@@ -8,8 +8,10 @@ class ShadeService {
   final _log = Logger('ShadeService');
 
   // Initialize Firestore with persistence enabled
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance..settings = 
-    const Settings(persistenceEnabled: true, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance
+    ..settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
 
   // Known shade categories
   static const List<String> shadeCategories = ['Old Shade', 'New Shade'];
@@ -22,7 +24,7 @@ class ShadeService {
   DateTime? _lastCacheTime;
   Stream<List<ShadeData>>? _activeStream;
   Timer? _cleanupTimer;
-  
+
   // Cache monitoring
   int _cacheHits = 0;
   int _cacheMisses = 0;
@@ -35,7 +37,8 @@ class ShadeService {
   // Start the cleanup timer
   void _startCleanupTimer() {
     _cleanupTimer?.cancel();
-    _cleanupTimer = Timer.periodic(cleanupInterval, (_) => _performCacheCleanup());
+    _cleanupTimer =
+        Timer.periodic(cleanupInterval, (_) => _performCacheCleanup());
   }
 
   // Perform cache cleanup
@@ -44,7 +47,8 @@ class ShadeService {
 
     final age = DateTime.now().difference(_lastCacheTime!);
     if (age >= cacheDuration) {
-      _log.info('Cache cleanup: Clearing expired cache (age: ${age.inSeconds}s)');
+      _log.info(
+          'Cache cleanup: Clearing expired cache (age: ${age.inSeconds}s)');
       clearCache();
     } else if (_cachedShadeData!.length > maxCacheItems) {
       _log.info('Cache cleanup: Trimming cache to size limit');
@@ -55,7 +59,7 @@ class ShadeService {
   // Get real-time stream of shade data with caching
   Stream<List<ShadeData>> getShadeDataStream() {
     _performCacheCleanup(); // Check cache before returning stream
-    
+
     // Return existing stream if active
     if (_activeStream != null) {
       return _activeStream!;
@@ -71,9 +75,8 @@ class ShadeService {
     // Create the stream with caching
     _activeStream = query.snapshots().map((snapshot) {
       // Convert documents to ShadeData objects
-      final List<ShadeData> data = snapshot.docs
-          .map((doc) => _convertToShadeData(doc))
-          .toList();
+      final List<ShadeData> data =
+          snapshot.docs.map((doc) => _convertToShadeData(doc)).toList();
 
       // Update cache with size limit
       if (data.length <= maxCacheItems) {
@@ -83,7 +86,8 @@ class ShadeService {
         // If data exceeds limit, store only the most recent items
         _cachedShadeData = data.sublist(0, maxCacheItems);
         _lastCacheTime = DateTime.now();
-        _log.warning('Data size exceeds cache limit. Caching only the most recent $maxCacheItems items.');
+        _log.warning(
+            'Data size exceeds cache limit. Caching only the most recent $maxCacheItems items.');
       }
 
       return data;
@@ -95,7 +99,7 @@ class ShadeService {
   // Get cached data if available and not expired
   List<ShadeData>? getCachedData() {
     _performCacheCleanup(); // Check cache before returning data
-    
+
     if (_cachedShadeData != null && _lastCacheTime != null) {
       final age = DateTime.now().difference(_lastCacheTime!);
       if (age < cacheDuration) {
@@ -112,20 +116,22 @@ class ShadeService {
     return {
       'cacheHits': _cacheHits,
       'cacheMisses': _cacheMisses,
-      'hitRate': _cacheHits + _cacheMisses == 0 
-          ? 0 
+      'hitRate': _cacheHits + _cacheMisses == 0
+          ? 0
           : _cacheHits / (_cacheHits + _cacheMisses),
       'currentCacheSize': _cachedShadeData?.length ?? 0,
       'maxCacheSize': maxCacheItems,
-      'isCacheValid': _lastCacheTime != null 
-          ? DateTime.now().difference(_lastCacheTime!) < cacheDuration 
+      'isCacheValid': _lastCacheTime != null
+          ? DateTime.now().difference(_lastCacheTime!) < cacheDuration
           : false,
-      'cacheAge': _lastCacheTime != null 
-          ? DateTime.now().difference(_lastCacheTime!).inSeconds 
+      'cacheAge': _lastCacheTime != null
+          ? DateTime.now().difference(_lastCacheTime!).inSeconds
           : null,
       'cleanupInterval': cleanupInterval.inSeconds,
-      'nextCleanupIn': _lastCacheTime != null 
-          ? cleanupInterval.inSeconds - (DateTime.now().difference(_lastCacheTime!).inSeconds % cleanupInterval.inSeconds)
+      'nextCleanupIn': _lastCacheTime != null
+          ? cleanupInterval.inSeconds -
+              (DateTime.now().difference(_lastCacheTime!).inSeconds %
+                  cleanupInterval.inSeconds)
           : null,
     };
   }
@@ -153,15 +159,17 @@ class ShadeService {
 
   ShadeData _convertToShadeData(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    final dashboard = data['latestDataForDashboard'] as Map<String, dynamic>? ?? {};
-    
+    final dashboard =
+        data['latestDataForDashboard'] as Map<String, dynamic>? ?? {};
+
     // Handle timestamp conversion for mandatory fields
     final DateTime updatedTimestamp = (data['updatedOn'] as Timestamp).toDate();
     final DateTime savedTimestamp = (data['savedOn'] as Timestamp).toDate();
-    
+
     String getFormattedTimestamp(DateTime timestamp) {
       final String period = timestamp.hour >= 12 ? 'PM' : 'AM';
-      final int hour = timestamp.hour > 12 ? timestamp.hour - 12 : timestamp.hour;
+      final int hour =
+          timestamp.hour > 12 ? timestamp.hour - 12 : timestamp.hour;
       final String minute = timestamp.minute.toString().padLeft(2, '0');
       return '${timestamp.day}-${timestamp.month}-${timestamp.year}, $hour:$minute $period';
     }
@@ -179,16 +187,17 @@ class ShadeService {
       dateUpdated: getFormattedTimestamp(updatedTimestamp),
       dateSaved: getFormattedTimestamp(savedTimestamp),
       polygonCoordinates: List<String>.from(data['polygonPoints'] as List),
-      
+
       // Optional fields with default values
-      area: (data['area'] ?? 0.0).toDouble(),  // Keep as square meters for consistent storage
+      area: (data['area'] ?? 0.0)
+          .toDouble(), // Keep as square meters for consistent storage
       perimeter: (data['perimeter'] ?? 0.0).toDouble(),
       mapImageUrl: data['mapImageUrl'] ?? '',
-      boundaryImageURLs: data['boundaryImageURLs'] != null 
-          ? List<String>.from(data['boundaryImageURLs'] as List) 
+      boundaryImageURLs: data['boundaryImageURLs'] != null
+          ? List<String>.from(data['boundaryImageURLs'] as List)
           : [],
       savedBy: data['savedBy'] ?? '',
-      
+
       // Dashboard fields with default values
       agencyName: dashboard['agencyName'] ?? '',
       averageHeight: (dashboard['averageHeight'] ?? 0.0).toDouble(),
@@ -197,12 +206,12 @@ class ShadeService {
       khataNumber: dashboard['khataNumber'] ?? '',
       plotNumber: dashboard['plotNumber'] ?? '',
       shadeType: dashboard['shadeType'] ?? '',
-      mediaURLs: dashboard['mediaURLs'] != null 
-          ? List<String>.from(dashboard['mediaURLs'] as List) 
+      mediaURLs: dashboard['mediaURLs'] != null
+          ? List<String>.from(dashboard['mediaURLs'] as List)
           : [],
       survivalPercentage: (dashboard['survivalPercentage'] ?? 0.0).toDouble(),
-      plantVarieties: dashboard['plantVarieties'] != null 
-          ? List<String>.from(dashboard['plantVarieties'] as List) 
+      plantVarieties: dashboard['plantVarieties'] != null
+          ? List<String>.from(dashboard['plantVarieties'] as List)
           : [],
       plantationYear: dashboard['plantationYear'] ?? 0,
     );
@@ -225,4 +234,4 @@ class ShadeService {
       throw Exception('Failed to delete shade data: $e');
     }
   }
-} 
+}

@@ -61,11 +61,11 @@ class TableBorderHandler {
             end: Alignment.bottomCenter,
             colors: [
               Theme.of(context).colorScheme.primary.withValues(
-                alpha: TableConstants.kShadowOpacity,
-              ),
+                    alpha: TableConstants.kShadowOpacity,
+                  ),
               Theme.of(context).colorScheme.tertiary.withValues(
-                alpha: 0.0,
-              ),
+                    alpha: 0.0,
+                  ),
             ],
             stops: TableConstants.kShadowGradientStops,
           ),
@@ -87,4 +87,4 @@ class TableBorderHandler {
       ),
     );
   }
-} 
+}

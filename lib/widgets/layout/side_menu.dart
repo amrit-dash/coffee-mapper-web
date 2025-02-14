@@ -357,11 +357,11 @@ class _SideMenuState extends ConsumerState<SideMenu> {
             context,
             MaterialPageRoute(
               builder: (context) => LoginScreen(
-                returnScreen: widget.isLoginScreen 
-                  ? const DashboardScreen() 
-                  : (widget.renderDashboard 
-                      ? const RegistrationScreen() 
-                      : const DashboardScreen()),
+                returnScreen: widget.isLoginScreen
+                    ? const DashboardScreen()
+                    : (widget.renderDashboard
+                        ? const RegistrationScreen()
+                        : const DashboardScreen()),
               ),
             ),
           );

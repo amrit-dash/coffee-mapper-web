@@ -27,7 +27,6 @@ class OdiaDropdownField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: DropdownButtonFormField<String>(
-        
         value: value,
         items: items.map((String item) {
           return DropdownMenuItem<String>(
@@ -57,19 +56,20 @@ class OdiaDropdownField extends StatelessWidget {
             fontFamily: 'Gilroy-Medium',
           ),
           border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          suffixIcon: isLoading 
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          suffixIcon: isLoading
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                    ),
                   ),
-                ),
-              )
-            : null,
+                )
+              : null,
         ),
         validator: (value) {
           if (isRequired && (value == null || value.isEmpty)) {
@@ -83,4 +83,4 @@ class OdiaDropdownField extends StatelessWidget {
       ),
     );
   }
-} 
+}

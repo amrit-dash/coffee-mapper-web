@@ -38,8 +38,10 @@ class BoundaryMapDialog extends StatefulWidget {
 
     // Validate coordinate ranges
     bool hasInvalidCoordinates = markers.any((marker) =>
-        marker.position.latitude < -90 || marker.position.latitude > 90 ||
-        marker.position.longitude < -180 || marker.position.longitude > 180);
+        marker.position.latitude < -90 ||
+        marker.position.latitude > 90 ||
+        marker.position.longitude < -180 ||
+        marker.position.longitude > 180);
 
     if (hasInvalidCoordinates) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -103,7 +105,7 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
 
   void _setupMarkers() {
     if (_isDisposed) return;
-    
+
     setState(() {
       _markers.clear();
       // Add markers
@@ -137,7 +139,8 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
           polygonId: const gmap.PolygonId('boundary'),
           points: widget.polygonPoints,
           strokeColor: Theme.of(context).colorScheme.secondary,
-          fillColor: Theme.of(context).colorScheme.secondary.withValues(alpha: 120),
+          fillColor:
+              Theme.of(context).colorScheme.secondary.withValues(alpha: 120),
           strokeWidth: 2,
         ),
       );
@@ -146,14 +149,14 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
 
   void _onMapCreated(gmap.GoogleMapController controller) {
     if (_isDisposed) return;
-    
+
     try {
       setState(() {
         _mapController = controller;
         _isMapLoading = false;
         _mapError = null;
       });
-      
+
       // First fit bounds
       Future.delayed(const Duration(milliseconds: 100), () {
         if (!_isDisposed && _mapController != null) {
@@ -203,7 +206,7 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
     // Add padding to the bounds
     final latPadding = (maxLat - minLat) * 0.3; // 30% padding
     final lngPadding = (maxLng - minLng) * 0.3; // 30% padding
-    
+
     _mapController!.animateCamera(
       gmap.CameraUpdate.newLatLngBounds(
         gmap.LatLngBounds(
@@ -227,7 +230,8 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = ResponsiveUtils.isMobile(MediaQuery.of(context).size.width);
+    final isMobile =
+        ResponsiveUtils.isMobile(MediaQuery.of(context).size.width);
 
     return PopScope(
       canPop: true,
@@ -309,7 +313,8 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
                   top: isMobile ? 35 : 55,
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
-                    transitionBuilder: (Widget child, Animation<double> animation) {
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
                       return FadeTransition(
                         opacity: animation,
                         child: SlideTransition(
@@ -366,4 +371,4 @@ class _BoundaryMapDialogState extends State<BoundaryMapDialog> {
     });
     super.dispose();
   }
-} 
+}

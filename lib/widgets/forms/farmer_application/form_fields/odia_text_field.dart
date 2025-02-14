@@ -62,7 +62,8 @@ class OdiaTextField extends StatelessWidget {
           ),
           alignLabelWithHint: alignLabelWithHint,
           border: const OutlineInputBorder(),
-          contentPadding: contentPadding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          contentPadding: contentPadding ??
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           counterText: '',
           suffix: suffix,
           errorStyle: TextStyle(
@@ -82,4 +83,4 @@ class OdiaTextField extends StatelessWidget {
       ),
     );
   }
-} 
+}
