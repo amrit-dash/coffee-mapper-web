@@ -248,37 +248,28 @@ lib/
 
 We love your input! Check out our [Contributing Guidelines](CONTRIBUTING.md) to get started.
 
-<a href="https://github.com/amrit-dash/coffee-mapper-web/graphs/contributors">
-<a href="https://github.com/amritdash/coffee_mapper_web/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=amritdash/coffee_mapper_web" />
-</a>
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👥 Core Team
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/amritdash">
-        <img src="https://github.com/amritdash.png" width="100px;" alt="Amrit Dash"/><br />
-        <sub><b>Amrit Dash</b></sub>
-      </a>
-      <br />
-      <a href="https://about.me/amritdash" title="Website">🌐</a>
-      <a href="https://twitter.com/amritdash" title="Twitter">🐦</a>
-    </td>
-  </tr>
-</table>
+<div align="center">
+<a href="https://about.me/amritdash">
+<img src="https://avatars.githubusercontent.com/amrit-dash" width="100px" alt="Amrit Dash"/>
+<br/>
+<b>Amrit Dash</b>
+</a>
+<br/>
+<a href="https://about.me/amritdash">🌐</a> • 
+<a href="https://github.com/amrit-dash">🐙</a>
+</div>
 
 ## 🙏 Acknowledgments
 
-- 🎨 Flutter Team for the amazing framework
-- 🔥 Firebase for backend services
-- 🗺️ Google Maps Platform for mapping services
-- 👥 All contributors who have helped shape this project
+* 🎯 Flutter Team for the amazing framework
+* 🔥 Firebase for backend services
+* 🗺️ Google Maps Platform for mapping services
 
 ## 🔧 Technical Details
 
