@@ -2,7 +2,8 @@
 
 <div align="center">
 
-[![Coffee Mapper](https://img.shields.io/badge/Coffee_Mapper-Web-green?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZklEQVR42mNkYGBgZGRkZGIgA4D0MzEyMjIRVQ8TAwMDM5T+z8DAwMzAwPifgYHhHwMDwz8GBsZ/QPwPiP8yMDD+BWKg3r9A/AeI/wLxH6AeRqCB/4H4HwPjf0YGxn9MQPwfhBkZ/zMBxRiBmAmImYGYBYhZgZgNiNmBmAOIOYGYC4i5gZgHiHmBmA+I+YFYAIQZ/zMyMP1jZmD8y8LA+IeFgfE3KwPjHzYGxt/sDIx/OBgY/3IyMP7jYmD8z83A+J+HgfE/LwPjfz4Gxv8CDIz/BRkY/wsxMP4XZmD8L8LA+F+UgfG/GAPjf3EGxv8SDIz/JRkY/0sxMP6XZmD8L8PA+F+WgfG/HAPjf3kGxv8KDIz/FRkY/ysxMP5XZmD8r8LA+F+VgfG/GgPjf3UGxv8aDIz/NRkY/2sxMP7XZmD8r8PA+F+XgfG/HgPjf30Gxv8GDIz/DRkY/xsxMP43ZmD8bwLE/00ZGP+bMTD+NwcAn9qgKOF+JXAAAAAASUVORK5CYII=)](https://coffeemapper.web.app)
+![Coffee Mapper Logo](https://i.ibb.co/zWyCyM2x/logo-white.png)
+
 
 A comprehensive web dashboard application built with Flutter for tracking and managing coffee plantations in Koraput. The application provides real-time monitoring, data visualization, and management tools for coffee plantation initiatives.
 
