@@ -54,7 +54,6 @@ jobs:
       
       # Set up Firebase configuration
       - name: Create Firebase Config Files
-        if: github.event_name == 'push'
         run: |
           # Create development configuration
           echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
@@ -77,6 +76,17 @@ jobs:
           cat .firebaserc
           if ! jq empty .firebaserc; then
             echo "Invalid .firebaserc JSON"
+            exit 1
+          fi
+          
+          # Verify Firebase configuration files
+          if ! grep -q "const firebaseOptions" lib/config/firebase_options_dev.dart; then
+            echo "Invalid firebase_options_dev.dart: Missing firebaseOptions constant"
+            exit 1
+          fi
+          
+          if ! grep -q "const firebaseOptions" lib/config/firebase_options_prod.dart; then
+            echo "Invalid firebase_options_prod.dart: Missing firebaseOptions constant"
             exit 1
           fi
 
