@@ -2,9 +2,9 @@ name: Flutter Web
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   build:
@@ -16,8 +16,9 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.5.4'
+          flutter-version: '3.19.0'
           channel: 'stable'
+          cache: true
           
       - name: Install dependencies
         run: flutter pub get
@@ -31,11 +32,20 @@ jobs:
       - name: Build web
         run: flutter build web --release --web-renderer canvaskit
         
-      - name: Deploy to Firebase
+      - name: Deploy to Firebase Production
         if: github.ref == 'refs/heads/main'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}'
           projectId: coffee-mapper-web
+          channelId: live
+          
+      - name: Deploy to Firebase Development
+        if: github.ref == 'refs/heads/develop'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}'
+          projectId: coffee-mapper-dashboard
           channelId: live 
