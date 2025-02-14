@@ -14,10 +14,12 @@ class BeneficiaryHighlightSection extends StatefulWidget {
   });
 
   @override
-  State<BeneficiaryHighlightSection> createState() => _BeneficiaryHighlightSectionState();
+  State<BeneficiaryHighlightSection> createState() =>
+      _BeneficiaryHighlightSectionState();
 }
 
-class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSection> {
+class _BeneficiaryHighlightSectionState
+    extends State<BeneficiaryHighlightSection> {
   final BeneficiaryService _beneficiaryService = BeneficiaryService();
   List<FarmerFormData> filteredData = [];
   List<FarmerFormData> allData = [];
@@ -38,12 +40,18 @@ class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSectio
   // Get filtered data based on current selections
   List<FarmerFormData> _getCurrentFilteredData() {
     return allData.where((data) {
-      bool matchesDistrict = selectedDistrict == null || data.district == selectedDistrict;
+      bool matchesDistrict =
+          selectedDistrict == null || data.district == selectedDistrict;
       bool matchesBlock = selectedBlock == null || data.block == selectedBlock;
-      bool matchesPanchayat = selectedPanchayat == null || data.panchayat == selectedPanchayat;
-      bool matchesVillage = selectedVillage == null || data.village == selectedVillage;
+      bool matchesPanchayat =
+          selectedPanchayat == null || data.panchayat == selectedPanchayat;
+      bool matchesVillage =
+          selectedVillage == null || data.village == selectedVillage;
 
-      return matchesDistrict && matchesBlock && matchesPanchayat && matchesVillage;
+      return matchesDistrict &&
+          matchesBlock &&
+          matchesPanchayat &&
+          matchesVillage;
     }).toList();
   }
 
@@ -70,10 +78,10 @@ class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSectio
 
   void _filterData() {
     setState(() {
-      bool hasActiveFilters = selectedDistrict != null || 
-                            selectedBlock != null || 
-                            selectedPanchayat != null || 
-                            selectedVillage != null;
+      bool hasActiveFilters = selectedDistrict != null ||
+          selectedBlock != null ||
+          selectedPanchayat != null ||
+          selectedVillage != null;
 
       if (!hasActiveFilters) {
         filteredData = allData;
@@ -85,14 +93,21 @@ class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSectio
   }
 
   // Helper methods to get unique values
-  List<String> _getUniqueValues(List<FarmerFormData> data, String? Function(FarmerFormData) selector) {
-    return data.map(selector).where((value) => value != null).map((e) => e!).toSet().toList()..sort();
+  List<String> _getUniqueValues(
+      List<FarmerFormData> data, String? Function(FarmerFormData) selector) {
+    return data
+        .map(selector)
+        .where((value) => value != null)
+        .map((e) => e!)
+        .toSet()
+        .toList()
+      ..sort();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Container(
       padding: EdgeInsets.all(ResponsiveUtils.isMobile(screenWidth) ? 12 : 18),
       child: SizedBox(
@@ -169,10 +184,10 @@ class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSectio
   }
 
   bool _hasActiveFilters() {
-    return selectedDistrict != null || 
-           selectedBlock != null || 
-           selectedPanchayat != null || 
-           selectedVillage != null;
+    return selectedDistrict != null ||
+        selectedBlock != null ||
+        selectedPanchayat != null ||
+        selectedVillage != null;
   }
 
   void _onDistrictChanged(String value) {
@@ -205,11 +220,11 @@ class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSectio
 
   Future<void> _handleDelete(FarmerFormData data) async {
     if (_isDeleting) return; // Prevent multiple deletes
-    
+
     setState(() {
       _isDeleting = true;
     });
-    
+
     try {
       await _beneficiaryService.deleteBeneficiary(data);
     } catch (e) {
@@ -226,4 +241,4 @@ class _BeneficiaryHighlightSectionState extends State<BeneficiaryHighlightSectio
       }
     }
   }
-} 
+}

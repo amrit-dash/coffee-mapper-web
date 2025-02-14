@@ -10,49 +10,127 @@ permissions:
   contents: read
   id-token: write
 
+env:
+  FLUTTER_VERSION: '3.29.0'
+  FIREBASE_CLI_VERSION: 12.9.1
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
-
+    
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    
     steps:
       - uses: actions/checkout@v3
+      
+      # Cache Flutter dependencies
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ runner.tool_cache }}/flutter
+            ${{ env.PUB_CACHE }}
+            .dart_tool
+            build
+          key: ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
+            ${{ runner.os }}-flutter-
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           cache: true
+
+      - name: Install Firebase CLI
+        run: |
+          curl -sL https://firebase.tools | bash
+          firebase --version
+      
+      # Set up Firebase configuration
+      - name: Create Firebase Config Files
+        run: |
+          # Create development configuration
+          echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
           
+          # Create production configuration
+          echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
+          
+          # Create and validate firebase.json
+          echo '${{ secrets.FIREBASE_JSON }}' > firebase.json
+          echo "Verifying firebase.json:"
+          cat firebase.json
+          if ! jq empty firebase.json; then
+            echo "Invalid firebase.json JSON"
+            exit 1
+          fi
+          
+          # Create and validate .firebaserc
+          echo '${{ secrets.FIREBASE_RC }}' > .firebaserc
+          echo "Verifying .firebaserc:"
+          cat .firebaserc
+          if ! jq empty .firebaserc; then
+            echo "Invalid .firebaserc JSON"
+            exit 1
+          fi
+          
+          # Verify Firebase configuration files
+          if ! grep -q "const firebaseOptions" lib/config/firebase_options_dev.dart; then
+            echo "Invalid firebase_options_dev.dart: Missing firebaseOptions constant"
+            exit 1
+          fi
+          
+          if ! grep -q "const firebaseOptions" lib/config/firebase_options_prod.dart; then
+            echo "Invalid firebase_options_prod.dart: Missing firebaseOptions constant"
+            exit 1
+          fi
+
       - name: Install dependencies
         run: flutter pub get
         
+      - name: Format code
+        run: dart format .
+        
       - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+        run: |
+          # Format any generated files first
+          dart format .
+          # Now verify that everything is formatted
+          dart format --output=none --set-exit-if-changed .
         
       - name: Analyze project source
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
         
       - name: Build web
-        run: flutter build web --release --web-renderer canvaskit
-        
-      - name: Deploy to Firebase Production
-        if: github.ref == 'refs/heads/main'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}'
-          projectId: coffee-mapper-web
-          channelId: live
+        if: github.event_name == 'push'
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            flutter build web --release --dart-define=ENVIRONMENT=production
+          else
+            flutter build web --release --dart-define=ENVIRONMENT=development
+          fi
+
+      # Production Deployment
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          # Deploy only hosting to all production sites
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
-      - name: Deploy to Firebase Development
-        if: github.ref == 'refs/heads/develop'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}'
-          projectId: coffee-mapper-dashboard
-          channelId: live 
+      # Development Deployment
+      - name: Deploy to Development
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          # Deploy only hosting to development site
+          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" 

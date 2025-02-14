@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 
 class AppTextStyles {
-  static TextStyle gilroyMedium(BuildContext context, {
+  static TextStyle gilroyMedium(
+    BuildContext context, {
     double? fontSize,
     Color? color,
     FontWeight? fontWeight,
   }) {
     return TextStyle(
       fontFamily: 'Gilroy-Medium',
-      fontSize: fontSize != null 
-          ? ResponsiveUtils.getFontSize(MediaQuery.of(context).size.width, fontSize)
+      fontSize: fontSize != null
+          ? ResponsiveUtils.getFontSize(
+              MediaQuery.of(context).size.width, fontSize)
           : null,
       color: color,
       fontWeight: fontWeight,
@@ -18,15 +20,17 @@ class AppTextStyles {
     );
   }
 
-  static TextStyle gilroySemiBold(BuildContext context, {
+  static TextStyle gilroySemiBold(
+    BuildContext context, {
     double? fontSize,
     Color? color,
     FontWeight? fontWeight,
   }) {
     return TextStyle(
       fontFamily: 'Gilroy-SemiBold',
-      fontSize: fontSize != null 
-          ? ResponsiveUtils.getFontSize(MediaQuery.of(context).size.width, fontSize)
+      fontSize: fontSize != null
+          ? ResponsiveUtils.getFontSize(
+              MediaQuery.of(context).size.width, fontSize)
           : null,
       color: color,
       fontWeight: fontWeight ?? FontWeight.w600,
@@ -88,4 +92,4 @@ class AppTextStyles {
       color: Theme.of(context).highlightColor,
     );
   }
-} 
+}
