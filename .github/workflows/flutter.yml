@@ -16,7 +16,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     permissions:
       contents: read
       pull-requests: write
@@ -80,46 +79,38 @@ jobs:
             flutter build web --release --web-renderer canvaskit --dart-define=ENVIRONMENT=development
           fi
 
-      # Deploy Firebase Rules for Production
-      - name: Deploy Firebase Rules (Production)
+      # Production Deployment
+      - name: Deploy to Production
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
+          # Setup Firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}" > $HOME/prod-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/prod-key.json
           firebase login --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
           firebase use prod
+          
+          # Deploy Rules
           firebase deploy --only firestore,storage
           
-      # Deploy to Multiple Production Sites
-      - name: Deploy to Production Sites
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          # Main site
-          firebase deploy --only hosting:cdt-koraput
-          
-          # Backup site
-          firebase deploy --only hosting:coffeemapper
-          
-          # Additional sites
-          firebase deploy --only hosting:cdtkoraput
-          firebase deploy --only hosting:cdtdashboard
+          # Deploy to all production sites
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           
-      # Deploy Firebase Rules for Development
-      - name: Deploy Firebase Rules (Development)
+      # Development Deployment
+      - name: Deploy to Development
         if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
         run: |
+          # Setup Firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" > $HOME/dev-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/dev-key.json
           firebase login --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
           firebase use dev
+          
+          # Deploy Rules
           firebase deploy --only firestore,storage
           
-      # Deploy to Development Site
-      - name: Deploy to Development Site
-        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        run: |
+          # Deploy to development site
           firebase deploy --only hosting:coffee-mapper-dashboard
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
