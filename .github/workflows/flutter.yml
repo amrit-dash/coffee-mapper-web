@@ -93,14 +93,13 @@ jobs:
           # Setup Firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}" > $HOME/prod-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/prod-key.json
-          firebase login --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
-          firebase use prod
+          firebase use prod --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy Rules
-          firebase deploy --only firestore,storage
+          firebase deploy --only firestore,storage --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy to all production sites
-          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           
@@ -111,13 +110,12 @@ jobs:
           # Setup Firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" > $HOME/dev-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/dev-key.json
-          firebase login --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
-          firebase use dev
+          firebase use dev --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy Rules
-          firebase deploy --only firestore,storage
+          firebase deploy --only firestore,storage --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy to development site
-          firebase deploy --only hosting:coffee-mapper-dashboard
+          firebase deploy --only hosting:coffee-mapper-dashboard --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
