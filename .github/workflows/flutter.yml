@@ -47,7 +47,19 @@ jobs:
           
           # Create Firebase rules and config files
           echo "${{ secrets.FIREBASE_RULES }}" > firestore.rules
-          echo "${{ secrets.FIREBASE_INDEXES }}" > firestore.indexes.json
+          
+          # Create and validate firestore.indexes.json
+          echo '{
+            "indexes": [],
+            "fieldOverrides": []
+          }' > firestore.indexes.json
+          echo "Verifying firestore.indexes.json:"
+          cat firestore.indexes.json
+          if ! jq empty firestore.indexes.json; then
+            echo "Invalid firestore.indexes.json JSON"
+            exit 1
+          fi
+          
           echo "${{ secrets.STORAGE_RULES }}" > storage.rules
           
           # Create and validate .firebaserc
@@ -114,16 +126,15 @@ jobs:
           echo "Using production project ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
           # Initialize Firebase
-          firebase use "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase use "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
           # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
           # Deploy to all production sites
-          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/prod-key.json
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           
       # Development Deployment
       - name: Deploy to Development
@@ -137,13 +148,12 @@ jobs:
           echo "Using development project ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
           # Initialize Firebase with service account
-          firebase use "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase use "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
           # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
           # Deploy to development site
-          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json 
