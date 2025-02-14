@@ -20,7 +20,7 @@ class DashboardMetricsData {
   factory DashboardMetricsData.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     final metricsData = data['metricsData'] as Map<String, dynamic>;
-    
+
     return DashboardMetricsData(
       bearingArea: (metricsData['bearingArea'] as num).toDouble(),
       nonBearingArea: (metricsData['nonBearingArea'] as num).toDouble(),
@@ -32,10 +32,12 @@ class DashboardMetricsData {
 
   // Static fallback data
   static DashboardMetricsData get fallbackData => DashboardMetricsData(
-    bearingArea: 2988,
-    nonBearingArea: 1199.8,
-    totalFarmers: 5827,
-    chart1URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmzXfoTpJ__dBoeS7V533azEHZ3SPsy_ccHsjfUHPSaRcsgOuxGS00M6JBTRMlI9fl_mhxqYBWGseE/pubchart?oid=512820604&format=image',
-    chart2URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmzXfoTpJ__dBoeS7V533azEHZ3SPsy_ccHsjfUHPSaRcsgOuxGS00M6JBTRMlI9fl_mhxqYBWGseE/pubchart?oid=2011250957&format=image',
-  );
-} 
+        bearingArea: 2988,
+        nonBearingArea: 1199.8,
+        totalFarmers: 5827,
+        chart1URL:
+            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmzXfoTpJ__dBoeS7V533azEHZ3SPsy_ccHsjfUHPSaRcsgOuxGS00M6JBTRMlI9fl_mhxqYBWGseE/pubchart?oid=512820604&format=image',
+        chart2URL:
+            'https://docs.google.com/spreadsheets/d/e/2PACX-1vSmzXfoTpJ__dBoeS7V533azEHZ3SPsy_ccHsjfUHPSaRcsgOuxGS00M6JBTRMlI9fl_mhxqYBWGseE/pubchart?oid=2011250957&format=image',
+      );
+}

@@ -27,7 +27,9 @@ class Header extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/logo/logo-white.png',
-                  height: ResponsiveUtils.getLogoHeight(screenWidth, screenHeight) * 0.8,
+                  height:
+                      ResponsiveUtils.getLogoHeight(screenWidth, screenHeight) *
+                          0.8,
                 ),
                 SizedBox(width: isMobile ? 8 : screenWidth * 0.02),
                 Flexible(
@@ -40,7 +42,9 @@ class Header extends StatelessWidget {
                         'Coffee Developement Trust, Koraput',
                         style: TextStyle(
                           fontFamily: 'Gilroy-Medium',
-                          fontSize: isMobile ? 16 : ResponsiveUtils.getFontSize(screenWidth, 20),
+                          fontSize: isMobile
+                              ? 16
+                              : ResponsiveUtils.getFontSize(screenWidth, 20),
                           fontWeight: FontWeight.normal,
                           color: Theme.of(context).colorScheme.error,
                         ),
@@ -50,7 +54,9 @@ class Header extends StatelessWidget {
                         'Government of Odisha',
                         style: TextStyle(
                           fontFamily: 'Gilroy-Medium',
-                          fontSize: isMobile ? 14 : ResponsiveUtils.getFontSize(screenWidth, 16),
+                          fontSize: isMobile
+                              ? 14
+                              : ResponsiveUtils.getFontSize(screenWidth, 16),
                           fontWeight: FontWeight.normal,
                           color: Theme.of(context).cardColor,
                         ),
@@ -92,7 +98,9 @@ class Header extends StatelessWidget {
                 SizedBox(width: screenWidth * 0.02),
                 Image.asset(
                   'assets/images/CM.png',
-                  height: ResponsiveUtils.getLogoHeight(screenWidth, screenHeight) * 0.8,
+                  height:
+                      ResponsiveUtils.getLogoHeight(screenWidth, screenHeight) *
+                          0.8,
                 ),
               ],
             ),

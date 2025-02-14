@@ -612,32 +612,29 @@ class _FarmerFormDialogState extends ConsumerState<FarmerFormDialog> {
       loading: () => Column(
         children: [
           OdiaDropdownField(
-            englishLabel: 'District',
-            odiaLabel: 'ଜିଲ୍ଲା',
-            value: null,
-            items: const [],
-            onChanged: (_) {},
-            isLoading: true,
-            isRequired: true
-          ),
+              englishLabel: 'District',
+              odiaLabel: 'ଜିଲ୍ଲା',
+              value: null,
+              items: const [],
+              onChanged: (_) {},
+              isLoading: true,
+              isRequired: true),
           OdiaDropdownField(
-            englishLabel: 'Block',
-            odiaLabel: 'ବ୍ଲକ',
-            value: null,
-            items: const [],
-            onChanged: (_) {},
-            isLoading: true,
-            isRequired: true
-          ),
+              englishLabel: 'Block',
+              odiaLabel: 'ବ୍ଲକ',
+              value: null,
+              items: const [],
+              onChanged: (_) {},
+              isLoading: true,
+              isRequired: true),
           OdiaDropdownField(
-            englishLabel: 'Panchayat',
-            odiaLabel: 'ପଂଚାୟତ',
-            value: null,
-            items: const [],
-            onChanged: (_) {},
-            isLoading: true,
-            isRequired: true
-          ),
+              englishLabel: 'Panchayat',
+              odiaLabel: 'ପଂଚାୟତ',
+              value: null,
+              items: const [],
+              onChanged: (_) {},
+              isLoading: true,
+              isRequired: true),
           OdiaDropdownField(
             englishLabel: 'Village',
             odiaLabel: 'ଗ୍ରାମ',

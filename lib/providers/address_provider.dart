@@ -63,4 +63,4 @@ final availableVillagesProvider = Provider<List<String>>((ref) {
     loading: () => [],
     error: (_, __) => [],
   );
-}); 
+});

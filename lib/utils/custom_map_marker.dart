@@ -61,4 +61,4 @@ class CustomMapMarker {
 
     return gmap.BitmapDescriptor.bytes(uint8List);
   }
-} 
+}

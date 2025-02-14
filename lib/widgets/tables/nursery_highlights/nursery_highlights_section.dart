@@ -11,10 +11,12 @@ class NurseryHighlightsSection extends ConsumerStatefulWidget {
   const NurseryHighlightsSection({super.key});
 
   @override
-  ConsumerState<NurseryHighlightsSection> createState() => _NurseryHighlightsSectionState();
+  ConsumerState<NurseryHighlightsSection> createState() =>
+      _NurseryHighlightsSectionState();
 }
 
-class _NurseryHighlightsSectionState extends ConsumerState<NurseryHighlightsSection> {
+class _NurseryHighlightsSectionState
+    extends ConsumerState<NurseryHighlightsSection> {
   final NurseryService _nurseryService = NurseryService();
   List<NurseryData> allData = [];
   late Stream<List<NurseryData>> _dataStream;
@@ -29,14 +31,14 @@ class _NurseryHighlightsSectionState extends ConsumerState<NurseryHighlightsSect
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
-    
+
     // Only show this section if user is admin - Deprecated
-    // All Users Can See This Section 
+    // All Users Can See This Section
     // final adminData = ref.watch(adminProvider);
     // if (adminData == null || !adminData.isAdmin) {
     //   return const SizedBox.shrink();
     // }
-    
+
     return SizedBox(
       height: ResponsiveUtils.getTableContainerHeight(screenWidth),
       child: Column(
@@ -101,4 +103,4 @@ class _NurseryHighlightsSectionState extends ConsumerState<NurseryHighlightsSect
       ),
     );
   }
-} 
+}

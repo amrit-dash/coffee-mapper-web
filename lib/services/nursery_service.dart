@@ -7,12 +7,12 @@ class NurseryService {
   Stream<List<NurseryData>> getNurseryDataStream() {
     return _firestore
         .collection('nurseryDetails')
-        .where('status', isEqualTo: 'Active')  // Only fetch active records
+        .where('status', isEqualTo: 'Active') // Only fetch active records
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs
-              .map((doc) => NurseryData.fromMap(doc.id, doc.data()))
-              .toList();
-        });
+      return snapshot.docs
+          .map((doc) => NurseryData.fromMap(doc.id, doc.data()))
+          .toList();
+    });
   }
-} 
+}

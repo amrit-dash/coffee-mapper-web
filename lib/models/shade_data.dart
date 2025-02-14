@@ -26,7 +26,7 @@ class ShadeData {
   final double survivalPercentage;
   final List<String> plantVarieties;
   final int plantationYear;
-  
+
   ShadeData({
     required this.id,
     required this.district,
@@ -56,4 +56,4 @@ class ShadeData {
     required this.plantVarieties,
     required this.plantationYear,
   });
-} 
+}

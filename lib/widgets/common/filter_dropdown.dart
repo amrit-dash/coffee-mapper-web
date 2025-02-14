@@ -43,11 +43,12 @@ class FilterDropdown extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           ),
           isExpanded: true,
         ),
       ],
     );
   }
-} 
+}

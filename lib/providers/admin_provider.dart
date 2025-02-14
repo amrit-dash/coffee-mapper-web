@@ -17,10 +17,8 @@ class AdminNotifier extends StateNotifier<AdminData?> {
       return;
     }
 
-    final adminDoc = await FirebaseFirestore.instance
-        .collection('admins')
-        .doc(email)
-        .get();
+    final adminDoc =
+        await FirebaseFirestore.instance.collection('admins').doc(email).get();
 
     state = AdminData(
       isAdmin: adminDoc.exists,
@@ -35,4 +33,4 @@ class AdminNotifier extends StateNotifier<AdminData?> {
 
 final adminProvider = StateNotifierProvider<AdminNotifier, AdminData?>((ref) {
   return AdminNotifier();
-}); 
+});
