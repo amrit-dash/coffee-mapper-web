@@ -13,6 +13,7 @@ permissions:
 env:
   FLUTTER_VERSION: '3.29.0'
   FIREBASE_CLI_VERSION: 12.9.1
+  PUB_CACHE: ~/.pub-cache
 
 jobs:
   build-and-deploy:
