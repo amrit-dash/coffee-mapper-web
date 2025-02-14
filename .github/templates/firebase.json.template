@@ -1,0 +1,29 @@
+{
+    "hosting": [
+        {
+            "site": "your-site-name",
+            "public": "build/web",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "frameworksBackend": {
+                "region": "your-region"
+            },
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        }
+    ],
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "storage": {
+        "rules": "storage.rules"
+    }
+} 
