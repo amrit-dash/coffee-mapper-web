@@ -125,16 +125,15 @@ jobs:
           # Verify project ID
           echo "Using production project ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
-          # Initialize Firebase
-          firebase use "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
-          
+          # Note: Using --token is deprecated but still required for CI environments
           # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy to all production sites
-          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/prod-key.json
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           
       # Development Deployment
       - name: Deploy to Development
@@ -147,13 +146,12 @@ jobs:
           # Verify project ID
           echo "Using development project ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
-          # Initialize Firebase with service account
-          firebase use "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
-          
+          # Note: Using --token is deprecated but still required for CI environments
           # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy to development site
-          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
+          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json 
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
