@@ -262,8 +262,9 @@ class _ShadeHeaderState extends State<ShadeHeader> {
                             selectedVillage = null;
                           }
                           if (label == 'Village') selectedVillage = null;
-                          if (label == 'Region Category')
+                          if (label == 'Region Category') {
                             selectedRegionCategory = null;
+                          }
                         });
                         onChanged('');
                       },
@@ -294,8 +295,9 @@ class _ShadeHeaderState extends State<ShadeHeader> {
                   if (label == 'Block') selectedBlock = value;
                   if (label == 'Panchayat') selectedPanchayat = value;
                   if (label == 'Village') selectedVillage = value;
-                  if (label == 'Region Category')
+                  if (label == 'Region Category') {
                     selectedRegionCategory = value;
+                  }
                 });
                 onChanged(value);
               }
