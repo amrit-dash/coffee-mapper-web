@@ -45,14 +45,25 @@ jobs:
           # Create production configuration
           echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
           
-          # Create Firebase rules and config files
-          echo "${{ secrets.FIREBASE_RULES }}" > firestore.rules
+          # Create Firebase rules files with basic valid rules
+          cat > firestore.rules << 'EOL'
+          rules_version = "2";
+          service cloud.firestore {
+            match /databases/{database}/documents {
+              match /{document=**} {
+                allow read, write: if request.auth != null;
+              }
+            }
+          }
+          EOL
           
           # Create and validate firestore.indexes.json
-          echo '{
+          cat > firestore.indexes.json << 'EOL'
+          {
             "indexes": [],
             "fieldOverrides": []
-          }' > firestore.indexes.json
+          }
+          EOL
           echo "Verifying firestore.indexes.json:"
           cat firestore.indexes.json
           if ! jq empty firestore.indexes.json; then
@@ -60,7 +71,17 @@ jobs:
             exit 1
           fi
           
-          echo "${{ secrets.STORAGE_RULES }}" > storage.rules
+          # Create basic storage rules
+          cat > storage.rules << 'EOL'
+          rules_version = "2";
+          service firebase.storage {
+            match /b/{bucket}/o {
+              match /{allPaths=**} {
+                allow read, write: if request.auth != null;
+              }
+            }
+          }
+          EOL
           
           # Create and validate .firebaserc
           echo '${{ secrets.FIREBASE_RC }}' > .firebaserc
