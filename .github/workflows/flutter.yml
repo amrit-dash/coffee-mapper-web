@@ -13,6 +13,7 @@ permissions:
 env:
   FLUTTER_VERSION: '3.29.0'
   FIREBASE_CLI_VERSION: 12.9.1
+  PUB_CACHE: ~/.pub-cache
 
 jobs:
   build-and-deploy:
@@ -55,11 +56,14 @@ jobs:
       # Set up Firebase configuration
       - name: Create Firebase Config Files
         run: |
-          # Create development configuration
-          echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
-          
-          # Create production configuration
-          echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
+          # Create Firebase configuration files based on environment
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
+            echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
+          else
+            echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
+            echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
+          fi
           
           # Create and validate firebase.json
           echo '${{ secrets.FIREBASE_JSON }}' > firebase.json
@@ -78,6 +82,11 @@ jobs:
             echo "Invalid .firebaserc JSON"
             exit 1
           fi
+          
+          # Create rules files
+          echo "${{ secrets.FIREBASE_RULES }}" > firestore.rules
+          echo "${{ secrets.STORAGE_RULES }}" > storage.rules
+          echo "${{ secrets.FIREBASE_INDEXES }}" > firestore.indexes.json
           
           # Verify Firebase configuration files
           if ! grep -q "const firebaseOptions" lib/config/firebase_options_dev.dart; then
