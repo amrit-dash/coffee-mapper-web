@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "your-project-id",
+    "dev": "your-dev-project-id",
+    "prod": "your-prod-project-id"
+  },
+  "targets": {
+    "your-dev-project-id": {
+      "hosting": {
+        "your-site-name": [
+          "your-site-id"
+        ]
+      }
+    }
+  }
+} 
