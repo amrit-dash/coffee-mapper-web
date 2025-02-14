@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AreaFormatter {
   static const double hectareConversion = 10000.0; // 1 hectare = 10000 m²
-  static const double threshold = 1000.0; // Threshold for switching to hectares
+  static const double threshold = 10.0; // Threshold for switching to hectares
   
   // Format area for display with appropriate unit
   static String formatArea(double areaInSquareMeters, [bool useThreshold = true]) {
