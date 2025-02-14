@@ -10,9 +10,13 @@ permissions:
   contents: read
   id-token: write
 
+env:
+  FIREBASE_CLI_VERSION: 12.9.1
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     permissions:
       contents: read
       pull-requests: write
@@ -23,9 +27,40 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-version: '3.5.4'
           channel: 'stable'
           cache: true
+
+      - name: Install Firebase CLI
+        run: |
+          curl -sL https://firebase.tools | bash
+          firebase --version
+      
+      # Set up Firebase configuration
+      - name: Create Firebase Config Files
+        if: github.event_name == 'push'
+        run: |
+          # Create development configuration
+          echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
+          
+          # Create production configuration
+          echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
+          
+          # Create Firebase rules and config files
+          echo "${{ secrets.FIREBASE_RULES }}" > firestore.rules
+          echo "${{ secrets.FIREBASE_INDEXES }}" > firestore.indexes.json
+          echo "${{ secrets.STORAGE_RULES }}" > storage.rules
+          echo "${{ secrets.FIREBASE_RC }}" > .firebaserc
+          echo "${{ secrets.FIREBASE_JSON }}" > firebase.json
+          
+          # Create directories for rules
+          mkdir -p firestore/dev firestore/prod storage/dev storage/prod
+          cp firestore.rules firestore/dev/firestore.rules
+          cp firestore.rules firestore/prod/firestore.rules
+          cp firestore.indexes.json firestore/dev/firestore.indexes.json
+          cp firestore.indexes.json firestore/prod/firestore.indexes.json
+          cp storage.rules storage/dev/storage.rules
+          cp storage.rules storage/prod/storage.rules
           
       - name: Install dependencies
         run: flutter pub get
@@ -37,22 +72,54 @@ jobs:
         run: flutter analyze
         
       - name: Build web
-        run: flutter build web --release --web-renderer canvaskit
-        
-      - name: Deploy to Firebase Production
-        if: github.ref == 'refs/heads/main'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}'
-          projectId: coffee-mapper-web
-          channelId: live
+        if: github.event_name == 'push'
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            flutter build web --release --web-renderer canvaskit --dart-define=ENVIRONMENT=production
+          else
+            flutter build web --release --web-renderer canvaskit --dart-define=ENVIRONMENT=development
+          fi
+
+      # Deploy Firebase Rules for Production
+      - name: Deploy Firebase Rules (Production)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}" > $HOME/prod-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/prod-key.json
+          firebase login --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase use prod
+          firebase deploy --only firestore,storage
           
-      - name: Deploy to Firebase Development
-        if: github.ref == 'refs/heads/develop'
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}'
-          projectId: coffee-mapper-dashboard
-          channelId: live 
+      # Deploy to Multiple Production Sites
+      - name: Deploy to Production Sites
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          # Main site
+          firebase deploy --only hosting:cdt-koraput
+          
+          # Backup site
+          firebase deploy --only hosting:coffeemapper
+          
+          # Additional sites
+          firebase deploy --only hosting:cdtkoraput
+          firebase deploy --only hosting:cdtdashboard
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          
+      # Deploy Firebase Rules for Development
+      - name: Deploy Firebase Rules (Development)
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" > $HOME/dev-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/dev-key.json
+          firebase login --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase use dev
+          firebase deploy --only firestore,storage
+          
+      # Deploy to Development Site
+      - name: Deploy to Development Site
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+        run: |
+          firebase deploy --only hosting:coffee-mapper-dashboard
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
