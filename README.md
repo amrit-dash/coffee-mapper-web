@@ -13,6 +13,7 @@ A comprehensive web dashboard application built with Flutter for tracking and ma
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Website](https://img.shields.io/badge/Developer-Amrit_Dash-blue.svg)](https://about.me/amritdash)
 [![Twitter Follow](https://img.shields.io/twitter/follow/amritdash?style=social)](https://twitter.com/amritdash)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/amrit-dash/coffee-mapper-web/flutter.yml?branch=main)](https://github.com/amrit-dash/coffee-mapper-web/actions)
 
 [Features](#-features) • [Installation](#-getting-started) • [Contributing](#-contributing) • [Support](#-support)
 
@@ -100,7 +101,7 @@ Before you begin, ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/amritdash/coffee_mapper_web.git
+   git clone https://github.com/amrit-dash/coffee-mapper-web.git
    cd coffee_mapper_web
    ```
 
@@ -223,6 +224,7 @@ lib/
 
 We love your input! Check out our [Contributing Guidelines](CONTRIBUTING.md) to get started.
 
+<a href="https://github.com/amrit-dash/coffee-mapper-web/graphs/contributors">
 <a href="https://github.com/amritdash/coffee_mapper_web/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=amritdash/coffee_mapper_web" />
 </a>
