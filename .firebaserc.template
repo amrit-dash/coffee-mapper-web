@@ -1,0 +1,23 @@
+{
+  "projects": {
+    "default": "plot-survey",
+    "dev": "plot-survey",
+    "prod": "coffee-mapper-agent"
+  },
+  "targets": {
+    "plot-survey": {
+      "hosting": {
+        "dev": [
+          "coffee-mapper-dashboard"
+        ],
+        "prod-main": [
+          "cdt-koraput"
+        ],
+        "prod-backup": [
+          "coffeemapper"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
