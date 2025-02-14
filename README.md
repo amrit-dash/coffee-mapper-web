@@ -2,18 +2,18 @@
 
 <div align="center">
 
-![Coffee Mapper Logo](https://i.ibb.co/zWyCyM2x/logo-white.png)
+[![Coffee Mapper](https://img.shields.io/badge/Coffee_Mapper-Web-green?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZklEQVR42mNkYGBgZGRkZGIgA4D0MzEyMjIRVQ8TAwMDM5T+z8DAwMzAwPifgYHhHwMDwz8GBsZ/QPwPiP8yMDD+BWKg3r9A/AeI/wLxH6AeRqCB/4H4HwPjf0YGxn9MQPwfhBkZ/zMBxRiBmAmImYGYBYhZgZgNiNmBmAOIOYGYC4i5gZgHiHmBmA+I+YFYAIQZ/zMyMP1jZmD8y8LA+IeFgfE3KwPjHzYGxt/sDIx/OBgY/3IyMP7jYmD8z83A+J+HgfE/LwPjfz4Gxv8CDIz/BRkY/wsxMP4XZmD8L8LA+F+UgfG/GAPjf3EGxv8SDIz/JRkY/0sxMP6XZmD8L8PA+F+WgfG/HAPjf3kGxv8KDIz/FRkY/ysxMP5XZmD8r8LA+F+VgfG/GgPjf3UGxv8aDIz/NRkY/2sxMP7XZmD8r8PA+F+XgfG/HgPjf30Gxv8GDIz/DRkY/xsxMP43ZmD8bwLE/00ZGP+bMTD+NwcAn9qgKOF+JXAAAAAASUVORK5CYII=)](https://coffeemapper.web.app)
 
 A comprehensive web dashboard application built with Flutter for tracking and managing coffee plantations in Koraput. The application provides real-time monitoring, data visualization, and management tools for coffee plantation initiatives.
 
-[![Flutter Version](https://img.shields.io/badge/Flutter-^3.5.4-blue.svg)](https://flutter.dev/)
-[![Dart Version](https://img.shields.io/badge/Dart-^3.0.0-blue.svg)](https://dart.dev)
-[![Firebase](https://img.shields.io/badge/Firebase-Enabled-orange.svg)](https://firebase.google.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Website](https://img.shields.io/badge/Developer-Amrit_Dash-blue.svg)](https://about.me/amritdash)
-[![Twitter Follow](https://img.shields.io/twitter/follow/amritdash?style=social)](https://twitter.com/amritdash)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/amrit-dash/coffee-mapper-web/flutter.yml?branch=main)](https://github.com/amrit-dash/coffee-mapper-web/actions)
+[![Flutter](https://img.shields.io/badge/Flutter-^3.5.4-blue?style=for-the-badge&logo=flutter&logoColor=white&labelColor=02569B)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-^3.0.0-blue?style=for-the-badge&logo=dart&logoColor=white&labelColor=0175C2)](https://dart.dev)
+[![Firebase](https://img.shields.io/badge/Firebase-Enabled-orange?style=for-the-badge&logo=firebase&logoColor=white&labelColor=FFCA28)](https://firebase.google.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=license&logoColor=white&labelColor=34D058)](LICENSE)
+[![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen?style=for-the-badge&logo=github&logoColor=white&labelColor=238636)](CONTRIBUTING.md)
+[![Developer](https://img.shields.io/badge/Developer-Amrit_Dash-blue?style=for-the-badge&logo=about.me&logoColor=white&labelColor=00A98F)](https://about.me/amritdash)
+[![Twitter Follow](https://img.shields.io/twitter/follow/amritdash?style=for-the-badge&logo=twitter&logoColor=1DA1F2&labelColor=white)](https://twitter.com/amritdash)
+[![Build](https://img.shields.io/github/actions/workflow/status/amrit-dash/coffee-mapper-web/flutter.yml?branch=main&style=for-the-badge&logo=github-actions&logoColor=white&labelColor=2088FF)](https://github.com/amrit-dash/coffee-mapper-web/actions)
 
 [Features](#-features) • [Installation](#-getting-started) • [Contributing](#-contributing) • [Support](#-support)
 
