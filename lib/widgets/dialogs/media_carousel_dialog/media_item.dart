@@ -23,10 +23,10 @@ class MediaItem extends StatefulWidget {
 class _MediaItemState extends State<MediaItem> {
   // Duration for fade transitions
   static const Duration _transitionDuration = Duration(milliseconds: 400);
-  
+
   // Supported video file extensions
   static const List<String> _videoExtensions = ['.mp4', '.mov', '.avi', '.wmv'];
-  
+
   // Cache for preloaded media to improve performance
   static final Map<String, bool> _preloadedMedia = {};
 
@@ -59,7 +59,7 @@ class _MediaItemState extends State<MediaItem> {
   /// Preloads the next media item to improve loading performance
   void _preloadNextMedia() {
     if (_preloadedMedia.containsKey(widget.url)) return;
-    
+
     final isVideo = _isVideoUrl(widget.url);
     _preloadedMedia[widget.url] = true;
 
@@ -67,24 +67,24 @@ class _MediaItemState extends State<MediaItem> {
     final link = html.LinkElement()
       ..rel = 'preload'
       ..href = widget.url;
-    
+
     if (isVideo) {
       link.as = 'video';
     } else {
       link.as = 'image';
     }
-    
+
     html.document.head!.append(link);
   }
 
   /// Initializes the media element based on the URL type
   void _initializeMedia() {
     if (_isDisposed) return;
-    
+
     try {
       _viewId = 'media-${DateTime.now().millisecondsSinceEpoch}';
       final isVideo = _isVideoUrl(widget.url);
-      
+
       // Register the view factory for the platform view
       ui_web.platformViewRegistry.registerViewFactory(_viewId!, (int viewId) {
         // Create container for media element
@@ -174,7 +174,6 @@ class _MediaItemState extends State<MediaItem> {
         container.children.add(_mediaElement!);
         return container;
       });
-
     } catch (e) {
       if (!_isDisposed && mounted) {
         setState(() {
@@ -222,7 +221,8 @@ class _MediaItemState extends State<MediaItem> {
                   children: [
                     Text(
                       'Failed to load media',
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      style:
+                          TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                     const SizedBox(height: 8),
                     TextButton(
@@ -243,4 +243,4 @@ class _MediaItemState extends State<MediaItem> {
       ),
     );
   }
-} 
+}

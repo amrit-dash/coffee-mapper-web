@@ -28,18 +28,18 @@ class CarouselControls extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: enabled 
-                ? Theme.of(context).colorScheme.surface.withAlpha(204)
-                : Theme.of(context).colorScheme.surface.withAlpha(77),
+              color: enabled
+                  ? Theme.of(context).colorScheme.surface.withAlpha(204)
+                  : Theme.of(context).colorScheme.surface.withAlpha(77),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Icon(
               direction == CarouselDirection.next
-                ? Icons.chevron_right
-                : Icons.chevron_left,
+                  ? Icons.chevron_right
+                  : Icons.chevron_left,
               color: enabled
-                ? Theme.of(context).colorScheme.onSurface
-                : Theme.of(context).colorScheme.onSurface.withAlpha(77),
+                  ? Theme.of(context).colorScheme.onSurface
+                  : Theme.of(context).colorScheme.onSurface.withAlpha(77),
               size: 32,
             ),
           ),
@@ -47,4 +47,4 @@ class CarouselControls extends StatelessWidget {
       ),
     );
   }
-} 
+}

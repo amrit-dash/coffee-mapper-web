@@ -71,7 +71,9 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     //final screenHeight = MediaQuery.of(context).size.height;
-    final imageSize = ResponsiveUtils.isDesktop(screenWidth) ? screenWidth * 0.25 : screenWidth * (ResponsiveUtils.isTablet(screenWidth) ? 0.30 : 0.45);
+    final imageSize = ResponsiveUtils.isDesktop(screenWidth)
+        ? screenWidth * 0.25
+        : screenWidth * (ResponsiveUtils.isTablet(screenWidth) ? 0.30 : 0.45);
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: imageSize),
@@ -99,7 +101,11 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
         '${widget.coordinates.longitude.toStringAsFixed(6)}';
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: ResponsiveUtils.isDesktop(screenWidth) ? screenWidth * 0.25 : screenWidth * (ResponsiveUtils.isTablet(screenWidth) ? 0.30 : 0.45)),
+      constraints: BoxConstraints(
+          maxWidth: ResponsiveUtils.isDesktop(screenWidth)
+              ? screenWidth * 0.25
+              : screenWidth *
+                  (ResponsiveUtils.isTablet(screenWidth) ? 0.30 : 0.45)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -176,4 +182,4 @@ class _CustomInfoWindowState extends State<CustomInfoWindow> {
       ),
     );
   }
-} 
+}

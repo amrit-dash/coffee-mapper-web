@@ -43,4 +43,4 @@ class DeleteConfirmationDialog<T> extends StatelessWidget {
       ],
     );
   }
-} 
+}

@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'package:coffee_mapper_web/widgets/dialogs/media_carousel_dialog/media_item.dart';
+
 import 'package:coffee_mapper_web/widgets/dialogs/media_carousel_dialog/carousel_controls.dart';
+import 'package:coffee_mapper_web/widgets/dialogs/media_carousel_dialog/media_item.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MediaCarouselDialog extends StatefulWidget {
-  final List<String> mediaUrls;
-
   const MediaCarouselDialog({
     super.key,
     required this.mediaUrls,
   });
+  final List<String> mediaUrls;
 
   static Future<void> show(BuildContext context, List<String> mediaUrls) async {
     if (mediaUrls.isEmpty) return;
@@ -19,7 +19,8 @@ class MediaCarouselDialog extends StatefulWidget {
     return showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (BuildContext context) => MediaCarouselDialog(mediaUrls: mediaUrls),
+      builder: (BuildContext context) =>
+          MediaCarouselDialog(mediaUrls: mediaUrls),
     );
   }
 
@@ -111,7 +112,7 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
           width: dialogWidth,
           height: dialogHeight,
           decoration: BoxDecoration(
-            color: Theme.of(context).dialogBackgroundColor,
+            color: Theme.of(context).dialogTheme.backgroundColor,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Stack(
@@ -127,7 +128,7 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
                   isVisible: index == _currentIndex,
                 ),
               ),
-              
+
               // Navigation arrows
               Positioned(
                 left: 16,
@@ -158,7 +159,8 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
                   color: Colors.transparent,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface.withAlpha(204),
+                      color:
+                          Theme.of(context).colorScheme.surface.withAlpha(204),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -179,4 +181,4 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
       ),
     );
   }
-} 
+}

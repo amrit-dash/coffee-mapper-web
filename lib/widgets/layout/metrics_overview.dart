@@ -17,7 +17,7 @@ class MetricsOverview extends StatefulWidget {
 class _MetricsOverviewState extends State<MetricsOverview> {
   final CoffeeService _coffeeService = CoffeeService();
   final ShadeService _shadeService = ShadeService();
-  
+
   late Stream<List<ShadeData>> _shadeStream;
   late Stream<List<CoffeeData>> _coffeeStream;
 
@@ -48,11 +48,11 @@ class _MetricsOverviewState extends State<MetricsOverview> {
     // Calculate dynamic card width
     double cardWidth;
     if (isMobile) {
-      cardWidth = (screenWidth * 0.8) / 2;  // 2 cards per row
+      cardWidth = (screenWidth * 0.8) / 2; // 2 cards per row
     } else if (isTablet) {
-      cardWidth = (screenWidth * 0.6) / 2;  // 2 cards per row
+      cardWidth = (screenWidth * 0.6) / 2; // 2 cards per row
     } else {
-      cardWidth = (screenWidth * 0.7) / 4;  // 4 cards per row
+      cardWidth = (screenWidth * 0.7) / 4; // 4 cards per row
     }
 
     return Column(
@@ -61,12 +61,15 @@ class _MetricsOverviewState extends State<MetricsOverview> {
         Padding(
           padding: EdgeInsets.all(isMobile ? 10 : 20),
           child: Align(
-            alignment: (isMobile || isTablet) ? Alignment.center : Alignment.centerLeft,
+            alignment: (isMobile || isTablet)
+                ? Alignment.center
+                : Alignment.centerLeft,
             child: Text(
               'Ongoing Coffee Mapper Progress',
               style: TextStyle(
                 fontFamily: 'Gilroy-SemiBold',
-                fontSize: ResponsiveUtils.getFontSize(screenWidth, isMobile ? 22 : 21),
+                fontSize: ResponsiveUtils.getFontSize(
+                    screenWidth, isMobile ? 22 : 21),
                 color: Theme.of(context).highlightColor,
               ),
             ),
@@ -76,10 +79,10 @@ class _MetricsOverviewState extends State<MetricsOverview> {
           padding: EdgeInsets.all(isMobile ? 10 : 20),
           child: StreamBuilder<List<List<dynamic>>>(
             stream: Rx.combineLatest2(
-              _shadeStream,
-              _coffeeStream,
-              (List<ShadeData> shadeData, List<CoffeeData> coffeeData) => [shadeData, coffeeData]
-            ),
+                _shadeStream,
+                _coffeeStream,
+                (List<ShadeData> shadeData, List<CoffeeData> coffeeData) =>
+                    [shadeData, coffeeData]),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
@@ -99,35 +102,35 @@ class _MetricsOverviewState extends State<MetricsOverview> {
                   alignment: WrapAlignment.start,
                   children: [
                     _buildMetricCard(
-                      context, 
-                      'Total Shade Plantations', 
-                      shadeData.length.toString(), 
-                      'Last Activity: ${_getLatestActivityDate(shadeData)}', 
-                      cardWidth
-                    ),
+                        context,
+                        'Total Shade Plantations',
+                        shadeData.length.toString(),
+                        'Last Activity: ${_getLatestActivityDate(shadeData)}',
+                        cardWidth),
                     _buildMetricCard(
-                      context, 
-                      'Total Coffee Plantations', 
-                      coffeeData.length.toString(), 
-                      'Last Activity: ${_getLatestActivityDate(coffeeData)}', 
-                      cardWidth
-                    ),
+                        context,
+                        'Total Coffee Plantations',
+                        coffeeData.length.toString(),
+                        'Last Activity: ${_getLatestActivityDate(coffeeData)}',
+                        cardWidth),
                     _buildMetricCard(
-                      context, 
-                      'Area of Shade Plantations', 
-                      AreaFormatter.formatArea(_calculateTotalArea(shadeData)), 
-                      'Over ${shadeData.length} Shade Plantations', 
-                      cardWidth,
-                      tooltip: AreaFormatter.getAreaTooltip(_calculateTotalArea(shadeData))
-                    ),
+                        context,
+                        'Area of Shade Plantations',
+                        AreaFormatter.formatArea(
+                            _calculateTotalArea(shadeData)),
+                        'Over ${shadeData.length} Shade Plantations',
+                        cardWidth,
+                        tooltip: AreaFormatter.getAreaTooltip(
+                            _calculateTotalArea(shadeData))),
                     _buildMetricCard(
-                      context, 
-                      'Area of Coffee Plantations', 
-                      AreaFormatter.formatArea(_calculateTotalArea(coffeeData)), 
-                      'Over ${coffeeData.length} Coffee Plantations', 
-                      cardWidth,
-                      tooltip: AreaFormatter.getAreaTooltip(_calculateTotalArea(coffeeData))
-                    ),
+                        context,
+                        'Area of Coffee Plantations',
+                        AreaFormatter.formatArea(
+                            _calculateTotalArea(coffeeData)),
+                        'Over ${coffeeData.length} Coffee Plantations',
+                        cardWidth,
+                        tooltip: AreaFormatter.getAreaTooltip(
+                            _calculateTotalArea(coffeeData))),
                   ],
                 ),
               );
@@ -138,7 +141,9 @@ class _MetricsOverviewState extends State<MetricsOverview> {
     );
   }
 
-  Widget _buildMetricCard(BuildContext context, String title, String value, String subtitle, double width, {String? tooltip}) {
+  Widget _buildMetricCard(BuildContext context, String title, String value,
+      String subtitle, double width,
+      {String? tooltip}) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
 
@@ -181,7 +186,8 @@ class _MetricsOverviewState extends State<MetricsOverview> {
             title,
             style: TextStyle(
               fontFamily: 'Gilroy-SemiBold',
-              fontSize: ResponsiveUtils.getFontSize(screenWidth, isMobile ? 16 : 14),
+              fontSize:
+                  ResponsiveUtils.getFontSize(screenWidth, isMobile ? 16 : 14),
               color: Theme.of(context).highlightColor,
             ),
           ),
@@ -191,7 +197,8 @@ class _MetricsOverviewState extends State<MetricsOverview> {
             subtitle,
             style: TextStyle(
               fontFamily: isMobile ? 'Gilroy-SemiBold' : 'Gilroy-Medium',
-              fontSize: ResponsiveUtils.getFontSize(screenWidth, isMobile ? 12 : 12),
+              fontSize:
+                  ResponsiveUtils.getFontSize(screenWidth, isMobile ? 12 : 12),
               color: Theme.of(context).colorScheme.secondaryContainer,
             ),
           ),
@@ -199,4 +206,4 @@ class _MetricsOverviewState extends State<MetricsOverview> {
       ),
     );
   }
-} 
+}

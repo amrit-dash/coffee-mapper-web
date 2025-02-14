@@ -65,7 +65,7 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
               if (isDesktop) Expanded(child: _buildFiltersRow(context)),
             ],
           ),
-          if (!isDesktop) 
+          if (!isDesktop)
             Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Center(child: _buildFiltersRow(context)),
@@ -78,12 +78,12 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
   Widget _buildFiltersRow(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
-    final hasActiveFilters = selectedDistrict != null || 
-                            selectedBlock != null || 
-                            selectedPanchayat != null || 
-                            selectedVillage != null ||
-                            selectedRegionCategory != null;
-    
+    final hasActiveFilters = selectedDistrict != null ||
+        selectedBlock != null ||
+        selectedPanchayat != null ||
+        selectedVillage != null ||
+        selectedRegionCategory != null;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -170,7 +170,7 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
-    
+
     final horizontalPadding = isMobile ? 8.0 : (isTablet ? 10.0 : 12.0);
     final verticalPadding = isMobile ? 4.0 : (isTablet ? 5.0 : 6.0);
     final fontSize = isMobile ? 11.0 : (isTablet ? 12.0 : 13.0);
@@ -179,7 +179,8 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
     // Get the primary color and create a darker variant for selected state
     final primaryColor = Theme.of(context).colorScheme.primary;
     final selectedColor = HSLColor.fromColor(primaryColor)
-        .withLightness((HSLColor.fromColor(primaryColor).lightness * 0.8).clamp(0.0, 1.0))
+        .withLightness(
+            (HSLColor.fromColor(primaryColor).lightness * 0.8).clamp(0.0, 1.0))
         .toColor();
 
     return Container(
@@ -216,7 +217,7 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
             underline: const SizedBox(),
             icon: Padding(
               padding: EdgeInsets.only(left: horizontalPadding),
-              child: selectedValue == null 
+              child: selectedValue == null
                   ? Icon(
                       Icons.arrow_drop_down,
                       color: Colors.white,
@@ -236,7 +237,9 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
                             //selectedVillage = null;
                           }
                           if (label == 'Village') selectedVillage = null;
-                          if (label == 'Region Category') selectedRegionCategory = null;
+                          if (label == 'Region Category') {
+                            selectedRegionCategory = null;
+                          }
                         });
                         onChanged('');
                       },
@@ -267,7 +270,9 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
                   if (label == 'Block') selectedBlock = value;
                   if (label == 'Panchayat') selectedPanchayat = value;
                   if (label == 'Village') selectedVillage = value;
-                  if (label == 'Region Category') selectedRegionCategory = value;
+                  if (label == 'Region Category') {
+                    selectedRegionCategory = value;
+                  }
                 });
                 onChanged(value);
               }
@@ -277,4 +282,4 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
       ),
     );
   }
-} 
+}

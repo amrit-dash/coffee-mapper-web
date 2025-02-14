@@ -19,7 +19,7 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
   bool _isLoading = false;
   bool _showSuccess = false;
   String? _submittedTicketId;
-  
+
   final _formData = GrievanceData(
     name: '',
     phone: '',
@@ -54,7 +54,7 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
       // Generate timestamp for both document ID and ticket ID
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       String docID = timestamp.toString();
-      
+
       // Update form data
       _formData.ticketID = docID;
       _formData.submittedOn = DateTime.now();
@@ -72,13 +72,12 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
         _showSuccess = true;
         _submittedTicketId = docID;
       });
-
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error submitting form: $e'),
@@ -116,7 +115,8 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                           'Submit a Grievance (ଅଭିଯୋଗ ଦାଖଲ କରନ୍ତୁ)',
                           style: TextStyle(
                             fontFamily: 'Gilroy-SemiBold',
-                            fontSize: ResponsiveUtils.getFontSize(screenWidth, 23),
+                            fontSize:
+                                ResponsiveUtils.getFontSize(screenWidth, 23),
                             color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
@@ -142,7 +142,8 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                     englishLabel: 'Name',
                                     odiaLabel: 'ନାମ',
                                     value: _formData.name,
-                                    onChanged: (value) => _formData.name = value,
+                                    onChanged: (value) =>
+                                        _formData.name = value,
                                   ),
                                   OdiaTextField(
                                     englishLabel: 'Phone Number',
@@ -160,7 +161,8 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                       }
                                       return null;
                                     },
-                                    onChanged: (value) => _formData.phone = value,
+                                    onChanged: (value) =>
+                                        _formData.phone = value,
                                   ),
                                   OdiaTextField(
                                     englishLabel: 'Email ID',
@@ -173,14 +175,16 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                       }
                                       return null;
                                     },
-                                    onChanged: (value) => _formData.email = value,
+                                    onChanged: (value) =>
+                                        _formData.email = value,
                                   ),
                                   OdiaTextField(
                                     englishLabel: 'Grievance Content',
                                     odiaLabel: 'ଅଭିଯୋଗ ବିବରଣୀ',
                                     value: _formData.grievance,
                                     maxLines: isMobile ? 9 : 8,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 20),
                                     alignLabelWithHint: true,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -191,7 +195,8 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                       }
                                       return null;
                                     },
-                                    onChanged: (value) => _formData.grievance = value,
+                                    onChanged: (value) =>
+                                        _formData.grievance = value,
                                   ),
                                 ],
                               ),
@@ -209,10 +214,12 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                       side: BorderSide(
-                                        color: Theme.of(context).colorScheme.error,
+                                        color:
+                                            Theme.of(context).colorScheme.error,
                                       ),
                                     ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 32),
                                   ),
                                   onPressed: _isLoading
                                       ? null
@@ -220,7 +227,8 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                   child: Text(
                                     'Cancel',
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.error,
+                                      color:
+                                          Theme.of(context).colorScheme.error,
                                       fontFamily: 'Gilroy-SemiBold',
                                       fontSize: 16,
                                     ),
@@ -232,8 +240,10 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                 height: 48,
                                 child: FilledButton(
                                   style: FilledButton.styleFrom(
-                                    backgroundColor: Theme.of(context).colorScheme.error,
-                                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 32),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(4),
                                     ),
@@ -245,8 +255,9 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
                                           width: 20,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2,
-                                            valueColor: AlwaysStoppedAnimation<Color>(
-                                                Colors.white),
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.white),
                                           ),
                                         )
                                       : Text(
@@ -270,4 +281,4 @@ class _GrievanceFormDialogState extends State<GrievanceFormDialog> {
       ),
     );
   }
-} 
+}
