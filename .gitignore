@@ -48,6 +48,16 @@ lib/config/firebase_options_prod.dart
 .env*
 *.env
 firebase_options_*.dart
+lib/firebase_options.dart
+
+# Firebase rules and configuration
+firestore/
+storage/
+firestore.rules
+firestore.indexes.json
+storage.rules
+firebase.json
+.firebaserc
 
 # Flutter/Dart specific
 .dart_tool/
