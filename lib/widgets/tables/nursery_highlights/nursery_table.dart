@@ -48,7 +48,7 @@ class _NurseryTableState extends State<NurseryTable> {
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return SizedBox(
       width: double.infinity,
       child: Stack(
@@ -63,8 +63,10 @@ class _NurseryTableState extends State<NurseryTable> {
                 border: TableBorderHandler.getTableBorder(),
                 minWidth: TableConstants.kMinTableWidth,
                 fixedTopRows: 1,
-                headingRowHeight: ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kHeaderHeight),
-                dataRowHeight: ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kRowHeight),
+                headingRowHeight: ResponsiveUtils.getRowHeight(
+                    screenWidth, TableConstants.kHeaderHeight),
+                dataRowHeight: ResponsiveUtils.getRowHeight(
+                    screenWidth, TableConstants.kRowHeight),
                 headingRowDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
@@ -86,17 +88,21 @@ class _NurseryTableState extends State<NurseryTable> {
                   _buildColumn('Fifth\nPair Leaves'),
                   _buildColumn('Sixth\nPair Leaves'),
                 ],
-                rows: widget.nurseryData.map((data) => _buildDataRow(context, data)).toList(),
+                rows: widget.nurseryData
+                    .map((data) => _buildDataRow(context, data))
+                    .toList(),
               ),
             ),
           ),
           if (_showHeaderBorder)
             TableBorderHandler.buildHeaderBorder(
-              ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kHeaderHeight),
+              ResponsiveUtils.getRowHeight(
+                  screenWidth, TableConstants.kHeaderHeight),
             ),
           TableBorderHandler.buildHeaderShadow(
             context,
-            ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kHeaderHeight - 1),
+            ResponsiveUtils.getRowHeight(
+                screenWidth, TableConstants.kHeaderHeight - 1),
           ),
         ],
       ),
@@ -105,9 +111,10 @@ class _NurseryTableState extends State<NurseryTable> {
 
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollUpdateNotification) {
-      final isVerticalScroll = notification.metrics.axisDirection == AxisDirection.down || 
-                              notification.metrics.axisDirection == AxisDirection.up;
-      
+      final isVerticalScroll =
+          notification.metrics.axisDirection == AxisDirection.down ||
+              notification.metrics.axisDirection == AxisDirection.up;
+
       if (isVerticalScroll) {
         final showBorder = notification.metrics.pixels > 0;
         if (showBorder != _showHeaderBorder) {
@@ -120,10 +127,10 @@ class _NurseryTableState extends State<NurseryTable> {
 
   DataColumn2 _buildColumn(String label) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     // Define custom widths for specific columns
     double columnWidth = 150.0; // default width
-    
+
     switch (label) {
       case 'Nursery\nDistrict':
       case 'Nursery\nBlock':
@@ -191,22 +198,23 @@ class _NurseryTableState extends State<NurseryTable> {
     return DataCell(
       LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final availableWidth = constraints.maxWidth - (2 * TableConstants.kHorizontalPadding);
-          
+          final availableWidth =
+              constraints.maxWidth - (2 * TableConstants.kHorizontalPadding);
+
           final textSpan = TextSpan(
             text: text,
             style: AppTextStyles.tableData(context),
           );
-          
+
           final textPainter = TextPainter(
             text: textSpan,
             textDirection: TextDirection.ltr,
             maxLines: 1,
           );
-          
+
           textPainter.layout(maxWidth: double.infinity);
           final bool isTextTruncated = textPainter.width > availableWidth - 10;
-          
+
           Widget content = Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -258,4 +266,4 @@ class _NurseryTableState extends State<NurseryTable> {
       onSelectChanged: null,
     );
   }
-} 
+}

@@ -7,13 +7,14 @@ class TableConstants {
   static const double kBorderWidthBottom = 1.1;
   static const double kHeaderHeight = 55;
   static const double kRowHeight = 45;
-  static const double kMinTableWidth = 2700;  // Increased to accommodate new columns
+  static const double kMinTableWidth =
+      2700; // Increased to accommodate new columns
   static const double kStatusBorderRadius = 12;
   static const double kDeleteIconSize = 14;
   static const double kDeleteButtonMaxHeight = 28;
   static const double kShadowHeight = 8;
-  static const double kHeaderDividerWidth = 1.1;  // Thicker divider for header
-  
+  static const double kHeaderDividerWidth = 1.1; // Thicker divider for header
+
   // Padding and Margins
   static const double kHorizontalPadding = 8;
   static const double kVerticalPadding = 4;
@@ -22,11 +23,12 @@ class TableConstants {
 
   // Column Widths
   static const double kDeleteColumnWidth = 40;
-  static const double kRegionNameWidth = 120;  // Renamed from kShadeNameWidth
-  static const double kRegionCategoryWidth = 150;  // Renamed from kShadeCategoryWidth
+  static const double kRegionNameWidth = 120; // Renamed from kShadeNameWidth
+  static const double kRegionCategoryWidth =
+      150; // Renamed from kShadeCategoryWidth
   static const double kDefaultColumnWidth = 100;
-  static const double kBoundaryWidth = 100;  // Renamed from kShadeBoundaryWidth
-  static const double kAreaWidth = 100;  // Renamed from kShadeAreaWidth
+  static const double kBoundaryWidth = 100; // Renamed from kShadeBoundaryWidth
+  static const double kAreaWidth = 100; // Renamed from kShadeAreaWidth
   static const double kPlantationYearWidth = 100;
   static const double kPlantVarietyWidth = 180;
   static const double kAverageHeightWidth = 100;
@@ -39,9 +41,9 @@ class TableConstants {
   static const double kSavedByWidth = 200;
   static const double kSavedOnWidth = 160;
   static const double kUpdatedOnWidth = 160;
-  static const double kMediaWidth = 80;  // Renamed from kShadeMediaWidth
+  static const double kMediaWidth = 80; // Renamed from kShadeMediaWidth
   static const double kBoundaryImageWidth = 80;
-  
+
   // New coffee-specific column widths
   static const double kShadeTypeWidth = 120;
   static const double kAverageYieldWidth = 100;
@@ -49,14 +51,14 @@ class TableConstants {
   // Colors
   static const Color kDividerColor = Color(0xFFFCDCBC);
   static const Color kHeaderDividerColor = Color(0xFFD5B799);
-  
+
   // Gradient Stops
   static const List<double> kShadowGradientStops = [0.0, 0.8];
   static const double kShadowOpacity = 102.0; // 0.4 opacity
 
   // Formatting
   static const int kDecimalPrecision = 2;
-  
+
   /// Formats a numeric value according to table rules:
   /// - Returns empty string if value is zero
   /// - Removes decimal places if they are all zeros
@@ -73,4 +75,4 @@ class TableConstants {
 
     return '${value.toStringAsFixed(kDecimalPrecision)}${suffix ?? ''}';
   }
-} 
+}

@@ -29,12 +29,15 @@ class _InteractiveChartDialogState extends State<InteractiveChartDialog> {
     final isMobile = screenWidth < 600;
 
     // Calculate scaling factor to fit screen if needed
-    final scale = isMobile ? (screenWidth * 0.8) / InteractiveChartDialog._defaultWidth : 1.0;
+    final scale = isMobile
+        ? (screenWidth * 0.8) / InteractiveChartDialog._defaultWidth
+        : 1.0;
     final width = InteractiveChartDialog._defaultWidth * scale;
     final height = InteractiveChartDialog._defaultHeight * scale;
 
     // Generate a unique ID for the iframe
-    final String viewId = 'interactive-chart-${DateTime.now().millisecondsSinceEpoch}';
+    final String viewId =
+        'interactive-chart-${DateTime.now().millisecondsSinceEpoch}';
 
     // Register the view factory
     // ignore: undefined_prefixed_name

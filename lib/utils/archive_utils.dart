@@ -32,13 +32,11 @@ class ArchiveUtils {
 
     batch.update(sourceDoc, updates);
     batch.update(
-      sourceDoc.collection('regionInsights').doc('latestInformation'), 
-      {
-        'regionCategory': 'Archived',
-        'updatedOn': timestamp,
-        'savedBy': currentUser.email,
-      }
-    );
+        sourceDoc.collection('regionInsights').doc('latestInformation'), {
+      'regionCategory': 'Archived',
+      'updatedOn': timestamp,
+      'savedBy': currentUser.email,
+    });
 
     // 2. Copy to archivedRegions with updates
     final targetDoc = firestore.collection('archivedRegions').doc(documentId);
@@ -54,12 +52,10 @@ class ArchiveUtils {
   }
 
   static Future<void> _copySubcollections(
-    DocumentReference source, 
-    DocumentReference target
-  ) async {
+      DocumentReference source, DocumentReference target) async {
     final collections = await source.collection('regionInsights').get();
     final docs = collections.docs;
-    
+
     for (final doc in docs) {
       final targetSubDoc = target.collection('regionInsights').doc(doc.id);
       await targetSubDoc.set(doc.data());
@@ -67,33 +63,33 @@ class ArchiveUtils {
   }
 
   static Future<void> _deleteDocumentWithSubcollections(
-    DocumentReference document
-  ) async {
+      DocumentReference document) async {
     final collections = await document.collection('regionInsights').get();
     final docs = collections.docs;
-    
+
     for (final doc in docs) {
       await doc.reference.delete();
     }
-    
+
     await document.delete();
   }
 
   // Test method to migrate existing archived documents
   static Future<void> testMigrateExistingArchivedDocuments() async {
     final firestore = FirebaseFirestore.instance;
-    
+
     try {
       // Find all documents marked as Archived
-      final query = firestore.collection('savedRegions')
+      final query = firestore
+          .collection('savedRegions')
           .where('regionCategory', isEqualTo: 'Archived');
-      
+
       final snapshot = await query.get();
       _log.info('Found ${snapshot.docs.length} archived documents to migrate');
-      
+
       int successCount = 0;
       int failureCount = 0;
-      
+
       for (final doc in snapshot.docs) {
         try {
           _log.info('Migrating document ${doc.id}...');
@@ -105,8 +101,9 @@ class ArchiveUtils {
           _log.severe('Failed to migrate ${doc.id}: $e');
         }
       }
-      
-      _log.info('Migration complete. Success: $successCount, Failed: $failureCount');
+
+      _log.info(
+          'Migration complete. Success: $successCount, Failed: $failureCount');
     } catch (e) {
       _log.severe('Migration failed: $e');
       rethrow;
@@ -116,7 +113,7 @@ class ArchiveUtils {
   // Archive a beneficiary document
   static Future<void> archiveBeneficiary(FarmerFormData data) async {
     if (data.id == null) throw Exception('Document ID is required');
-    
+
     final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null || currentUser.email == null) {
@@ -137,4 +134,4 @@ class ArchiveUtils {
       rethrow;
     }
   }
-} 
+}

@@ -19,7 +19,8 @@ class MediaCarouselDialog extends StatefulWidget {
     return showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (BuildContext context) => MediaCarouselDialog(mediaUrls: mediaUrls),
+      builder: (BuildContext context) =>
+          MediaCarouselDialog(mediaUrls: mediaUrls),
     );
   }
 
@@ -127,7 +128,7 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
                   isVisible: index == _currentIndex,
                 ),
               ),
-              
+
               // Navigation arrows
               Positioned(
                 left: 16,
@@ -158,7 +159,8 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
                   color: Colors.transparent,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface.withAlpha(204),
+                      color:
+                          Theme.of(context).colorScheme.surface.withAlpha(204),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
@@ -179,4 +181,4 @@ class _MediaCarouselDialogState extends State<MediaCarouselDialog> {
       ),
     );
   }
-} 
+}

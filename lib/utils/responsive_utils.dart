@@ -37,19 +37,19 @@ class ResponsiveUtils {
   static double getLogoHeight(double screenWidth, double screenHeight) {
     // Base height calculation from screen height
     double baseHeight = screenHeight * 0.12;
-    
+
     // Adjust based on width constraints
     if (screenWidth < mobile) {
-      baseHeight *= 0.8;  // Reduce more on mobile
+      baseHeight *= 0.8; // Reduce more on mobile
     } else if (screenWidth < desktop) {
-      baseHeight *= 0.85;  // Slightly reduce on tablet
+      baseHeight *= 0.85; // Slightly reduce on tablet
     }
-    
+
     // Additional height constraints
     if (screenHeight < 400) {
       baseHeight = screenHeight * 0.08;
     }
-    
+
     // Ensure minimum and maximum bounds
     return baseHeight.clamp(40.0, 120.0);
   }
@@ -62,17 +62,17 @@ class ResponsiveUtils {
   }
 
   static double getTableContainerHeight(double screenWidth) {
-    if (screenWidth < mobile) return 380;  // Mobile height
-    if (screenWidth < desktop) return 420;  // Tablet height
-    return 447;  // Desktop height
+    if (screenWidth < mobile) return 380; // Mobile height
+    if (screenWidth < desktop) return 420; // Tablet height
+    return 447; // Desktop height
   }
 
   // Column width responsiveness
   static double getColumnWidth(double screenWidth, double baseWidth) {
-    if (screenWidth < 360) return baseWidth * 0.6;  // Very small screens
-    if (screenWidth < mobile) return baseWidth * 0.7;  // Mobile
-    if (screenWidth < desktop) return baseWidth * 0.85;  // Tablet
-    return baseWidth;  // Desktop
+    if (screenWidth < 360) return baseWidth * 0.6; // Very small screens
+    if (screenWidth < mobile) return baseWidth * 0.7; // Mobile
+    if (screenWidth < desktop) return baseWidth * 0.85; // Tablet
+    return baseWidth; // Desktop
   }
 
   // Row heights
@@ -92,4 +92,4 @@ class ResponsiveUtils {
       return 24.0;
     }
   }
-} 
+}

@@ -15,10 +15,11 @@ class MapOverviewSection extends StatefulWidget {
   State<MapOverviewSection> createState() => _MapOverviewSectionState();
 }
 
-class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTickerProviderStateMixin {
+class _MapOverviewSectionState extends State<MapOverviewSection>
+    with SingleTickerProviderStateMixin {
   final ShadeService _shadeService = ShadeService();
   final CoffeeService _coffeeService = CoffeeService();
-  
+
   // Map controller and state
   gmap.GoogleMapController? _mapController;
   final Set<gmap.Marker> _markers = {};
@@ -27,8 +28,9 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
   String? _selectedImageUrl;
   bool _isMapLoading = true;
   bool _isDisposed = false;
-  double _currentZoom = 10.0;  // Track current zoom level
-  static const double _minMarkerInteractionZoom = 14.0;  // Minimum zoom level for marker interaction
+  double _currentZoom = 10.0; // Track current zoom level
+  static const double _minMarkerInteractionZoom =
+      14.0; // Minimum zoom level for marker interaction
 
   // Animation controller for zoom message
   late AnimationController _messageController;
@@ -41,7 +43,8 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
   String? selectedBlock;
   String? selectedVillage;
   String? selectedPanchayat;
-  Set<String> selectedRegionCategories = {};  // Changed to Set for multiple selections
+  Set<String> selectedRegionCategories =
+      {}; // Changed to Set for multiple selections
 
   // Data state
   List<ShadeData> allShadeData = [];
@@ -59,7 +62,8 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
     _coffeeDataStream = _coffeeService.getCoffeeDataStream();
     _messageController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000), // Just the fade out duration
+      duration:
+          const Duration(milliseconds: 2000), // Just the fade out duration
     );
     _messageController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -98,11 +102,20 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
   }
 
   bool _matchesFilters(dynamic data) {
-    return (selectedDistrict == null || selectedDistrict!.isEmpty || data.district == selectedDistrict) &&
-           (selectedBlock == null || selectedBlock!.isEmpty || data.block == selectedBlock) &&
-           (selectedPanchayat == null || selectedPanchayat!.isEmpty || data.panchayat == selectedPanchayat) &&
-           (selectedVillage == null || selectedVillage!.isEmpty || data.village == selectedVillage) &&
-           (selectedRegionCategories.isEmpty || selectedRegionCategories.contains(data.regionCategory));
+    return (selectedDistrict == null ||
+            selectedDistrict!.isEmpty ||
+            data.district == selectedDistrict) &&
+        (selectedBlock == null ||
+            selectedBlock!.isEmpty ||
+            data.block == selectedBlock) &&
+        (selectedPanchayat == null ||
+            selectedPanchayat!.isEmpty ||
+            data.panchayat == selectedPanchayat) &&
+        (selectedVillage == null ||
+            selectedVillage!.isEmpty ||
+            data.village == selectedVillage) &&
+        (selectedRegionCategories.isEmpty ||
+            selectedRegionCategories.contains(data.regionCategory));
   }
 
   List<String> _getUniqueValues(String Function(dynamic) selector) {
@@ -116,7 +129,8 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
     return values.toList()..sort();
   }
 
-  List<String> _getFilteredValues(String Function(dynamic) selector, {
+  List<String> _getFilteredValues(
+    String Function(dynamic) selector, {
     String? district,
     String? block,
     String? panchayat,
@@ -147,13 +161,13 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
   }
 
   List<String> get allRegionCategories => [
-    ...ShadeService.shadeCategories,
-    ...CoffeeService.coffeeCategories,
-  ];
+        ...ShadeService.shadeCategories,
+        ...CoffeeService.coffeeCategories,
+      ];
 
   void _updateMapPolygons() {
     if (_isDisposed) return;
-    
+
     setState(() {
       _markers.clear();
       _polygons.clear();
@@ -164,14 +178,16 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
         // Add polygon
         if (data.polygonCoordinates.isNotEmpty) {
           try {
-            List<gmap.LatLng> points = _convertToLatLng(data.polygonCoordinates);
+            List<gmap.LatLng> points =
+                _convertToLatLng(data.polygonCoordinates);
             if (points.isNotEmpty) {
               _polygons.add(
                 gmap.Polygon(
                   polygonId: gmap.PolygonId(data.id),
                   points: points,
                   strokeColor: Theme.of(context).colorScheme.secondary,
-                  fillColor: Theme.of(context).colorScheme.secondary.withAlpha(77),
+                  fillColor:
+                      Theme.of(context).colorScheme.secondary.withAlpha(77),
                   strokeWidth: 2,
                 ),
               );
@@ -185,14 +201,15 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
                     final uri = Uri.parse(url);
                     final pathSegments = uri.pathSegments;
                     if (pathSegments.isEmpty) continue;
-                    
+
                     // Get the filename (last segment)
                     final filename = pathSegments.last;
-                    
+
                     // Extract coordinates part (remove extension and token)
-                    final coordPart = filename.split('/').last.split('.jpg').first;
+                    final coordPart =
+                        filename.split('/').last.split('.jpg').first;
                     final coords = coordPart.split('_');
-                    
+
                     if (coords.length == 2) {
                       final lat = double.tryParse(coords[0]);
                       final lng = double.tryParse(coords[1]);
@@ -200,7 +217,8 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
                         final newLocation = gmap.LatLng(lat, lng);
                         _markers.add(
                           gmap.Marker(
-                            markerId: gmap.MarkerId('${data.id}_${_markers.length}'),
+                            markerId:
+                                gmap.MarkerId('${data.id}_${_markers.length}'),
                             position: newLocation,
                             icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
                               gmap.BitmapDescriptor.hueOrange,
@@ -210,8 +228,9 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
                                 setState(() {
                                   _selectedLocation = null;
                                   _selectedImageUrl = null;
-                                  
-                                  Future.delayed(const Duration(milliseconds: 50), () {
+
+                                  Future.delayed(
+                                      const Duration(milliseconds: 50), () {
                                     if (mounted) {
                                       setState(() {
                                         _selectedLocation = newLocation;
@@ -226,9 +245,10 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
                                   _messageController.reset();
                                   _showZoomMessage = true;
                                 });
-                                
+
                                 // Start the fade out after 2 seconds
-                                Future.delayed(const Duration(milliseconds: 2000), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 2000), () {
                                   if (mounted && _showZoomMessage) {
                                     _messageController.forward(from: 0);
                                   }
@@ -259,20 +279,23 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
 
   List<gmap.LatLng> _convertToLatLng(List<String> coordinates) {
     List<gmap.LatLng> points = [];
-    
+
     for (String coord in coordinates) {
       try {
         // Remove any whitespace and split by comma
         List<String> parts = coord.trim().split(',');
-        
+
         if (parts.length == 2) {
           // Parse and validate each part
           double? lat = double.tryParse(parts[0].trim());
           double? lng = double.tryParse(parts[1].trim());
-          
-          if (lat != null && lng != null && 
-              lat >= -90 && lat <= 90 && 
-              lng >= -180 && lng <= 180) {
+
+          if (lat != null &&
+              lng != null &&
+              lat >= -90 &&
+              lat <= 90 &&
+              lng >= -180 &&
+              lng <= 180) {
             points.add(gmap.LatLng(lat, lng));
           }
         }
@@ -280,7 +303,7 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
         // Continue to next coordinate instead of throwing
       }
     }
-    
+
     return points;
   }
 
@@ -304,7 +327,7 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
     final paddingFactor = _polygons.length > 5 ? 0.1 : 0.2;
     final latPadding = (maxLat - minLat) * paddingFactor;
     final lngPadding = (maxLng - minLng) * paddingFactor;
-    
+
     final targetBounds = gmap.LatLngBounds(
       southwest: gmap.LatLng(minLat - latPadding, minLng - lngPadding),
       northeast: gmap.LatLng(maxLat + latPadding, maxLng + lngPadding),
@@ -346,7 +369,7 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
 
   void _onMapCreated(gmap.GoogleMapController controller) {
     if (_isDisposed) return;
-    
+
     setState(() {
       _mapController = controller;
       _isMapLoading = false;
@@ -362,13 +385,13 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
     final screenHeight = MediaQuery.of(context).size.height;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
-    
+
     // Make map height larger and responsive
-    final mapHeight = isMobile 
-        ? screenHeight * 0.85  // 70% of screen height on mobile
-        : isTablet 
-            ? screenHeight * 0.78  // 65% of screen height on tablet
-            : screenHeight * 0.7;  // 60% of screen height on desktop
+    final mapHeight = isMobile
+        ? screenHeight * 0.85 // 70% of screen height on mobile
+        : isTablet
+            ? screenHeight * 0.78 // 65% of screen height on tablet
+            : screenHeight * 0.7; // 60% of screen height on desktop
 
     // Get filtered lists based on current selections
     final districts = _getUniqueValues((data) => data.district);
@@ -387,7 +410,7 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
       block: selectedBlock,
       panchayat: selectedPanchayat,
     );
-    
+
     // Get filtered region categories based on all location filters
     final filteredRegionCategories = _getFilteredValues(
       (data) => data.regionCategory,
@@ -406,34 +429,40 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
           panchayats: panchayats,
           villages: villages,
           regionCategories: filteredRegionCategories,
-          selectedRegionCategories: selectedRegionCategories,  // Pass selected categories
+          selectedRegionCategories:
+              selectedRegionCategories, // Pass selected categories
           onDistrictChanged: (value) => setState(() {
             selectedDistrict = value.isEmpty ? null : value;
             selectedBlock = null;
             selectedPanchayat = null;
             selectedVillage = null;
-            selectedRegionCategories.clear();  // Clear region categories when district changes
+            selectedRegionCategories
+                .clear(); // Clear region categories when district changes
             _updateFilteredData();
           }),
           onBlockChanged: (value) => setState(() {
             selectedBlock = value.isEmpty ? null : value;
             selectedPanchayat = null;
             selectedVillage = null;
-            selectedRegionCategories.clear();  // Clear region categories when block changes
+            selectedRegionCategories
+                .clear(); // Clear region categories when block changes
             _updateFilteredData();
           }),
           onPanchayatChanged: (value) => setState(() {
             selectedPanchayat = value.isEmpty ? null : value;
             selectedVillage = null;
-            selectedRegionCategories.clear();  // Clear region categories when panchayat changes
+            selectedRegionCategories
+                .clear(); // Clear region categories when panchayat changes
             _updateFilteredData();
           }),
           onVillageChanged: (value) => setState(() {
             selectedVillage = value.isEmpty ? null : value;
-            selectedRegionCategories.clear();  // Clear region categories when village changes
+            selectedRegionCategories
+                .clear(); // Clear region categories when village changes
             _updateFilteredData();
           }),
-          onRegionCategoriesChanged: (categories) => setState(() {  // Updated to handle multiple selections
+          onRegionCategoriesChanged: (categories) => setState(() {
+            // Updated to handle multiple selections
             selectedRegionCategories = categories;
             _updateFilteredData();
           }),
@@ -534,7 +563,9 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
                         vertical: 16,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor.withAlpha(230),
+                        color: Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withAlpha(230),
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
@@ -563,11 +594,11 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
   }
 
   bool _hasActiveFilters() {
-    return (selectedDistrict?.isNotEmpty ?? false) || 
-           (selectedBlock?.isNotEmpty ?? false) || 
-           (selectedPanchayat?.isNotEmpty ?? false) || 
-           (selectedVillage?.isNotEmpty ?? false) ||
-           selectedRegionCategories.isNotEmpty;
+    return (selectedDistrict?.isNotEmpty ?? false) ||
+        (selectedBlock?.isNotEmpty ?? false) ||
+        (selectedPanchayat?.isNotEmpty ?? false) ||
+        (selectedVillage?.isNotEmpty ?? false) ||
+        selectedRegionCategories.isNotEmpty;
   }
 
   @override
@@ -583,4 +614,4 @@ class _MapOverviewSectionState extends State<MapOverviewSection> with SingleTick
     });
     super.dispose();
   }
-} 
+}

@@ -14,8 +14,10 @@ class BeneficiaryService {
   final _log = Logger('BeneficiaryService');
 
   // Initialize Firestore with persistence enabled
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance..settings = 
-    const Settings(persistenceEnabled: true, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance
+    ..settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
 
   // Cache settings
   static const Duration cacheDuration = Duration(minutes: 5);
@@ -24,9 +26,10 @@ class BeneficiaryService {
   final Map<String, List<FarmerFormData>> _cache = {};
   List<FarmerFormData>? _cachedData;
   DateTime? _lastCacheTime;
-  final BehaviorSubject<List<FarmerFormData>> _dataSubject = BehaviorSubject<List<FarmerFormData>>.seeded([]);
+  final BehaviorSubject<List<FarmerFormData>> _dataSubject =
+      BehaviorSubject<List<FarmerFormData>>.seeded([]);
   Timer? _cleanupTimer;
-  
+
   // Cache monitoring
   int _cacheHits = 0;
   int _cacheMisses = 0;
@@ -46,45 +49,51 @@ class BeneficiaryService {
     // Listen to query snapshots and handle updates
     query.snapshots().listen(
       (snapshot) {
-        if (_dataSubject.isClosed) return;  // Early return if stream is closed
-        
-        try {
-          final List<FarmerFormData> data = snapshot.docs.map((doc) {
-            try {
-              final Map<String, dynamic> docData = doc.data();
-              // Convert submittedOn to DateTime, handling both Timestamp and String formats
-              DateTime submittedOn;
-              if (docData['submittedOn'] is Timestamp) {
-                submittedOn = (docData['submittedOn'] as Timestamp).toDate();
-              } else if (docData['submittedOn'] is String) {
-                submittedOn = DateTime.parse(docData['submittedOn']);
-              } else {
-                submittedOn = DateTime.now();
-              }
+        if (_dataSubject.isClosed) return; // Early return if stream is closed
 
-              return FarmerFormData.fromJson({
-                ...docData,
-                'id': doc.id,
-                'district': docData['district'] ?? '',
-                'block': docData['block'] ?? '',
-                'panchayat': docData['panchayat'] ?? '',
-                'village': docData['village'] ?? '',
-                'status': docData['status'] ?? 'active',
-                'submittedOn': Timestamp.fromDate(submittedOn),
-              });
-            } catch (e) {
-              _log.warning('Error parsing document ${doc.id}: $e');
-              return null;
-            }
-          }).where((data) => data != null).cast<FarmerFormData>().toList();
+        try {
+          final List<FarmerFormData> data = snapshot.docs
+              .map((doc) {
+                try {
+                  final Map<String, dynamic> docData = doc.data();
+                  // Convert submittedOn to DateTime, handling both Timestamp and String formats
+                  DateTime submittedOn;
+                  if (docData['submittedOn'] is Timestamp) {
+                    submittedOn =
+                        (docData['submittedOn'] as Timestamp).toDate();
+                  } else if (docData['submittedOn'] is String) {
+                    submittedOn = DateTime.parse(docData['submittedOn']);
+                  } else {
+                    submittedOn = DateTime.now();
+                  }
+
+                  return FarmerFormData.fromJson({
+                    ...docData,
+                    'id': doc.id,
+                    'district': docData['district'] ?? '',
+                    'block': docData['block'] ?? '',
+                    'panchayat': docData['panchayat'] ?? '',
+                    'village': docData['village'] ?? '',
+                    'status': docData['status'] ?? 'active',
+                    'submittedOn': Timestamp.fromDate(submittedOn),
+                  });
+                } catch (e) {
+                  _log.warning('Error parsing document ${doc.id}: $e');
+                  return null;
+                }
+              })
+              .where((data) => data != null)
+              .cast<FarmerFormData>()
+              .toList();
 
           // Update cache in a safe manner
           _cachedData = List<FarmerFormData>.unmodifiable(data);
           _lastCacheTime = DateTime.now();
-          
+
           // Only emit if there are changes and stream is still active
-          if (!_dataSubject.isClosed && 
-              (!_dataSubject.hasValue || !listEquals(_dataSubject.value, data))) {
+          if (!_dataSubject.isClosed &&
+              (!_dataSubject.hasValue ||
+                  !listEquals(_dataSubject.value, data))) {
             _dataSubject.add(List<FarmerFormData>.unmodifiable(data));
           }
         } catch (e) {
@@ -102,13 +111,14 @@ class BeneficiaryService {
           _dataSubject.addError(error);
         }
       },
-      cancelOnError: false,  // Don't cancel stream on error
+      cancelOnError: false, // Don't cancel stream on error
     );
   }
 
   void _startCleanupTimer() {
     _cleanupTimer?.cancel();
-    _cleanupTimer = Timer.periodic(cleanupInterval, (_) => _performCacheCleanup());
+    _cleanupTimer =
+        Timer.periodic(cleanupInterval, (_) => _performCacheCleanup());
   }
 
   void _performCacheCleanup() {
@@ -116,7 +126,8 @@ class BeneficiaryService {
 
     final age = DateTime.now().difference(_lastCacheTime!);
     if (age >= cacheDuration) {
-      _log.info('Cache cleanup: Clearing expired cache (age: ${age.inSeconds}s)');
+      _log.info(
+          'Cache cleanup: Clearing expired cache (age: ${age.inSeconds}s)');
       clearCache();
     } else if (_cachedData!.length > maxCacheItems) {
       _log.info('Cache cleanup: Trimming cache to size limit');
@@ -125,7 +136,8 @@ class BeneficiaryService {
   }
 
   Stream<List<FarmerFormData>> getBeneficiaryDataStream() {
-    return _dataSubject.stream.map((list) => List<FarmerFormData>.unmodifiable(list));
+    return _dataSubject.stream
+        .map((list) => List<FarmerFormData>.unmodifiable(list));
   }
 
   Future<List<FarmerFormData>> getBeneficiaries({
@@ -141,7 +153,8 @@ class BeneficiaryService {
     }
     _cacheMisses++;
 
-    Query query = _firestore.collection('farmerApplications')
+    Query query = _firestore
+        .collection('farmerApplications')
         .where('status', isEqualTo: 'active')
         .orderBy('submittedOn', descending: true);
 
@@ -170,9 +183,9 @@ class BeneficiaryService {
           'panchayat': data['panchayat'] ?? '',
           'village': data['village'] ?? '',
           'status': data['status'] ?? 'active',
-          'submittedOn': data['submittedOn'] is Timestamp 
+          'submittedOn': data['submittedOn'] is Timestamp
               ? data['submittedOn']
-              : data['submittedOn'] is String 
+              : data['submittedOn'] is String
                   ? Timestamp.fromDate(DateTime.parse(data['submittedOn']))
                   : Timestamp.fromDate(DateTime.now()),
         });
@@ -193,12 +206,12 @@ class BeneficiaryService {
     try {
       // Use ArchiveUtils to archive the beneficiary
       await ArchiveUtils.archiveBeneficiary(data);
-      
+
       // Update local cache safely
       if (_cachedData != null) {
         _cachedData = List<FarmerFormData>.from(_cachedData!)
           ..removeWhere((item) => item.id == data.id);
-        
+
         if (!_dataSubject.isClosed) {
           _dataSubject.add(_cachedData!);
         }
@@ -210,7 +223,8 @@ class BeneficiaryService {
     }
   }
 
-  String _generateCacheKey(String? district, String? block, String? panchayat, String? village) {
+  String _generateCacheKey(
+      String? district, String? block, String? panchayat, String? village) {
     return '$district:$block:$panchayat:$village';
   }
 
@@ -230,20 +244,22 @@ class BeneficiaryService {
     return {
       'cacheHits': _cacheHits,
       'cacheMisses': _cacheMisses,
-      'hitRate': _cacheHits + _cacheMisses == 0 
-          ? 0 
+      'hitRate': _cacheHits + _cacheMisses == 0
+          ? 0
           : _cacheHits / (_cacheHits + _cacheMisses),
       'currentCacheSize': _cachedData?.length ?? 0,
       'maxCacheSize': maxCacheItems,
-      'isCacheValid': _lastCacheTime != null 
-          ? DateTime.now().difference(_lastCacheTime!) < cacheDuration 
+      'isCacheValid': _lastCacheTime != null
+          ? DateTime.now().difference(_lastCacheTime!) < cacheDuration
           : false,
-      'cacheAge': _lastCacheTime != null 
-          ? DateTime.now().difference(_lastCacheTime!).inSeconds 
+      'cacheAge': _lastCacheTime != null
+          ? DateTime.now().difference(_lastCacheTime!).inSeconds
           : null,
       'cleanupInterval': cleanupInterval.inSeconds,
-      'nextCleanupIn': _lastCacheTime != null 
-          ? cleanupInterval.inSeconds - (DateTime.now().difference(_lastCacheTime!).inSeconds % cleanupInterval.inSeconds)
+      'nextCleanupIn': _lastCacheTime != null
+          ? cleanupInterval.inSeconds -
+              (DateTime.now().difference(_lastCacheTime!).inSeconds %
+                  cleanupInterval.inSeconds)
           : null,
     };
   }
@@ -253,4 +269,4 @@ class BeneficiaryService {
     _dataSubject.close();
     clearCache();
   }
-} 
+}

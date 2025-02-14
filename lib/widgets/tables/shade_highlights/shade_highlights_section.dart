@@ -37,14 +37,21 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
   // Get filtered data based on current selections
   List<ShadeData> _getCurrentFilteredData() {
     return allData.where((data) {
-      bool matchesDistrict = selectedDistrict == null || data.district == selectedDistrict;
+      bool matchesDistrict =
+          selectedDistrict == null || data.district == selectedDistrict;
       bool matchesBlock = selectedBlock == null || data.block == selectedBlock;
-      bool matchesPanchayat = selectedPanchayat == null || data.panchayat == selectedPanchayat;
-      bool matchesVillage = selectedVillage == null || data.village == selectedVillage;
-      bool matchesRegionCategory = selectedRegionCategory == null || data.regionCategory == selectedRegionCategory;
+      bool matchesPanchayat =
+          selectedPanchayat == null || data.panchayat == selectedPanchayat;
+      bool matchesVillage =
+          selectedVillage == null || data.village == selectedVillage;
+      bool matchesRegionCategory = selectedRegionCategory == null ||
+          data.regionCategory == selectedRegionCategory;
 
-      return matchesDistrict && matchesBlock && matchesPanchayat && 
-             matchesVillage && matchesRegionCategory;
+      return matchesDistrict &&
+          matchesBlock &&
+          matchesPanchayat &&
+          matchesVillage &&
+          matchesRegionCategory;
     }).toList();
   }
 
@@ -76,11 +83,11 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
 
   void _filterData() {
     setState(() {
-      bool hasActiveFilters = selectedDistrict != null || 
-                            selectedBlock != null || 
-                            selectedPanchayat != null || 
-                            selectedVillage != null ||
-                            selectedRegionCategory != null;
+      bool hasActiveFilters = selectedDistrict != null ||
+          selectedBlock != null ||
+          selectedPanchayat != null ||
+          selectedVillage != null ||
+          selectedRegionCategory != null;
 
       if (!hasActiveFilters) {
         filteredData = allData;
@@ -92,14 +99,15 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
   }
 
   // Helper methods to get unique values
-  List<String> _getUniqueValues(List<ShadeData> data, String Function(ShadeData) selector) {
+  List<String> _getUniqueValues(
+      List<ShadeData> data, String Function(ShadeData) selector) {
     return data.map(selector).toSet().toList()..sort();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return SizedBox(
       height: ResponsiveUtils.getTableContainerHeight(screenWidth),
       child: StreamBuilder<List<ShadeData>>(
@@ -145,13 +153,13 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: const [
                       BoxShadow(
-                        color: Color.fromARGB(35, 0, 0, 0),  // ~0.1 opacity
+                        color: Color.fromARGB(35, 0, 0, 0), // ~0.1 opacity
                         blurRadius: 8,
                         spreadRadius: 0,
                         offset: Offset(0, 2),
                       ),
                       BoxShadow(
-                        color: Color.fromARGB(35, 0, 0, 0),  // ~0.1 opacity
+                        color: Color.fromARGB(35, 0, 0, 0), // ~0.1 opacity
                         blurRadius: 4,
                         spreadRadius: 0,
                         offset: Offset(0, 1),
@@ -179,11 +187,11 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
   }
 
   bool _hasActiveFilters() {
-    return selectedDistrict != null || 
-           selectedBlock != null || 
-           selectedPanchayat != null || 
-           selectedVillage != null ||
-           selectedRegionCategory != null;
+    return selectedDistrict != null ||
+        selectedBlock != null ||
+        selectedPanchayat != null ||
+        selectedVillage != null ||
+        selectedRegionCategory != null;
   }
 
   void _onDistrictChanged(String value) {
@@ -223,11 +231,11 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
 
   Future<void> _handleDelete(ShadeData data) async {
     if (_isDeleting) return; // Prevent multiple deletes
-    
+
     setState(() {
       _isDeleting = true;
     });
-    
+
     try {
       await _shadeService.deleteShadeData(data.id);
     } catch (e) {
@@ -244,4 +252,4 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
       }
     }
   }
-} 
+}
