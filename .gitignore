@@ -155,3 +155,4 @@ migrate_working_dir/
 /android/app/debug
 /android/app/profile
 /android/app/release
+github.sh
