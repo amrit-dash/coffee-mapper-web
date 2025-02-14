@@ -1,0 +1,60 @@
+.markdown-body img {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+    margin: 4px;
+}
+
+.markdown-body img[alt*="badge"] {
+    height: 28px;
+    margin: 4px;
+}
+
+.markdown-body div[align="center"] {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.markdown-body h1, 
+.markdown-body h2, 
+.markdown-body h3 {
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: 0.3em;
+}
+
+.markdown-body details {
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #f6f8fa;
+    border-radius: 6px;
+}
+
+.markdown-body table {
+    display: table;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.markdown-body blockquote {
+    border-left: 4px solid #0366d6;
+    color: #6a737d;
+    padding: 0 1em;
+    margin: 1rem 0;
+}
+
+.markdown-body code {
+    background-color: rgba(27,31,35,0.05);
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+}
+
+.markdown-body pre {
+    background-color: #f6f8fa;
+    border-radius: 6px;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+}
