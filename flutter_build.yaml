@@ -1,0 +1,16 @@
+targets:
+  $default:
+    builders:
+      build_web_compilers|entrypoint:
+        options:
+          dart2js_args:
+            - --no-source-maps
+      flutter_web_plugins|web_entrypoint:
+        generate_for:
+          - web/**.dart
+        options:
+          dart2js_args:
+            - --no-source-maps
+    assets:
+      options:
+        format: json 

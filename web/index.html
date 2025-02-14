@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A dashboard for Coffee Mapper App.">
+  <meta name="keywords" content="coffee, mapper, dashboard, coffee mapper, coffee mapper dashboard, coffee mapper web, coffee mapper web dashboard, koraput, koraput coffee, koraput coffee map, koraput coffee mapper, koraput coffee mapper dashboard, koraput coffee mapper web, koraput coffee mapper web dashboard, koraput coffee plantation, koraput coffee, koraput coffee mapper">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Coffee Mapper Dashboard">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Coffee Mapper Dashboard</title>
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = '{{flutter_service_worker_version}}';
+  </script>
+
+  <script>
+    let googleMapsInitialized = false;
+    let googleMapsLoadPromise = null;
+
+    // Function to load Google Maps API dynamically
+    function loadGoogleMapsAPI(apiKey) {
+      if (googleMapsLoadPromise) {
+        return googleMapsLoadPromise;
+      }
+
+      googleMapsLoadPromise = new Promise((resolve, reject) => {
+        // If Maps API is already loaded, resolve immediately
+        if (window.google && window.google.maps) {
+          googleMapsInitialized = true;
+          resolve();
+          return;
+        }
+
+        window.initMap = function() {
+          googleMapsInitialized = true;
+          resolve();
+        };
+
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&callback=initMap&v=weekly`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+
+      return googleMapsLoadPromise;
+    }
+
+    // Will be called from Dart code after fetching the API key
+    window.initializeGoogleMaps = function(apiKey) {
+      return loadGoogleMapsAPI(apiKey);
+    };
+  </script>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
