@@ -1,17 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:coffee_mapper_web/widgets/layout/header.dart';
-import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
-import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
-import 'package:coffee_mapper_web/widgets/forms/farmer_application/farmer_form_dialog.dart';
-import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_highlight_section.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:coffee_mapper_web/providers/admin_provider.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+
+import 'package:coffee_mapper_web/providers/admin_provider.dart';
+import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/widgets/forms/farmer_application/farmer_form_dialog.dart';
+import 'package:coffee_mapper_web/widgets/layout/header.dart';
+import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
+import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
+import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_highlight_section.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class RegistrationScreen extends ConsumerWidget {
   const RegistrationScreen({super.key});
@@ -25,7 +26,7 @@ class RegistrationScreen extends ConsumerWidget {
         )
           ..setAttribute('download', 'Application Form.pdf')
           ..style.display = 'none';
-        
+
         html.document.body!.children.add(anchor);
         anchor.click();
         html.document.body!.children.remove(anchor);
@@ -104,7 +105,8 @@ class RegistrationScreen extends ConsumerWidget {
                           Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: isMobile ? 10 : 20),
+                                horizontal: isMobile ? 10 : 20,
+                              ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -142,7 +144,8 @@ class RegistrationScreen extends ConsumerWidget {
                                                 fontFamily: 'Gilroy-SemiBold',
                                                 fontSize: ResponsiveUtils
                                                     .getDashboardHeaderSize(
-                                                        screenWidth),
+                                                  screenWidth,
+                                                ),
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .error,
@@ -170,7 +173,8 @@ class RegistrationScreen extends ConsumerWidget {
                           // Farmer Application Section
                           Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: isMobile ? 10 : 20),
+                              horizontal: isMobile ? 10 : 20,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -179,7 +183,9 @@ class RegistrationScreen extends ConsumerWidget {
                                   style: TextStyle(
                                     fontFamily: 'Gilroy-SemiBold',
                                     fontSize: ResponsiveUtils.getFontSize(
-                                        screenWidth, isMobile ? 19 : 21),
+                                      screenWidth,
+                                      isMobile ? 19 : 21,
+                                    ),
                                     color: Theme.of(context).highlightColor,
                                   ),
                                 ),
@@ -202,14 +208,18 @@ class RegistrationScreen extends ConsumerWidget {
                                         ),
                                       ),
                                       onPressed: () => _showFormDialog(context),
-                                      icon: Icon(Icons.edit_document,
-                                          color: Theme.of(context).cardColor),
+                                      icon: Icon(
+                                        Icons.edit_document,
+                                        color: Theme.of(context).cardColor,
+                                      ),
                                       label: Text(
                                         'Fill Form Now',
                                         style: TextStyle(
                                           fontFamily: 'Gilroy-Medium',
                                           fontSize: ResponsiveUtils.getFontSize(
-                                              screenWidth, 16),
+                                            screenWidth,
+                                            16,
+                                          ),
                                           color: Theme.of(context).cardColor,
                                         ),
                                       ),
@@ -227,15 +237,19 @@ class RegistrationScreen extends ConsumerWidget {
                                           ),
                                         ),
                                         onPressed: () => _downloadPDF(context),
-                                        icon: Icon(Icons.download,
-                                            color: Theme.of(context).cardColor),
+                                        icon: Icon(
+                                          Icons.download,
+                                          color: Theme.of(context).cardColor,
+                                        ),
                                         label: Text(
                                           'Download Form in PDF Format',
                                           style: TextStyle(
                                             fontFamily: 'Gilroy-Medium',
                                             fontSize:
                                                 ResponsiveUtils.getFontSize(
-                                                    screenWidth, 16),
+                                              screenWidth,
+                                              16,
+                                            ),
                                             color: Theme.of(context).cardColor,
                                           ),
                                         ),
@@ -244,8 +258,11 @@ class RegistrationScreen extends ConsumerWidget {
                                     if (!isTablet && !isMobile) ...[
                                       const SizedBox(width: 20),
                                       Expanded(
-                                          child: _buildHelpText(
-                                              context, screenWidth)),
+                                        child: _buildHelpText(
+                                          context,
+                                          screenWidth,
+                                        ),
+                                      ),
                                     ],
                                   ],
                                 ),
@@ -262,14 +279,18 @@ class RegistrationScreen extends ConsumerWidget {
                                         ),
                                       ),
                                       onPressed: () => _downloadPDF(context),
-                                      icon: Icon(Icons.download,
-                                          color: Theme.of(context).cardColor),
+                                      icon: Icon(
+                                        Icons.download,
+                                        color: Theme.of(context).cardColor,
+                                      ),
                                       label: Text(
                                         'Download Form in PDF Format',
                                         style: TextStyle(
                                           fontFamily: 'Gilroy-Medium',
                                           fontSize: ResponsiveUtils.getFontSize(
-                                              screenWidth, 16),
+                                            screenWidth,
+                                            16,
+                                          ),
                                           color: Theme.of(context).cardColor,
                                         ),
                                       ),

@@ -135,7 +135,8 @@ class _DashboardMetricsState extends State<DashboardMetrics> {
 
   Widget _buildGraph(BuildContext context, String imageUrl, String title) {
     // Convert image URL to interactive URL by replacing 'format=image' with 'format=interactive'
-    final interactiveUrl = imageUrl.replaceAll('format=image', 'format=interactive');
+    final interactiveUrl =
+        imageUrl.replaceAll('format=image', 'format=interactive');
 
     return InkWell(
       highlightColor: Colors.transparent,

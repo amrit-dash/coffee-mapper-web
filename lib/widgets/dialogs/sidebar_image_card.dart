@@ -19,7 +19,8 @@ class SidebarImageCard extends ConsumerStatefulWidget {
   ConsumerState<SidebarImageCard> createState() => _SidebarImageCardState();
 }
 
-class _SidebarImageCardState extends ConsumerState<SidebarImageCard> with SingleTickerProviderStateMixin {
+class _SidebarImageCardState extends ConsumerState<SidebarImageCard>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;
   bool _isVisible = false;
@@ -69,8 +70,10 @@ class _SidebarImageCardState extends ConsumerState<SidebarImageCard> with Single
     final dialogHeight = dialogWidth * (9 / 16);
 
     // Calculate padding values clamped between 16 and 48
-    final horizontalPadding = ((screenWidth - dialogWidth) / 2).clamp(16.0, 48.0);
-    final verticalPadding = ((screenHeight - dialogHeight) / 2).clamp(16.0, 48.0);
+    final horizontalPadding =
+        ((screenWidth - dialogWidth) / 2).clamp(16.0, 48.0);
+    final verticalPadding =
+        ((screenHeight - dialogHeight) / 2).clamp(16.0, 48.0);
 
     showDialog(
       context: context,
@@ -83,7 +86,8 @@ class _SidebarImageCardState extends ConsumerState<SidebarImageCard> with Single
         child: ConstrainedBox(
           constraints: BoxConstraints(
             maxWidth: dialogWidth.clamp(400.0, 1200.0),
-            maxHeight: dialogHeight.clamp(225.0, 675.0), // 16:9 ratio maintained in constraints
+            maxHeight: dialogHeight.clamp(
+                225.0, 675.0), // 16:9 ratio maintained in constraints
           ),
           child: const SidebarCarouselDialog(),
         ),
@@ -96,7 +100,7 @@ class _SidebarImageCardState extends ConsumerState<SidebarImageCard> with Single
     // Watch the news provider to trigger animation after news loads
     final news = ref.watch(dashboardNewsProvider);
     final hasAnimated = ref.watch(sidebarImageAnimatedProvider);
-    
+
     // Start animation only if news is loaded and we haven't animated globally yet
     if (news.newsItems.isNotEmpty && !hasAnimated) {
       // Add a small delay to ensure news view is rendered
@@ -233,10 +237,8 @@ class _SidebarCarouselDialogState extends State<SidebarCarouselDialog> {
                             return Container(
                               color: Colors.black,
                               child: const Center(
-                                child: Icon(Icons.image_not_supported, 
-                                  size: 48, 
-                                  color: Colors.white
-                                ),
+                                child: Icon(Icons.image_not_supported,
+                                    size: 48, color: Colors.white),
                               ),
                             );
                           },
@@ -289,7 +291,8 @@ class _SidebarCarouselDialogState extends State<SidebarCarouselDialog> {
                       ),
                     ),
                     // Next button
-                    if (_currentPage < SidebarImageCard.carouselImages.length - 1)
+                    if (_currentPage <
+                        SidebarImageCard.carouselImages.length - 1)
                       IconButton(
                         icon: Icon(
                           Icons.arrow_forward_ios,
@@ -316,7 +319,8 @@ class _SidebarCarouselDialogState extends State<SidebarCarouselDialog> {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: Icon(Icons.close, color: Theme.of(context).colorScheme.error, size: 20),
+                icon: Icon(Icons.close,
+                    color: Theme.of(context).colorScheme.error, size: 20),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
@@ -325,4 +329,4 @@ class _SidebarCarouselDialogState extends State<SidebarCarouselDialog> {
       ),
     );
   }
-} 
+}

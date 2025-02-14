@@ -80,7 +80,8 @@ class _TicketSuccessOverlayState extends State<TicketSuccessOverlay> {
                 duration: const Duration(milliseconds: 200),
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.error.withAlpha(230),
                       borderRadius: BorderRadius.circular(4),
@@ -131,4 +132,4 @@ class _TicketSuccessOverlayState extends State<TicketSuccessOverlay> {
       ],
     );
   }
-} 
+}

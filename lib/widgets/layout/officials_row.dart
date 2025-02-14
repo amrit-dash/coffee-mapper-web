@@ -54,28 +54,28 @@ class _MarqueeTextState extends State<MarqueeText> {
 
   void _startScrolling() async {
     await Future.delayed(const Duration(seconds: 1));
-    
+
     while (_isScrolling && mounted) {
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       if (!mounted || !_isScrolling) break;
-      
+
       if (_scrollController.hasClients) {
         final maxScroll = _scrollController.position.maxScrollExtent;
         final currentScroll = _scrollController.offset;
-        
+
         if (currentScroll >= maxScroll) {
           // Pause at the end before going back to start
           await Future.delayed(const Duration(milliseconds: 1000));
           if (!mounted || !_isScrolling) break;
-          
+
           // Smooth scroll back to start
           await _scrollController.animateTo(
             0,
             duration: const Duration(milliseconds: 1500),
             curve: Curves.easeInOut,
           );
-          
+
           // Pause at the start before scrolling again
           await Future.delayed(const Duration(milliseconds: 1000));
           if (!mounted || !_isScrolling) break;
@@ -156,10 +156,10 @@ class OfficialsRow extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
-    
+
     // Don't render if mobile view
     if (isMobile) return const SizedBox.shrink();
-    
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: isTablet ? 10 : 0),
       child: SingleChildScrollView(
@@ -167,22 +167,26 @@ class OfficialsRow extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildOfficialAvatar(context,
+            _buildOfficialAvatar(
+              context,
               'assets/images/1.png',
               'Shri Kumar Vardhan Singh Deo',
               'Hon\'ble Deputy Chief Minister',
             ),
-            _buildOfficialAvatar(context,
+            _buildOfficialAvatar(
+              context,
               'assets/images/2.png',
               'Dr. Arabinda Kumar Padhee',
               'IAS, Principal Secretary',
             ),
-            _buildOfficialAvatar(context,
+            _buildOfficialAvatar(
+              context,
               'assets/images/3.png',
               'Sri Nikhil Pavan Kalyan',
               'IAS, Director',
             ),
-            _buildOfficialAvatar(context,
+            _buildOfficialAvatar(
+              context,
               'assets/images/4.png',
               'Shri V Keerthi Vasan',
               'Collector & District Magistrate',
@@ -193,10 +197,11 @@ class OfficialsRow extends StatelessWidget {
     );
   }
 
-  Widget _buildOfficialAvatar(BuildContext context, String imagePath, String name, String designation) {
+  Widget _buildOfficialAvatar(
+      BuildContext context, String imagePath, String name, String designation) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
-    
+
     // Adjust width based on screen size
     double containerWidth;
     if (isTablet) {
@@ -204,7 +209,7 @@ class OfficialsRow extends StatelessWidget {
     } else {
       containerWidth = screenWidth * 0.09; // Desktop view
     }
-    
+
     return Container(
       width: containerWidth,
       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -255,4 +260,4 @@ class OfficialsRow extends StatelessWidget {
       ),
     );
   }
-} 
+}
