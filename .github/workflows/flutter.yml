@@ -64,8 +64,15 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         
+      - name: Format code
+        run: dart format .
+        
       - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+        run: |
+          # Format any generated files first
+          dart format .
+          # Now verify that everything is formatted
+          dart format --output=none --set-exit-if-changed .
         
       - name: Analyze project source
         run: flutter analyze

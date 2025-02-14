@@ -237,8 +237,9 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
                             //selectedVillage = null;
                           }
                           if (label == 'Village') selectedVillage = null;
-                          if (label == 'Region Category')
+                          if (label == 'Region Category') {
                             selectedRegionCategory = null;
+                          }
                         });
                         onChanged('');
                       },
@@ -269,8 +270,9 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
                   if (label == 'Block') selectedBlock = value;
                   if (label == 'Panchayat') selectedPanchayat = value;
                   if (label == 'Village') selectedVillage = value;
-                  if (label == 'Region Category')
+                  if (label == 'Region Category') {
                     selectedRegionCategory = value;
+                  }
                 });
                 onChanged(value);
               }
