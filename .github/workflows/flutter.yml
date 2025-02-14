@@ -11,22 +11,39 @@ permissions:
   id-token: write
 
 env:
+  FLUTTER_VERSION: '3.29.0'
   FIREBASE_CLI_VERSION: 12.9.1
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
-
+    
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+    
     steps:
       - uses: actions/checkout@v3
+      
+      # Cache Flutter dependencies
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ runner.tool_cache }}/flutter
+            ${{ env.PUB_CACHE }}
+            .dart_tool
+            build
+          key: ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
+            ${{ runner.os }}-flutter-
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.0'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
           cache: true
 
@@ -45,53 +62,6 @@ jobs:
           # Create production configuration
           echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
           
-          # Create Firebase rules files with basic valid rules
-          cat > firestore.rules << 'EOL'
-          rules_version = "2";
-          service cloud.firestore {
-            match /databases/{database}/documents {
-              match /{document=**} {
-                allow read, write: if request.auth != null;
-              }
-            }
-          }
-          EOL
-          
-          # Create and validate firestore.indexes.json
-          cat > firestore.indexes.json << 'EOL'
-          {
-            "indexes": [],
-            "fieldOverrides": []
-          }
-          EOL
-          echo "Verifying firestore.indexes.json:"
-          cat firestore.indexes.json
-          if ! jq empty firestore.indexes.json; then
-            echo "Invalid firestore.indexes.json JSON"
-            exit 1
-          fi
-          
-          # Create basic storage rules
-          cat > storage.rules << 'EOL'
-          rules_version = "2";
-          service firebase.storage {
-            match /b/{bucket}/o {
-              match /{allPaths=**} {
-                allow read, write: if request.auth != null;
-              }
-            }
-          }
-          EOL
-          
-          # Create and validate .firebaserc
-          echo '${{ secrets.FIREBASE_RC }}' > .firebaserc
-          echo "Verifying .firebaserc:"
-          cat .firebaserc
-          if ! jq empty .firebaserc; then
-            echo "Invalid .firebaserc JSON"
-            exit 1
-          fi
-          
           # Create and validate firebase.json
           echo '${{ secrets.FIREBASE_JSON }}' > firebase.json
           echo "Verifying firebase.json:"
@@ -101,14 +71,14 @@ jobs:
             exit 1
           fi
           
-          # Create directories for rules
-          mkdir -p firestore/dev firestore/prod storage/dev storage/prod
-          cp firestore.rules firestore/dev/firestore.rules
-          cp firestore.rules firestore/prod/firestore.rules
-          cp firestore.indexes.json firestore/dev/firestore.indexes.json
-          cp firestore.indexes.json firestore/prod/firestore.indexes.json
-          cp storage.rules storage/dev/storage.rules
-          cp storage.rules storage/prod/storage.rules
+          # Create and validate .firebaserc
+          echo '${{ secrets.FIREBASE_RC }}' > .firebaserc
+          echo "Verifying .firebaserc:"
+          cat .firebaserc
+          if ! jq empty .firebaserc; then
+            echo "Invalid .firebaserc JSON"
+            exit 1
+          fi
 
       - name: Install dependencies
         run: flutter pub get
@@ -146,11 +116,7 @@ jobs:
           # Verify project ID
           echo "Using production project ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
-          # Note: Using --token is deprecated but still required for CI environments
-          # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
-          
-          # Deploy to all production sites
+          # Deploy only hosting to all production sites
           firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/prod-key.json
@@ -167,11 +133,7 @@ jobs:
           # Verify project ID
           echo "Using development project ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
-          # Note: Using --token is deprecated but still required for CI environments
-          # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
-          
-          # Deploy to development site
+          # Deploy only hosting to development site
           firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json
