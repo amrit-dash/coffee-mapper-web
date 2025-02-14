@@ -52,6 +52,9 @@ jobs:
           echo "${{ secrets.FIREBASE_RC }}" > .firebaserc
           echo "${{ secrets.FIREBASE_JSON }}" > firebase.json
           
+          # Verify files were created
+          cat .firebaserc
+          
           # Create directories for rules
           mkdir -p firestore/dev firestore/prod storage/dev storage/prod
           cp firestore.rules firestore/dev/firestore.rules
@@ -60,7 +63,7 @@ jobs:
           cp firestore.indexes.json firestore/prod/firestore.indexes.json
           cp storage.rules storage/dev/storage.rules
           cp storage.rules storage/prod/storage.rules
-          
+
       - name: Install dependencies
         run: flutter pub get
         
@@ -93,15 +96,14 @@ jobs:
           # Setup Firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}" > $HOME/prod-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/prod-key.json
-          firebase use prod --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy Rules
-          firebase deploy --only firestore,storage --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only firestore:prod,storage:prod --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
           # Deploy to all production sites
-          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/prod-key.json
           
       # Development Deployment
       - name: Deploy to Development
@@ -110,12 +112,11 @@ jobs:
           # Setup Firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" > $HOME/dev-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/dev-key.json
-          firebase use dev --token "${{ secrets.FIREBASE_TOKEN }}"
           
           # Deploy Rules
-          firebase deploy --only firestore,storage --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only firestore:dev,storage:dev --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
           # Deploy to development site
-          firebase deploy --only hosting:coffee-mapper-dashboard --token "${{ secrets.FIREBASE_TOKEN }}"
+          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json 
