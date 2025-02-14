@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:coffee_mapper_web/services/maps_service.dart';
-import 'package:logging/logging.dart';
 import 'package:coffee_mapper_web/config/firebase_config.dart';
-
 // import 'firebase_options.dart';  // We'll use our new config instead
 import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
+import 'package:coffee_mapper_web/services/maps_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:logging/logging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +44,9 @@ class CoffeeMapperWebApp extends StatelessWidget {
         primaryColor: const Color(0xFFc09366),
         scaffoldBackgroundColor: const Color(0xFFD5B799),
         cardColor: const Color(0xFFEADCC8),
-        dialogBackgroundColor: const Color(0xFFFAEEE6),
+        dialogTheme: DialogTheme(
+          backgroundColor: Colors.white,
+        ),
         unselectedWidgetColor: const Color(0xff402200),
         highlightColor: const Color(0xFF632D00),
         colorScheme: ColorScheme.fromSeed(
