@@ -88,8 +88,29 @@ Before you begin, ensure you have the following installed:
 1. **Firebase Setup**:
    - Create two Firebase projects (development and production)
    - Enable Authentication, Firestore, and Hosting
-   - Download the web configuration files
-   - Configure security rules for Firestore
+   - Set up Firebase configuration:
+     ```bash
+     # Copy template files
+     cp .github/templates/firebase.json.template firebase.json
+     cp .github/templates/firestore.rules.template firestore.rules
+     cp .github/templates/storage.rules.template storage.rules
+     cp .github/templates/firestore.indexes.json.template firestore.indexes.json
+     cp .github/templates/.firebaserc.template .firebaserc
+     ```
+   - Update the configuration files:
+     - In `firebase.json`:
+       - Replace `your-site-name` with your Firebase hosting site name
+       - Update `your-region` with your preferred region (e.g., "asia-east1")
+     - In `.firebaserc`:
+       - Replace `your-project-id` with your default Firebase project ID
+       - Update `your-dev-project-id` and `your-prod-project-id` with your development and production project IDs
+       - Configure hosting targets for your sites
+     - Update security rules in `firestore.rules` and `storage.rules`:
+       - Replace the default open access rules with your security requirements
+       - Uncomment and modify the example secured rules as needed
+     - In `firestore.indexes.json`:
+       - Replace the example index with your required Firestore indexes
+       - Add additional indexes as needed for your queries
 
 2. **Google Maps Setup**:
    - Create a Google Cloud Project
@@ -219,6 +240,8 @@ lib/
 - 🛡️ Environment-specific security rules
 - 🔒 Data access control
 - 🔄 Regular security updates
+
+> ⚠️ **Important Security Note**: The template files in `.github/templates/` contain open access rules for demonstration purposes only. Never use these rules in production. Always implement proper security rules based on your application's requirements before deploying.
 
 ## 🤝 Contributing
 
