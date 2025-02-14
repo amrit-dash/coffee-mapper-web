@@ -21,7 +21,7 @@ class AreaFormatter {
       return '${areaInSquareMeters.toStringAsFixed(2)} m²';
     } else {
       double hectares = areaInSquareMeters / hectareConversion;
-      return (hectares.toStringAsFixed(3) == "0.000")
+      return (hectares.toStringAsFixed(3) == '0.000')
           ? ''
           : '${hectares.toStringAsFixed(3)} ha';
     }
