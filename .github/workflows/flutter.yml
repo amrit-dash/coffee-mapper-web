@@ -81,9 +81,9 @@ jobs:
         if: github.event_name == 'push'
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            flutter build web --release --web-renderer canvaskit --dart-define=ENVIRONMENT=production
+            flutter build web --release --dart-define=ENVIRONMENT=production
           else
-            flutter build web --release --web-renderer canvaskit --dart-define=ENVIRONMENT=development
+            flutter build web --release --dart-define=ENVIRONMENT=development
           fi
 
       # Production Deployment
