@@ -19,7 +19,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   bool _isLoading = true;
-  static bool _isFirstLoad = true;  // Static variable to track initial load
+  static bool _isFirstLoad = true; // Static variable to track initial load
 
   @override
   void initState() {
@@ -29,12 +29,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (mounted) {
           setState(() {
             _isLoading = false;
-            _isFirstLoad = false;  // Set to false after first load
+            _isFirstLoad = false; // Set to false after first load
           });
         }
       });
     } else {
-      _isLoading = false;  // No loading if not first load
+      _isLoading = false; // No loading if not first load
     }
   }
 
@@ -101,16 +101,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     Expanded(
                       child: Align(
-                        alignment: !isMobile ? Alignment.centerLeft : Alignment.center,
+                        alignment:
+                            !isMobile ? Alignment.centerLeft : Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              !isMobile ? 'Koraput Coffee Plantation' : 'Koraput Coffee Plantation At A Glance',
+                              !isMobile
+                                  ? 'Koraput Coffee Plantation'
+                                  : 'Koraput Coffee Plantation At A Glance',
                               style: TextStyle(
                                 fontFamily: 'Gilroy-SemiBold',
-                                fontSize: ResponsiveUtils.getDashboardHeaderSize(screenWidth),
+                                fontSize:
+                                    ResponsiveUtils.getDashboardHeaderSize(
+                                        screenWidth),
                                 color: Theme.of(context).colorScheme.error,
                               ),
                             ),
@@ -119,8 +124,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 'At A Glance',
                                 style: TextStyle(
                                   fontFamily: 'Gilroy-SemiBold',
-                                  fontSize: ResponsiveUtils.getDashboardHeaderSize(screenWidth) * 0.8,
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontSize:
+                                      ResponsiveUtils.getDashboardHeaderSize(
+                                              screenWidth) *
+                                          0.8,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                           ],
@@ -132,7 +141,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-            if (isMobile) 
+            if (isMobile)
               const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),

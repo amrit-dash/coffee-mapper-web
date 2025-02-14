@@ -11,7 +11,7 @@ import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Firebase.initializeApp(
     options: FirebaseConfig.currentConfig,
   );

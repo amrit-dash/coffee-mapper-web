@@ -19,7 +19,8 @@ class MapsTestWidget extends StatelessWidget {
             Expanded(
               child: gmap.GoogleMap(
                 initialCameraPosition: gmap.CameraPosition(
-                  target: gmap.LatLng(18.8137326, 82.7001428), // Default coordinates
+                  target: gmap.LatLng(
+                      18.8137326, 82.7001428), // Default coordinates
                   zoom: 14,
                 ),
                 mapType: gmap.MapType.satellite,
@@ -38,4 +39,4 @@ void showMapsTestDialog(BuildContext context) {
     context: context,
     builder: (context) => const MapsTestWidget(),
   );
-} 
+}

@@ -54,7 +54,9 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final columns = widget.isLoggedIn ? TableColumns.beneficiaryAdminColumns : TableColumns.beneficiaryColumns;
+    final columns = widget.isLoggedIn
+        ? TableColumns.beneficiaryAdminColumns
+        : TableColumns.beneficiaryColumns;
 
     return SizedBox(
       width: double.infinity,
@@ -70,35 +72,44 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
                 border: TableBorderHandler.getTableBorder(),
                 minWidth: TableConstants.kMinTableWidth + 1000,
                 fixedTopRows: 1,
-                headingRowHeight: ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kHeaderHeight),
-                dataRowHeight: ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kRowHeight),
+                headingRowHeight: ResponsiveUtils.getRowHeight(
+                    screenWidth, TableConstants.kHeaderHeight),
+                dataRowHeight: ResponsiveUtils.getRowHeight(
+                    screenWidth, TableConstants.kRowHeight),
                 headingRowDecoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
                 columns: [
                   if (widget.isLoggedIn)
                     DataColumn2(
-                      label: _buildColumnLabel(context, TableColumns.deleteColumn.label),
+                      label: _buildColumnLabel(
+                          context, TableColumns.deleteColumn.label),
                       size: TableColumns.deleteColumn.size,
-                      fixedWidth: ResponsiveUtils.getColumnWidth(screenWidth, TableColumns.deleteColumn.width),
+                      fixedWidth: ResponsiveUtils.getColumnWidth(
+                          screenWidth, TableColumns.deleteColumn.width),
                     ),
                   ...columns.map((col) => DataColumn2(
-                    label: _buildColumnLabel(context, col.label),
-                    size: col.size,
-                    fixedWidth: ResponsiveUtils.getColumnWidth(screenWidth, col.width),
-                  )),
+                        label: _buildColumnLabel(context, col.label),
+                        size: col.size,
+                        fixedWidth: ResponsiveUtils.getColumnWidth(
+                            screenWidth, col.width),
+                      )),
                 ],
-                rows: widget.beneficiaryData.map((data) => _buildDataRow(context, data)).toList(),
+                rows: widget.beneficiaryData
+                    .map((data) => _buildDataRow(context, data))
+                    .toList(),
               ),
             ),
           ),
           if (_showHeaderBorder)
             TableBorderHandler.buildHeaderBorder(
-              ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kHeaderHeight),
+              ResponsiveUtils.getRowHeight(
+                  screenWidth, TableConstants.kHeaderHeight),
             ),
           TableBorderHandler.buildHeaderShadow(
             context,
-            ResponsiveUtils.getRowHeight(screenWidth, TableConstants.kHeaderHeight - 1),
+            ResponsiveUtils.getRowHeight(
+                screenWidth, TableConstants.kHeaderHeight - 1),
           ),
         ],
       ),
@@ -107,9 +118,10 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
 
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollUpdateNotification) {
-      final isVerticalScroll = notification.metrics.axisDirection == AxisDirection.down || 
-                              notification.metrics.axisDirection == AxisDirection.up;
-      
+      final isVerticalScroll =
+          notification.metrics.axisDirection == AxisDirection.down ||
+              notification.metrics.axisDirection == AxisDirection.up;
+
       if (isVerticalScroll) {
         final showBorder = notification.metrics.pixels > 0;
         if (showBorder != _showHeaderBorder) {
@@ -147,22 +159,23 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
     return DataCell(
       LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final availableWidth = constraints.maxWidth - (2 * TableConstants.kHorizontalPadding);
-          
+          final availableWidth =
+              constraints.maxWidth - (2 * TableConstants.kHorizontalPadding);
+
           final textSpan = TextSpan(
             text: text + (suffix != null ? ' $suffix' : ''),
             style: AppTextStyles.tableData(context),
           );
-          
+
           final textPainter = TextPainter(
             text: textSpan,
             textDirection: TextDirection.ltr,
             maxLines: 1,
           );
-          
+
           textPainter.layout(maxWidth: double.infinity);
           final bool isTextTruncated = textPainter.width > availableWidth - 10;
-          
+
           Widget content = Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -192,7 +205,9 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
   }
 
   DataRow _buildDataRow(BuildContext context, FarmerFormData data) {
-    final cells = widget.isLoggedIn ? _buildAdminCells(context, data) : _buildPublicCells(context, data);
+    final cells = widget.isLoggedIn
+        ? _buildAdminCells(context, data)
+        : _buildPublicCells(context, data);
 
     return DataRow(
       cells: [
@@ -220,7 +235,7 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
   }
 
   List<DataCell> _buildPublicCells(BuildContext context, FarmerFormData data) {
-    final submittedDate = data.submittedOn != null 
+    final submittedDate = data.submittedOn != null
         ? '${data.submittedOn!.day}-${data.submittedOn!.month}-${data.submittedOn!.year}'
         : '';
     final columns = TableColumns.beneficiaryColumns;
@@ -232,14 +247,15 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
       _buildDataCell(context, data.village ?? ''),
       _buildDataCell(context, data.post ?? ''),
       _buildDataCell(context, data.policeStation ?? ''),
-      _buildDataCell(context, data.landSize?.toString() ?? '', suffix: columns[6].suffix),
+      _buildDataCell(context, data.landSize?.toString() ?? '',
+          suffix: columns[6].suffix),
       _buildDataCell(context, data.landCategory ?? ''),
       _buildDataCell(context, submittedDate),
     ];
   }
 
   List<DataCell> _buildAdminCells(BuildContext context, FarmerFormData data) {
-    final submittedDate = data.submittedOn != null 
+    final submittedDate = data.submittedOn != null
         ? '${data.submittedOn!.day}-${data.submittedOn!.month}-${data.submittedOn!.year}'
         : '';
     final columns = TableColumns.beneficiaryAdminColumns;
@@ -253,7 +269,8 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
       _buildDataCell(context, data.post ?? ''),
       _buildDataCell(context, data.policeStation ?? ''),
       _buildDataCell(context, data.mobileNumber ?? ''),
-      _buildDataCell(context, data.landSize?.toString() ?? '', suffix: columns[8].suffix),
+      _buildDataCell(context, data.landSize?.toString() ?? '',
+          suffix: columns[8].suffix),
       _buildDataCell(context, data.landCategory ?? ''),
       _buildDataCell(context, data.khataNumber ?? ''),
       _buildDataCell(context, data.plotNumber ?? ''),
@@ -267,7 +284,8 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
     ];
   }
 
-  Future<void> _showDeleteConfirmation(BuildContext context, FarmerFormData data) async {
+  Future<void> _showDeleteConfirmation(
+      BuildContext context, FarmerFormData data) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -282,4 +300,4 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
       },
     );
   }
-} 
+}

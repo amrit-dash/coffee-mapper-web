@@ -5,7 +5,7 @@ class FarmerFormData {
   String? name;
   String? careOfName;
   String? classType;
-  
+
   // Address Details
   String? district;
   String? block;
@@ -14,28 +14,28 @@ class FarmerFormData {
   String? post;
   String? policeStation;
   String? mobileNumber;
-  
+
   // Land Details
   double? landSize;
   String? landCategory;
   String? khataNumber;
   String? plotNumber;
   String? mauja;
-  
+
   // Bank Details
   String? aadharNumber;
   String? bankAccountNumber;
   String? bankName;
   String? bankBranch;
   String? bankIFSC;
-  
+
   // Form Metadata
   DateTime? submittedOn;
   DateTime? archivedOn;
   String? archivedBy;
   bool agreement;
   String status;
-  
+
   // Submission Details
   int? ticketId;
 
@@ -91,7 +91,8 @@ class FarmerFormData {
       'bankName': bankName,
       'bankBranch': bankBranch,
       'bankIFSC': bankIFSC,
-      'submittedOn': submittedOn != null ? Timestamp.fromDate(submittedOn!) : null,
+      'submittedOn':
+          submittedOn != null ? Timestamp.fromDate(submittedOn!) : null,
       'archivedOn': archivedOn != null ? Timestamp.fromDate(archivedOn!) : null,
       'archivedBy': archivedBy,
       'agreement': agreement,
@@ -123,10 +124,10 @@ class FarmerFormData {
       bankName: json['bankName'] as String?,
       bankBranch: json['bankBranch'] as String?,
       bankIFSC: json['bankIFSC'] as String?,
-      submittedOn: json['submittedOn'] != null 
+      submittedOn: json['submittedOn'] != null
           ? (json['submittedOn'] as Timestamp).toDate()
           : null,
-      archivedOn: json['archivedOn'] != null 
+      archivedOn: json['archivedOn'] != null
           ? (json['archivedOn'] as Timestamp).toDate()
           : null,
       archivedBy: json['archivedBy'] as String?,
@@ -135,4 +136,4 @@ class FarmerFormData {
       ticketId: json['ticketId'] as int?,
     );
   }
-} 
+}

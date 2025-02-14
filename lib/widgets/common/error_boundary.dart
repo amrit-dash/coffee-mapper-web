@@ -42,4 +42,4 @@ class ErrorBoundary extends StatelessWidget {
       ),
     );
   }
-} 
+}

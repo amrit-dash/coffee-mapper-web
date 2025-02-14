@@ -19,28 +19,30 @@ class MapsService {
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.setConfigSettings(RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: Duration.zero, // Allow fetching immediately in development
+        minimumFetchInterval:
+            Duration.zero, // Allow fetching immediately in development
       ));
 
       await remoteConfig.fetchAndActivate();
       final apiKey = remoteConfig.getString(_mapsApiKeyConfigKey);
-      
+
       if (apiKey.isEmpty) {
-        throw Exception('Google Maps API key not found in Remote Config. Please set the "$_mapsApiKeyConfigKey" parameter in Firebase Remote Config.');
+        throw Exception(
+            'Google Maps API key not found in Remote Config. Please set the "$_mapsApiKeyConfigKey" parameter in Firebase Remote Config.');
       }
 
       // Call the JavaScript function to load Google Maps with the API key
       final result = js.context.callMethod('initializeGoogleMaps', [apiKey]);
-      
+
       // Convert the JavaScript Promise to a Dart Future and wait for it
       if (hasProperty(result, 'then')) {
         await promiseToFuture(result);
       }
-      
+
       _isInitialized = true;
     } catch (e) {
       _logger.severe('Error initializing Google Maps: $e');
       rethrow;
     }
   }
-} 
+}
