@@ -1,0 +1,68 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAdmin() {
+      return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.token.email));
+    }
+
+    // Protect the admins collection
+    match /admins/{email} {
+      allow read: if request.auth != null && request.auth.token.email == email;
+      allow write: if false;  // Only allow writes through backend/console
+    }
+
+    // Allow admin read access to nurseryDetails collection
+    match /nurseryDetails/{document=**} {
+      allow read, write: if isAdmin();
+    }
+    
+    // Allow public read access to appData collection
+    match /appData/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Allow public read access to savedRegions collection
+    match /savedRegions/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Farmer applications rules
+    match /farmerApplications/{applicationId} {
+      // Anyone can read active applications
+      allow read: if resource.data.status == 'active';
+      
+      // Admins can read all applications (including archived)
+      allow read: if isAdmin();
+      
+      // Anyone can create new applications with valid data
+      allow create: if isValidBeneficiaryData() && 
+                      request.resource.data.status == 'active' &&
+                      request.resource.data.submittedOn is timestamp;
+      
+      // Only admins can update, and they can only update specific fields
+      allow update: if isAdmin() && 
+                      (request.resource.data.diff(resource.data).affectedKeys()
+                        .hasOnly(['status', 'archivedOn', 'archivedBy']));
+      
+      // Only admins can delete
+      allow delete: if isAdmin();
+    }
+
+    // Grievance submission rules
+    match /grievances/{grievanceId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if isAdmin();
+    }
+    
+    // Default rule for all other collections
+    match /{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+} 
