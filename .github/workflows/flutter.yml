@@ -108,33 +108,19 @@ jobs:
       # Production Deployment
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          # Setup Firebase
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}" > $HOME/prod-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/prod-key.json
-          
-          # Verify project ID
-          echo "Using production project ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
-          
-          # Deploy only hosting to all production sites
-          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/prod-key.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          # Deploy only hosting to all production sites
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
       # Development Deployment
       - name: Deploy to Development
         if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
-        run: |
-          # Setup Firebase
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" > $HOME/dev-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/dev-key.json
-          
-          # Verify project ID
-          echo "Using development project ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
-          
-          # Deploy only hosting to development site
-          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --token "${{ secrets.FIREBASE_TOKEN }}"
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          # Deploy only hosting to development site
+          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" 
