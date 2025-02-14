@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 class DashboardService {
   static final _logger = Logger('DashboardService');
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
+
   DashboardMetricsData? _cachedMetricsData;
 
   Future<DashboardMetricsData> getDashboardMetrics() async {
@@ -16,13 +16,12 @@ class DashboardService {
       }
 
       // Fetch data from Firestore
-      final doc = await _firestore
-          .collection('appData')
-          .doc('dashboardData')
-          .get();
+      final doc =
+          await _firestore.collection('appData').doc('dashboardData').get();
 
       if (!doc.exists) {
-        _logger.warning('Dashboard metrics document not found, using fallback data');
+        _logger.warning(
+            'Dashboard metrics document not found, using fallback data');
         return DashboardMetricsData.fallbackData;
       }
 
@@ -43,4 +42,4 @@ class DashboardService {
   void clearCache() {
     _cachedMetricsData = null;
   }
-} 
+}

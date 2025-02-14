@@ -12,9 +12,10 @@ class DashboardNews {
 
   factory DashboardNews.fromFirestore(Map<String, dynamic> data) {
     final List<String> items = [];
-    
+
     // Check if currentEventsNews exists and is a list
-    if (data.containsKey('currentEventsNews') && data['currentEventsNews'] is List) {
+    if (data.containsKey('currentEventsNews') &&
+        data['currentEventsNews'] is List) {
       final List<dynamic> newsData = data['currentEventsNews'] as List<dynamic>;
       items.addAll(newsData.map((item) => item.toString()));
     }
@@ -42,9 +43,10 @@ class DashboardNewsNotifier extends StateNotifier<DashboardNews> {
   }
 }
 
-final dashboardNewsProvider = StateNotifierProvider<DashboardNewsNotifier, DashboardNews>((ref) {
+final dashboardNewsProvider =
+    StateNotifierProvider<DashboardNewsNotifier, DashboardNews>((ref) {
   return DashboardNewsNotifier();
 });
 
 // Provider to track if sidebar image has been animated
-final sidebarImageAnimatedProvider = StateProvider<bool>((ref) => false); 
+final sidebarImageAnimatedProvider = StateProvider<bool>((ref) => false);

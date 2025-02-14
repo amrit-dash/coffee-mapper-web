@@ -66,7 +66,7 @@ class _MapHeaderState extends State<MapHeader> {
               if (isDesktop) Expanded(child: _buildFiltersRow()),
             ],
           ),
-          if (!isDesktop) 
+          if (!isDesktop)
             Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Center(child: _buildFiltersRow()),
@@ -79,12 +79,12 @@ class _MapHeaderState extends State<MapHeader> {
   Widget _buildFiltersRow() {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
-    final hasActiveFilters = selectedDistrict != null || 
-                           selectedBlock != null || 
-                           selectedPanchayat != null || 
-                           selectedVillage != null ||
-                           widget.selectedRegionCategories.isNotEmpty;
-    
+    final hasActiveFilters = selectedDistrict != null ||
+        selectedBlock != null ||
+        selectedPanchayat != null ||
+        selectedVillage != null ||
+        widget.selectedRegionCategories.isNotEmpty;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -184,7 +184,7 @@ class _MapHeaderState extends State<MapHeader> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
-    
+
     final horizontalPadding = isMobile ? 8.0 : (isTablet ? 10.0 : 12.0);
     final verticalPadding = isMobile ? 4.0 : (isTablet ? 5.0 : 6.0);
     final fontSize = isMobile ? 11.0 : (isTablet ? 12.0 : 13.0);
@@ -192,7 +192,8 @@ class _MapHeaderState extends State<MapHeader> {
 
     final primaryColor = Theme.of(context).colorScheme.primary;
     final selectedColor = HSLColor.fromColor(primaryColor)
-        .withLightness((HSLColor.fromColor(primaryColor).lightness * 0.8).clamp(0.0, 1.0))
+        .withLightness(
+            (HSLColor.fromColor(primaryColor).lightness * 0.8).clamp(0.0, 1.0))
         .toColor();
 
     return Container(
@@ -202,14 +203,17 @@ class _MapHeaderState extends State<MapHeader> {
         vertical: verticalPadding,
       ),
       decoration: BoxDecoration(
-        color: widget.selectedRegionCategories.isNotEmpty ? selectedColor : primaryColor,
+        color: widget.selectedRegionCategories.isNotEmpty
+            ? selectedColor
+            : primaryColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: PopupMenuButton<String>(
         tooltip: 'Select Region Categories',
         offset: const Offset(0, 40),
         onSelected: (String category) {
-          final newCategories = Set<String>.from(widget.selectedRegionCategories);
+          final newCategories =
+              Set<String>.from(widget.selectedRegionCategories);
           if (newCategories.contains(category)) {
             newCategories.remove(category);
           } else {
@@ -217,7 +221,8 @@ class _MapHeaderState extends State<MapHeader> {
           }
           widget.onRegionCategoriesChanged?.call(newCategories);
         },
-        itemBuilder: (BuildContext context) => widget.regionCategories.map((String category) {
+        itemBuilder: (BuildContext context) =>
+            widget.regionCategories.map((String category) {
           final isSelected = widget.selectedRegionCategories.contains(category);
           return CheckedPopupMenuItem<String>(
             value: category,
@@ -272,7 +277,7 @@ class _MapHeaderState extends State<MapHeader> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
-    
+
     final horizontalPadding = isMobile ? 8.0 : (isTablet ? 10.0 : 12.0);
     final verticalPadding = isMobile ? 4.0 : (isTablet ? 5.0 : 6.0);
     final fontSize = isMobile ? 11.0 : (isTablet ? 12.0 : 13.0);
@@ -281,7 +286,8 @@ class _MapHeaderState extends State<MapHeader> {
     // Get the primary color and create a darker variant for selected state
     final primaryColor = Theme.of(context).colorScheme.primary;
     final selectedColor = HSLColor.fromColor(primaryColor)
-        .withLightness((HSLColor.fromColor(primaryColor).lightness * 0.8).clamp(0.0, 1.0))
+        .withLightness(
+            (HSLColor.fromColor(primaryColor).lightness * 0.8).clamp(0.0, 1.0))
         .toColor();
 
     return Container(
@@ -318,7 +324,7 @@ class _MapHeaderState extends State<MapHeader> {
             underline: const SizedBox(),
             icon: Padding(
               padding: EdgeInsets.only(left: horizontalPadding),
-              child: selectedValue == null 
+              child: selectedValue == null
                   ? Icon(
                       Icons.arrow_drop_down,
                       color: Colors.white,
@@ -377,4 +383,4 @@ class _MapHeaderState extends State<MapHeader> {
       ),
     );
   }
-} 
+}

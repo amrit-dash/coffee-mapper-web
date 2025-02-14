@@ -30,28 +30,28 @@ class _NewsScrollViewState extends ConsumerState<NewsScrollView> {
 
   void _startScrolling() async {
     await Future.delayed(const Duration(seconds: 1));
-    
+
     while (_isScrolling && mounted) {
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       if (!mounted || !_isScrolling) break;
-      
+
       if (_scrollController.hasClients) {
         final maxScroll = _scrollController.position.maxScrollExtent;
         final currentScroll = _scrollController.offset;
-        
+
         if (currentScroll >= maxScroll) {
           // Pause at the bottom before going back to top
           await Future.delayed(const Duration(milliseconds: 1000));
           if (!mounted || !_isScrolling) break;
-          
+
           // Smooth scroll to top with a slower animation
           await _scrollController.animateTo(
             0,
             duration: const Duration(milliseconds: 1500),
             curve: Curves.easeInOut,
           );
-          
+
           // Pause at the top before starting to scroll down again
           await Future.delayed(const Duration(milliseconds: 1000));
           if (!mounted || !_isScrolling) break;
@@ -102,4 +102,4 @@ class _NewsScrollViewState extends ConsumerState<NewsScrollView> {
       ),
     );
   }
-} 
+}

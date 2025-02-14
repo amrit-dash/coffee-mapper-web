@@ -25,7 +25,7 @@ class RegistrationScreen extends ConsumerWidget {
         )
           ..setAttribute('download', 'Application Form.pdf')
           ..style.display = 'none';
-        
+
         html.document.body!.children.add(anchor);
         anchor.click();
         html.document.body!.children.remove(anchor);

@@ -39,7 +39,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     try {
       // First attempt to sign in
-      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -58,9 +59,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             SnackBar(
               content: Row(
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.white, size: 16),
+                  const Icon(Icons.error_outline,
+                      color: Colors.white, size: 16),
                   const SizedBox(width: 8),
-                  const Text('Access denied. You do not have admin privileges.'),
+                  const Text(
+                      'Access denied. You do not have admin privileges.'),
                 ],
               ),
             ),
@@ -75,22 +78,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
 
       // Set admin data in provider
-      ref.read(adminProvider.notifier).checkAdminStatus(userCredential.user?.email);
-      
+      ref
+          .read(adminProvider.notifier)
+          .checkAdminStatus(userCredential.user?.email);
+
       if (mounted) {
         // Show success message before navigation
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               children: [
-                const Icon(Icons.check_circle_outline, color: Colors.white, size: 16),
+                const Icon(Icons.check_circle_outline,
+                    color: Colors.white, size: 16),
                 const SizedBox(width: 8),
                 const Text('Successfully logged in as admin'),
               ],
             ),
           ),
         );
-        
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => widget.returnScreen),
@@ -162,26 +168,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          maxWidth: screenWidth < 600 ? screenWidth * 0.95 : 500,
+                          maxWidth:
+                              screenWidth < 600 ? screenWidth * 0.95 : 500,
                         ),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: ResponsiveUtils.getPadding(screenWidth)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  ResponsiveUtils.getPadding(screenWidth)),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(height: ResponsiveUtils.getPadding(screenHeight) * 5),
+                              SizedBox(
+                                  height:
+                                      ResponsiveUtils.getPadding(screenHeight) *
+                                          5),
                               Expanded(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: ResponsiveUtils.getPadding(screenWidth) * 0.5),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: ResponsiveUtils.getPadding(
+                                              screenWidth) *
+                                          0.5),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Log in to continue',
                                         style: TextStyle(
                                           fontFamily: 'Gilroy-SemiBold',
-                                          fontSize: ResponsiveUtils.getFontSize(screenWidth, 20),
+                                          fontSize: ResponsiveUtils.getFontSize(
+                                              screenWidth, 20),
                                         ),
                                       ),
                                       SizedBox(height: screenHeight * 0.07),
@@ -194,29 +211,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         child: TextButton(
                                           onPressed: () async {
                                             final email = _emailController.text;
-                                            
+
                                             if (email.isEmpty) {
                                               if (!context.mounted) return;
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text('Please enter your email address')),
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        'Please enter your email address')),
                                               );
-                                              _emailController.selection = TextSelection.fromPosition(
-                                                TextPosition(offset: _emailController.text.length),
+                                              _emailController.selection =
+                                                  TextSelection.fromPosition(
+                                                TextPosition(
+                                                    offset: _emailController
+                                                        .text.length),
                                               );
                                               return;
                                             }
-                                  
+
                                             try {
-                                              await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+                                              await FirebaseAuth.instance
+                                                  .sendPasswordResetEmail(
+                                                      email: email);
                                               if (!context.mounted) return;
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text('Password reset email sent!')),
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        'Password reset email sent!')),
                                               );
                                             } on FirebaseAuthException catch (e) {
                                               if (!context.mounted) return;
-                                              ScaffoldMessenger.of(context).showSnackBar(
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
                                                 SnackBar(
-                                                  content: Text(e.message ?? 'Failed to send reset email'),
+                                                  content: Text(e.message ??
+                                                      'Failed to send reset email'),
                                                 ),
                                               );
                                             }
@@ -225,8 +255,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                             'Forgot Password?',
                                             style: TextStyle(
                                               fontFamily: 'Gilroy-Medium',
-                                              fontSize: ResponsiveUtils.getFontSize(screenWidth, 12),
-                                              color: Theme.of(context).colorScheme.error,
+                                              fontSize:
+                                                  ResponsiveUtils.getFontSize(
+                                                      screenWidth, 12),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
                                             ),
                                           ),
                                         ),
@@ -254,7 +288,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget _buildEmailTextField(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Stack(
       children: [
         TextFormField(
@@ -271,10 +305,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               color: Theme.of(context).colorScheme.secondary,
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.error),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.error),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.error),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.error),
             ),
             errorStyle: TextStyle(
               fontFamily: 'Gilroy-Medium',
@@ -308,7 +344,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget _buildPasswordTextField(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Stack(
       children: [
         TextFormField(
@@ -329,10 +365,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               color: Theme.of(context).colorScheme.secondary,
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.error),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.error),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.error),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.error),
             ),
             errorStyle: TextStyle(
               fontFamily: 'Gilroy-Medium',
@@ -374,7 +412,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildLoginButton(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    
+
     return Container(
       width: double.infinity,
       height: screenHeight * 0.15,

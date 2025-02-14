@@ -364,4 +364,4 @@ class TableColumns {
       width: 120.0,
     ),
   ];
-} 
+}

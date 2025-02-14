@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 @immutable
 class AddressData {
   final List<String> districts;
-  final Map<String, List<String>> blocks;       // key: block name, value: list of panchayats
-  final Map<String, List<String>> panchayats;   // key: panchayat name, value: list of villages
+  final Map<String, List<String>>
+      blocks; // key: block name, value: list of panchayats
+  final Map<String, List<String>>
+      panchayats; // key: panchayat name, value: list of villages
 
   const AddressData({
     required this.districts,
@@ -18,15 +20,13 @@ class AddressData {
 
     // Extract blocks mapping (key: block name, value: list of panchayats)
     final blocksData = data['blocks'] as Map<String, dynamic>? ?? {};
-    final blocks = blocksData.map((blockName, panchayatList) => 
-      MapEntry(blockName, List<String>.from(panchayatList as List))
-    );
+    final blocks = blocksData.map((blockName, panchayatList) =>
+        MapEntry(blockName, List<String>.from(panchayatList as List)));
 
     // Extract panchayats mapping (key: panchayat name, value: list of villages)
     final panchayatsData = data['panchayats'] as Map<String, dynamic>? ?? {};
-    final panchayats = panchayatsData.map((panchayatName, villageList) => 
-      MapEntry(panchayatName, List<String>.from(villageList as List))
-    );
+    final panchayats = panchayatsData.map((panchayatName, villageList) =>
+        MapEntry(panchayatName, List<String>.from(villageList as List)));
 
     return AddressData(
       districts: districts,
@@ -61,7 +61,5 @@ class AddressData {
 
   @override
   int get hashCode =>
-      districts.hashCode ^
-      blocks.hashCode ^
-      panchayats.hashCode;
-} 
+      districts.hashCode ^ blocks.hashCode ^ panchayats.hashCode;
+}

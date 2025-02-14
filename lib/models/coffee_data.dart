@@ -30,4 +30,4 @@ class CoffeeData extends ShadeData {
     required super.plantVarieties,
     required super.plantationYear,
   });
-} 
+}
