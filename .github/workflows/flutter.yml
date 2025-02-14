@@ -34,6 +34,12 @@ jobs:
         run: |
           curl -sL https://firebase.tools | bash
           firebase --version
+          
+      - name: Initialize Firebase
+        if: github.event_name == 'push'
+        run: |
+          # Initialize Firebase CLI with token
+          firebase login:ci --no-localhost --token "${{ secrets.FIREBASE_TOKEN }}"
       
       # Set up Firebase configuration
       - name: Create Firebase Config Files
@@ -113,13 +119,17 @@ jobs:
           # Verify project ID
           echo "Using production project ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
+          # Initialize Firebase with project
+          firebase use --add "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" prod
+          
           # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --force
           
           # Deploy to all production sites
-          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
+          firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}" --force
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/prod-key.json
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           
       # Development Deployment
       - name: Deploy to Development
@@ -132,10 +142,14 @@ jobs:
           # Verify project ID
           echo "Using development project ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
+          # Initialize Firebase with project
+          firebase use --add "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" dev
+          
           # Deploy Rules
-          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --force
           
           # Deploy to development site
-          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
+          firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}" --force
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json 
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/dev-key.json
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }} 
