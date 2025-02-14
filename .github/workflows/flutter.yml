@@ -52,8 +52,15 @@ jobs:
           echo "${{ secrets.FIREBASE_RC }}" > .firebaserc
           echo "${{ secrets.FIREBASE_JSON }}" > firebase.json
           
-          # Verify files were created
+          # Verify files were created and are valid JSON
+          echo "Verifying .firebaserc:"
           cat .firebaserc
+          echo "Verifying firebase.json:"
+          cat firebase.json
+          
+          # Validate JSON files
+          jq . .firebaserc || (echo "Invalid .firebaserc JSON" && exit 1)
+          jq . firebase.json || (echo "Invalid firebase.json JSON" && exit 1)
           
           # Create directories for rules
           mkdir -p firestore/dev firestore/prod storage/dev storage/prod
@@ -97,8 +104,11 @@ jobs:
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROD }}" > $HOME/prod-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/prod-key.json
           
+          # Verify project ID
+          echo "Using production project ID: ${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
+          
           # Deploy Rules
-          firebase deploy --only firestore:prod,storage:prod --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
           
           # Deploy to all production sites
           firebase deploy --only hosting:cdt-koraput,hosting:coffeemapper,hosting:cdtkoraput,hosting:cdtdashboard --project "${{ secrets.FIREBASE_PROJECT_ID_PROD }}"
@@ -113,8 +123,11 @@ jobs:
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}" > $HOME/dev-key.json
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/dev-key.json
           
+          # Verify project ID
+          echo "Using development project ID: ${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
+          
           # Deploy Rules
-          firebase deploy --only firestore:dev,storage:dev --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
+          firebase deploy --only firestore,storage --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
           
           # Deploy to development site
           firebase deploy --only hosting:coffee-mapper-dashboard --project "${{ secrets.FIREBASE_PROJECT_ID_DEV }}"
