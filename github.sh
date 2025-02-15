@@ -18,7 +18,7 @@ check_changes() {
 # Function to wait for GitHub checks to complete
 wait_for_checks() {
     local pr_number=$1
-    local max_attempts=3  # Reduced to 3 attempts (60 seconds)
+    local max_attempts=9  # Reduced to 9 attempts (180 seconds)
     local attempt=1
     
     echo "Checking build status briefly..."
