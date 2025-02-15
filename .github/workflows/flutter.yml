@@ -25,7 +25,7 @@ jobs:
     
     environment:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
-      url: ${{ github.ref == 'refs/heads/main' && format('https://{0}', 'coffeemapper.web.app') || format('https://{0}', 'coffee-mapper-dashboard.web.app') }}
+      url: ${{ github.ref == 'refs/heads/main' && 'https://coffeemapper.web.app' || 'https://coffee-mapper-dashboard.web.app' }}
     
     steps:
       - uses: actions/checkout@v3
