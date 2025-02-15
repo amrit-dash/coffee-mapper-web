@@ -14,7 +14,6 @@ permissions:
 env:
   FLUTTER_VERSION: '3.29.0'
   FIREBASE_CLI_VERSION: 12.9.1
-  PUB_CACHE: ~/.pub-cache
 
 jobs:
   build-and-deploy:
@@ -26,31 +25,17 @@ jobs:
     
     environment:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
-      url: ${{ github.ref == 'refs/heads/main' && 'https://cdt-koraput.web.app' || 'https://coffee-mapper-dashboard.web.app' }}
+      url: ${{ github.ref == 'refs/heads/main' && 'https://coffeemapper.web.app' || 'https://coffee-mapper-dashboard.web.app' }}
     
     steps:
       - uses: actions/checkout@v3
-      
-      # Cache Flutter dependencies
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ${{ runner.tool_cache }}/flutter
-            ${{ env.PUB_CACHE }}
-            .dart_tool
-            build
-          key: ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
-            ${{ runner.os }}-flutter-
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
-          cache: true
+          cache: true  # Using Flutter's built-in caching
 
       - name: Install Firebase CLI
         run: |
