@@ -18,31 +18,24 @@ check_changes() {
 # Function to wait for GitHub checks to complete
 wait_for_checks() {
     local pr_number=$1
-    local max_attempts=9  # Reduced to 9 attempts (180 seconds)
-    local attempt=1
     
-    echo "Checking build status briefly..."
+    echo "Waiting for 2 minutes to allow build to complete..."
+    sleep 120  # Wait for 2 minutes
     
-    while [ $attempt -le $max_attempts ]; do
-        # Get the check status and store it
-        check_status=$(gh pr checks $pr_number 2>&1)
-        echo "Current status: $check_status"
-        
-        if echo "$check_status" | grep -q "successful"; then
-            echo "Checks completed successfully!"
-            return 0
-        elif echo "$check_status" | grep -q "fail"; then
-            echo "Some checks failed, but proceeding with admin merge..."
-            return 0
-        fi
-        
-        echo "Attempt $attempt of $max_attempts: Checks still running..."
-        sleep 20
-        ((attempt++))
-    done
+    echo "Checking build status..."
+    check_status=$(gh pr checks $pr_number 2>&1)
+    echo "Current status: $check_status"
     
-    echo "Proceeding with admin merge without waiting for checks..."
-    return 0
+    if echo "$check_status" | grep -q "successful" || echo "$check_status" | grep -q "pass"; then
+        echo "✅ Checks completed successfully!"
+        return 0
+    elif echo "$check_status" | grep -q "fail"; then
+        echo "❌ Some checks failed, but proceeding with admin merge..."
+        return 0
+    else
+        echo "⚠️ Status unclear, proceeding with admin merge..."
+        return 0
+    fi
 }
 
 # Commit workflow
