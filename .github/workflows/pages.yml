@@ -12,21 +12,32 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup Pages
-        uses: actions/configure-pages@v3
-        
+        uses: actions/configure-pages@v4
+      
+      - name: Check docs directory
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "::error::docs directory not found"
+            exit 1
+          fi
+          ls -la docs/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './docs'
-          name: 'github-pages'
+          path: 'docs'
 
   deploy:
     needs: build
@@ -37,4 +48,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2 
+        uses: actions/deploy-pages@v4 
