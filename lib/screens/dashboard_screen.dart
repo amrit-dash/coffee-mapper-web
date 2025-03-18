@@ -1,23 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:coffee_mapper_web/widgets/layout/header.dart';
-import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
+import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
+import 'package:coffee_mapper_web/widgets/layout/dashboard_metrics.dart';
+import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/metrics_overview.dart';
-import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
+import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
+import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
+import 'package:coffee_mapper_web/widgets/map/map_overview_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/coffee_highlights/coffee_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_highlights_section.dart';
-import 'package:coffee_mapper_web/widgets/map/map_overview_section.dart';
-import 'package:coffee_mapper_web/widgets/layout/dashboard_metrics.dart';
+import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   bool _isLoading = true;
   static bool _isFirstLoad = true; // Static variable to track initial load
 
@@ -84,6 +87,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildDashboardContent(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < ResponsiveUtils.tablet;
+    final adminData = ref.watch(adminProvider);
+    final user = FirebaseAuth.instance.currentUser;
+    final bool isLoggedIn = user != null && (adminData?.isAdmin ?? false);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -151,27 +157,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 20),
             // New Dashboard Metrics Section
             const DashboardMetrics(),
-            const MetricsOverview(),
-            const SizedBox(height: 30),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
-              child: const ShadeHighlightsSection(),
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
-              child: const CoffeeHighlightsSection(),
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
-              child: const MapOverviewSection(),
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
-              child: const NurseryHighlightsSection(),
-            ),
+            // Show sensitive components only when logged in
+            if (isLoggedIn) ...[
+              const MetricsOverview(),
+              const SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+                child: const ShadeHighlightsSection(),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+                child: const CoffeeHighlightsSection(),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+                child: const MapOverviewSection(),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+                child: const NurseryHighlightsSection(),
+              ),
+            ]
           ],
         ),
       ),

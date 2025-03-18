@@ -45,7 +45,7 @@ class TableConstants {
   static const double kBoundaryImageWidth = 80;
 
   // New coffee-specific column widths
-  static const double kShadeTypeWidth = 120;
+  static const double kShadeTypeWidth = 160;
   static const double kAverageYieldWidth = 100;
 
   // Colors
