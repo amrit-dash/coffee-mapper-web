@@ -1,6 +1,3 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
@@ -9,10 +6,12 @@ import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
 import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_highlight_section.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'package:web/web.dart' as web;
 
 class RegistrationScreen extends ConsumerWidget {
   const RegistrationScreen({super.key});
@@ -21,15 +20,14 @@ class RegistrationScreen extends ConsumerWidget {
     try {
       if (kIsWeb) {
         // For web, create an anchor element and trigger download
-        final anchor = html.AnchorElement(
-          href: 'assets/assets/docs/farmerApplication.pdf',
-        )
+        final anchor = web.HTMLAnchorElement()
+          ..href = 'assets/assets/docs/farmerApplication.pdf'
           ..setAttribute('download', 'Application Form.pdf')
           ..style.display = 'none';
 
-        html.document.body!.children.add(anchor);
+        web.document.body!.appendChild(anchor);
         anchor.click();
-        html.document.body!.children.remove(anchor);
+        web.document.body!.removeChild(anchor);
       } else {
         // For non-web platforms, use url_launcher
         final Uri uri = Uri.parse('/assets/docs/farmerApplication.pdf');
@@ -82,7 +80,8 @@ class RegistrationScreen extends ConsumerWidget {
     final isMobile = ResponsiveUtils.isMobile(screenWidth);
     final isTablet = ResponsiveUtils.isTablet(screenWidth);
     final adminData = ref.watch(adminProvider);
-    final isLoggedIn = adminData?.isAdmin ?? false;
+    final user = FirebaseAuth.instance.currentUser;
+    final bool isLoggedIn = user != null && (adminData?.isAdmin ?? false);
 
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
@@ -303,13 +302,52 @@ class RegistrationScreen extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 30),
-                          // Beneficiary table section
-                          SizedBox(
-                            height: 450, // Fixed height for the table section
-                            child: BeneficiaryHighlightSection(
-                              isLoggedIn: isLoggedIn,
+                          // Beneficiary table section with login check
+                          if (isLoggedIn)
+                            SizedBox(
+                              height: 450, // Fixed height for the table section
+                              child: BeneficiaryHighlightSection(
+                                isLoggedIn: isLoggedIn,
+                              ),
+                            )
+                          else
+                            Container(
+                              height: 450,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondary
+                                      .withOpacity(0.1),
+                                ),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.lock_outline,
+                                      size: 48,
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      'Please log in as an admin to view beneficiary data',
+                                      style: TextStyle(
+                                        fontFamily: 'Gilroy-Medium',
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),

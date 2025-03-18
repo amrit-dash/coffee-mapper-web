@@ -1,5 +1,5 @@
-import 'package:data_table_2/data_table_2.dart';
 import 'package:coffee_mapper_web/utils/table_constants.dart';
+import 'package:data_table_2/data_table_2.dart';
 
 class ColumnDef {
   final String label;
@@ -18,34 +18,34 @@ class ColumnDef {
 class TableColumns {
   static const List<ColumnDef> shadeColumns = [
     ColumnDef(
-      label: 'Region\nName',
+      label: 'Name',
       size: ColumnSize.L,
       width: TableConstants.kRegionNameWidth,
     ),
     ColumnDef(
-      label: 'Region\nCategory',
+      label: 'Category',
       size: ColumnSize.L,
       width: TableConstants.kRegionCategoryWidth,
     ),
     ColumnDef(
-      label: 'Region\nBoundary',
+      label: 'Boundary',
       size: ColumnSize.M,
       width: TableConstants.kBoundaryWidth,
       suffix: 'm',
     ),
     ColumnDef(
-      label: 'Region\nArea',
+      label: 'Area',
       size: ColumnSize.M,
       width: TableConstants.kAreaWidth,
       suffix: 'm²',
     ),
     ColumnDef(
-      label: 'Plantation\nYear',
+      label: 'Year',
       size: ColumnSize.M,
       width: TableConstants.kPlantationYearWidth,
     ),
     ColumnDef(
-      label: 'Plant\nVariety',
+      label: 'Plant Variety',
       size: ColumnSize.L,
       width: TableConstants.kPlantVarietyWidth,
     ),
@@ -92,7 +92,7 @@ class TableColumns {
       width: TableConstants.kUpdatedOnWidth,
     ),
     ColumnDef(
-      label: 'Region\nMedia',
+      label: 'Project\nMedia',
       size: ColumnSize.S,
       width: TableConstants.kMediaWidth,
     ),
@@ -110,39 +110,39 @@ class TableColumns {
 
   static const List<ColumnDef> coffeeColumns = [
     ColumnDef(
-      label: 'Region\nName',
+      label: 'Name',
       size: ColumnSize.L,
       width: TableConstants.kRegionNameWidth,
     ),
     ColumnDef(
-      label: 'Region\nCategory',
+      label: 'Category',
       size: ColumnSize.L,
       width: TableConstants.kRegionCategoryWidth,
     ),
     ColumnDef(
-      label: 'Region\nBoundary',
+      label: 'Boundary',
       size: ColumnSize.M,
       width: TableConstants.kBoundaryWidth,
       suffix: 'm',
     ),
     ColumnDef(
-      label: 'Region\nArea',
+      label: 'Area',
       size: ColumnSize.M,
       width: TableConstants.kAreaWidth,
       suffix: 'm²',
     ),
     ColumnDef(
-      label: 'Shade\nType',
+      label: 'Shade Type',
       size: ColumnSize.M,
       width: TableConstants.kShadeTypeWidth,
     ),
     ColumnDef(
-      label: 'Plantation\nYear',
+      label: 'Year',
       size: ColumnSize.M,
       width: TableConstants.kPlantationYearWidth,
     ),
     ColumnDef(
-      label: 'Plant\nVariety',
+      label: 'Plant Variety',
       size: ColumnSize.L,
       width: TableConstants.kPlantVarietyWidth,
     ),
@@ -195,7 +195,7 @@ class TableColumns {
       width: TableConstants.kUpdatedOnWidth,
     ),
     ColumnDef(
-      label: 'Region\nMedia',
+      label: 'Project\nMedia',
       size: ColumnSize.S,
       width: TableConstants.kMediaWidth,
     ),
