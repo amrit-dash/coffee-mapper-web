@@ -19,8 +19,8 @@ check_changes() {
 wait_for_checks() {
     local pr_number=$1
     
-    echo "Waiting for 2 minutes to allow build to complete..."
-    sleep 120  # Wait for 2 minutes
+    echo "Waiting for 10s to breathe..."
+    sleep 10  # Wait for 2 minutes
     
     echo "Checking build status..."
     check_status=$(gh pr checks $pr_number 2>&1)
