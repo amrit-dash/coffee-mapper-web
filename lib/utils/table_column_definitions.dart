@@ -217,6 +217,12 @@ class TableColumns {
     width: TableConstants.kDeleteColumnWidth,
   );
 
+  static final downloadColumn = ColumnDef(
+    label: 'Download\nHTML',
+    size: ColumnSize.S,
+    width: TableConstants.kDeleteColumnWidth,
+  );
+
   static const List<ColumnDef> beneficiaryColumns = [
     ColumnDef(
       label: 'Ticket ID\n(ଟିକେଟ ନମ୍ବର)',
@@ -360,8 +366,8 @@ class TableColumns {
     ),
     ColumnDef(
       label: 'Date of Submission\n(ଦାଖଲ ତାରିଖ)',
-      size: ColumnSize.M,
-      width: 120.0,
+      size: ColumnSize.L,
+      width: 150.0,
     ),
   ];
 }
