@@ -10,7 +10,7 @@ class TableConstants {
   static const double kMinTableWidth =
       2700; // Increased to accommodate new columns
   static const double kStatusBorderRadius = 12;
-  static const double kDeleteIconSize = 14;
+  static const double kDeleteIconSize = 18;
   static const double kDeleteButtonMaxHeight = 28;
   static const double kShadowHeight = 8;
   static const double kHeaderDividerWidth = 1.1; // Thicker divider for header
@@ -22,7 +22,7 @@ class TableConstants {
   static const double kHorizontalMargin = 0;
 
   // Column Widths
-  static const double kDeleteColumnWidth = 40;
+  static const double kDeleteColumnWidth = 90;
   static const double kRegionNameWidth = 120; // Renamed from kShadeNameWidth
   static const double kRegionCategoryWidth =
       150; // Renamed from kShadeCategoryWidth

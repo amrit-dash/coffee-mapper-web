@@ -1,15 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:coffee_mapper_web/models/farmer_form_data.dart';
+import 'package:coffee_mapper_web/services/pdf_service.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/utils/table_border_handler.dart';
 import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
 import 'package:coffee_mapper_web/utils/table_constants.dart';
-import 'package:coffee_mapper_web/utils/table_border_handler.dart';
 import 'package:coffee_mapper_web/utils/table_scroll_behavior.dart';
 import 'package:coffee_mapper_web/utils/text_styles.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:coffee_mapper_web/widgets/dialogs/delete_confirmation_dialog.dart';
 import 'package:coffee_mapper_web/widgets/common/error_boundary.dart';
 import 'package:coffee_mapper_web/widgets/common/loading_indicator.dart';
+import 'package:coffee_mapper_web/widgets/dialogs/delete_confirmation_dialog.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:flutter/material.dart';
 
 class BeneficiaryTable extends StatefulWidget {
   final List<FarmerFormData> beneficiaryData;
@@ -35,6 +36,7 @@ class BeneficiaryTable extends StatefulWidget {
 
 class _BeneficiaryTableState extends State<BeneficiaryTable> {
   bool _showHeaderBorder = false;
+  final _pdfService = PdfService();
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +96,13 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
                         fixedWidth: ResponsiveUtils.getColumnWidth(
                             screenWidth, col.width),
                       )),
+                  DataColumn2(
+                    label: _buildColumnLabel(
+                        context, TableColumns.downloadColumn.label),
+                    size: TableColumns.downloadColumn.size,
+                    fixedWidth: ResponsiveUtils.getColumnWidth(
+                        screenWidth, TableColumns.downloadColumn.width),
+                  ),
                 ],
                 rows: widget.beneficiaryData
                     .map((data) => _buildDataRow(context, data))
@@ -230,6 +239,23 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
             ),
           ),
         ...cells,
+        DataCell(
+          Center(
+            child: IconButton(
+              icon: Icon(
+                Icons.download,
+                color: Theme.of(context).colorScheme.primary,
+                size: TableConstants.kDeleteIconSize,
+              ),
+              onPressed: () => _handleDownload(context, data),
+              constraints: const BoxConstraints(
+                maxHeight: TableConstants.kDeleteButtonMaxHeight,
+              ),
+              padding: EdgeInsets.all(5),
+              tooltip: 'Download Application',
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -299,5 +325,21 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
         );
       },
     );
+  }
+
+  Future<void> _handleDownload(
+      BuildContext context, FarmerFormData data) async {
+    try {
+      await _pdfService.generateBeneficiaryPdf(data);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to generate PDF: ${e.toString()}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
   }
 }
