@@ -1,4 +1,4 @@
-// ignore: avoid_web_libraries_in_flutter
+// ignore: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 
 import 'package:coffee_mapper_web/widgets/dialogs/media_carousel_dialog/carousel_controls.dart';

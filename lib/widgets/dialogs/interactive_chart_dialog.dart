@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-// ignore: avoid_web_libraries_in_flutter
+// ignore: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:ui_web' as ui_web;
+
+import 'package:flutter/material.dart';
 
 class InteractiveChartDialog extends StatefulWidget {
   final String chartUrl;
