@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-// ignore: depracated_member_use
+// ignore: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
+
+import 'package:flutter/material.dart';
 
 /// A widget that displays either an image or video media item with loading and error states
 class MediaItem extends StatefulWidget {

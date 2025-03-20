@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-// ignore: avoid_web_libraries_in_flutter
+// ignore: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class CustomInfoWindow extends StatefulWidget {
   final String imageUrl;

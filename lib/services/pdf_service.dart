@@ -1,36 +1,9 @@
+// ignore: deprecated_member_use
 import 'dart:html' as html;
-
-import 'package:pdf/widgets.dart' as pw;
 
 import '../models/farmer_form_data.dart';
 
 class PdfService {
-  // Label mappings for Odia translations
-  final Map<String, String> _labelMappings = {
-    'Personal Details': 'ନିଜ ବିବରଣୀ',
-    'Name': 'ନାମ',
-    'Care of Name': 'ପିତା/ସ୍ୱାମୀଙ୍କ ନାମ',
-    'Mobile Number': 'ମୋବାଇଲ୍ ନମ୍ବର',
-    'Aadhar Number': 'ଆଧାର ନମ୍ବର',
-    'Address Details': 'ଠିକଣା ବିବରଣୀ',
-    'Village': 'ଗ୍ରାମ',
-    'Block': 'ବ୍ଲକ',
-    'District': 'ଜିଲ୍ଲା',
-    'Post': 'ପୋଷ୍ଟ',
-    'Police Station': 'ଥାନା',
-    'Land Details': 'ଜମି ବିବରଣୀ',
-    'Land Size': 'ମୋଟ ଜମିର ପରିମାଣ',
-    'Land Category': 'ଜମି କିସମ',
-    'Khata Number': 'ଖାତା ନମ୍ବର',
-    'Plot Number': 'ପ୍ଲଟ ନମ୍ବର',
-    'Mauja': 'ମୌଜା',
-    'Bank Details': 'ବାଙ୍କ ପାସବୁକ ବିବରଣୀ',
-    'Bank Name': 'ବାଙ୍କ ନାମ',
-    'Account Number': 'ବାଙ୍କ ଖାତା ନମ୍ବର',
-    'IFSC Code': 'ବାଙ୍କ ଇଫସସ',
-    'Bank Branch': 'ବାଙ୍କ ସଖା',
-  };
-
   Future<void> generateBeneficiaryPdf(FarmerFormData data) async {
     final htmlContent = '''
       <!DOCTYPE html>
@@ -375,45 +348,5 @@ class PdfService {
     anchor.click();
     html.document.body?.children.remove(anchor);
     html.Url.revokeObjectUrl(url);
-  }
-
-  pw.Widget _buildSection(String title, List<pw.Widget> rows) {
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Text(
-          title,
-          style: pw.TextStyle(
-            fontSize: 16,
-            fontWeight: pw.FontWeight.bold,
-          ),
-        ),
-        pw.SizedBox(height: 10),
-        ...rows,
-        pw.SizedBox(height: 20),
-      ],
-    );
-  }
-
-  pw.Widget _buildRow(String label, String value) {
-    return pw.Padding(
-      padding: const pw.EdgeInsets.symmetric(vertical: 4),
-      child: pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          pw.SizedBox(
-            width: 150,
-            child: pw.Text(
-              label,
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-            ),
-          ),
-          pw.Text(': '),
-          pw.Expanded(
-            child: pw.Text(value),
-          ),
-        ],
-      ),
-    );
   }
 }
