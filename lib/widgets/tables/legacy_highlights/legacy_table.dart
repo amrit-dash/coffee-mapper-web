@@ -28,15 +28,6 @@ class LegacyTableState extends BaseDataTableState<LegacyData> {
     final screenWidth = MediaQuery.of(context).size.width;
     final columns = <DataColumn2>[];
 
-    if (widget.isLoggedIn) {
-      columns.add(DataColumn2(
-        label: buildColumnLabel(context, TableColumns.deleteColumn.label),
-        size: TableColumns.deleteColumn.size,
-        fixedWidth: ResponsiveUtils.getColumnWidth(
-            screenWidth, TableColumns.deleteColumn.width),
-      ));
-    }
-
     columns.addAll(TableColumns.legacyColumns.map((col) {
       return DataColumn2(
         label: buildColumnLabel(context, col.label),
@@ -51,10 +42,6 @@ class LegacyTableState extends BaseDataTableState<LegacyData> {
   @override
   DataRow2 buildDataRow(BuildContext context, LegacyData data) {
     final cells = <DataCell>[];
-
-    if (widget.isLoggedIn) {
-      cells.add(buildDeleteCell(context, data));
-    }
 
     cells.addAll([
       buildDataCell(context, data.name),
