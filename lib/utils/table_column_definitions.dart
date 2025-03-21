@@ -45,9 +45,9 @@ class TableColumns {
       width: TableConstants.kPlantationYearWidth,
     ),
     ColumnDef(
-      label: 'Plant Variety',
+      label: 'Shade Type',
       size: ColumnSize.L,
-      width: TableConstants.kPlantVarietyWidth,
+      width: TableConstants.kShadeTypeWidth,
     ),
     ColumnDef(
       label: 'Average\nHeight',
@@ -130,11 +130,6 @@ class TableColumns {
       size: ColumnSize.M,
       width: TableConstants.kAreaWidth,
       suffix: 'm²',
-    ),
-    ColumnDef(
-      label: 'Shade Type',
-      size: ColumnSize.M,
-      width: TableConstants.kShadeTypeWidth,
     ),
     ColumnDef(
       label: 'Year',
@@ -368,6 +363,44 @@ class TableColumns {
       label: 'Date of Submission\n(ଦାଖଲ ତାରିଖ)',
       size: ColumnSize.L,
       width: 150.0,
+    ),
+  ];
+
+  static const List<ColumnDef> legacyColumns = [
+    ColumnDef(
+      label: 'Name',
+      size: ColumnSize.M,
+      width: TableConstants.kNameWidth,
+    ),
+    ColumnDef(
+      label: 'Father/Husband\'s Name',
+      size: ColumnSize.M,
+      width: TableConstants.kCareOfNameWidth,
+    ),
+    ColumnDef(
+      label: 'Area',
+      size: ColumnSize.M,
+      width: TableConstants.kAreaWidth,
+    ),
+    ColumnDef(
+      label: 'Block',
+      size: ColumnSize.S,
+      width: TableConstants.kBlockWidth,
+    ),
+    ColumnDef(
+      label: 'Panchayat',
+      size: ColumnSize.S,
+      width: TableConstants.kPanchayatWidth,
+    ),
+    ColumnDef(
+      label: 'Village',
+      size: ColumnSize.S,
+      width: TableConstants.kVillageWidth,
+    ),
+    ColumnDef(
+      label: 'Year',
+      size: ColumnSize.S,
+      width: TableConstants.kYearWidth,
     ),
   ];
 }

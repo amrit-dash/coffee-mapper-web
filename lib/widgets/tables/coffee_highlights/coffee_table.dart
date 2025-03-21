@@ -1,225 +1,250 @@
-import 'package:flutter/material.dart';
-import 'package:data_table_2/data_table_2.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:coffee_mapper_web/models/coffee_data.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:coffee_mapper_web/utils/text_styles.dart';
-import 'package:coffee_mapper_web/utils/table_constants.dart';
-import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
-import 'package:coffee_mapper_web/utils/table_scroll_behavior.dart';
-import 'package:coffee_mapper_web/utils/table_border_handler.dart';
-import 'package:coffee_mapper_web/widgets/dialogs/delete_confirmation_dialog.dart';
-import 'package:coffee_mapper_web/widgets/common/error_boundary.dart';
-import 'package:coffee_mapper_web/widgets/common/loading_indicator.dart';
-import 'package:coffee_mapper_web/widgets/dialogs/media_carousel_dialog/media_carousel_dialog.dart';
-import 'package:coffee_mapper_web/widgets/dialogs/boundary_images/boundary_map_dialog.dart';
 import 'package:coffee_mapper_web/utils/area_formatter.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
+import 'package:coffee_mapper_web/utils/table_constants.dart';
+import 'package:coffee_mapper_web/utils/text_styles.dart';
+import 'package:coffee_mapper_web/widgets/dialogs/boundary_images/boundary_map_dialog.dart';
+import 'package:coffee_mapper_web/widgets/dialogs/delete_confirmation_dialog.dart';
+import 'package:coffee_mapper_web/widgets/dialogs/media_carousel_dialog/media_carousel_dialog.dart';
+import 'package:coffee_mapper_web/widgets/tables/base/base_data_table.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
-class CoffeeTable extends StatefulWidget {
-  final List<CoffeeData> coffeeData;
-  final bool isLoggedIn;
-  final Function(CoffeeData)? onDelete;
-  final bool isLoading;
-  final String? error;
-  final VoidCallback? onRetry;
-
+class CoffeeTable extends BaseDataTable<CoffeeData> {
   const CoffeeTable({
     super.key,
-    required this.coffeeData,
-    this.isLoggedIn = false,
-    this.onDelete,
-    this.isLoading = false,
-    this.error,
-    this.onRetry,
+    required super.data,
+    required super.isLoggedIn,
+    super.onDelete,
+    super.isLoading = false,
+    super.error,
+    super.onRetry,
   });
 
   @override
-  State<CoffeeTable> createState() => _CoffeeTableState();
+  CoffeeTableState createState() => CoffeeTableState();
 }
 
-class _CoffeeTableState extends State<CoffeeTable> {
-  bool _showHeaderBorder = false;
-  bool _isDeleting = false;
+class CoffeeTableState extends BaseDataTableState<CoffeeData> {
+  @override
+  List<DataColumn2> buildColumns(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final columns = <DataColumn2>[];
+
+    if (widget.isLoggedIn) {
+      columns.add(DataColumn2(
+        label: buildColumnLabel(context, TableColumns.deleteColumn.label),
+        size: TableColumns.deleteColumn.size,
+        fixedWidth: ResponsiveUtils.getColumnWidth(
+            screenWidth, TableColumns.deleteColumn.width),
+      ));
+    }
+
+    columns.addAll([
+      DataColumn2(
+        label: buildColumnLabel(context, 'Region'),
+        size: ColumnSize.M,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Region Category'),
+        size: ColumnSize.M,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Perimeter'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Area'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Plantation Year'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Plant Varieties'),
+        size: ColumnSize.M,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Average Height'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Average Yield'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Beneficiaries'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Survival %'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Plot Number'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Khata Number'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Agency Name'),
+        size: ColumnSize.M,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Saved By'),
+        size: ColumnSize.M,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Date Updated'),
+        size: ColumnSize.M,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Media'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Boundary'),
+        size: ColumnSize.S,
+      ),
+      DataColumn2(
+        label: buildColumnLabel(context, 'Status'),
+        size: ColumnSize.S,
+      ),
+    ]);
+
+    return columns;
+  }
 
   @override
-  Widget build(BuildContext context) {
-    if (_isDeleting) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+  DataRow buildDataRow(BuildContext context, CoffeeData data) {
+    final cells = <DataCell>[];
+
+    if (widget.isLoggedIn) {
+      cells.add(buildDeleteCell(context, data));
     }
 
-    if (widget.isLoading) {
-      return const LoadingIndicator(message: 'Loading data...');
-    }
+    cells.addAll([
+      buildDataCell(context, data.region),
+      buildDataCell(context, data.regionCategory),
+      buildDataCell(
+          context, TableConstants.formatNumber(data.perimeter, suffix: ' m')),
+      DataCell(
+        LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final formattedArea = AreaFormatter.formatArea(data.area);
+            final tooltip = AreaFormatter.getAreaTooltip(data.area);
 
-    if (widget.error != null) {
-      return ErrorBoundary(
-        message: widget.error!,
-        onRetry: widget.onRetry,
-      );
-    }
-
-    if (widget.coffeeData.isEmpty) {
-      return const ErrorBoundary(message: 'No data available');
-    }
-
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return SizedBox(
-      width: double.infinity,
-      child: Stack(
-        children: [
-          NotificationListener<ScrollNotification>(
-            onNotification: _handleScrollNotification,
-            child: ScrollConfiguration(
-              behavior: const TableScrollBehavior(),
-              child: DataTable2(
-                columnSpacing: TableConstants.kColumnSpacing,
-                horizontalMargin: TableConstants.kHorizontalMargin,
-                border: TableBorderHandler.getTableBorder(),
-                minWidth: TableConstants.kMinTableWidth,
-                fixedTopRows: 1,
-                headingRowHeight: ResponsiveUtils.getRowHeight(
-                    screenWidth, TableConstants.kHeaderHeight),
-                dataRowHeight: ResponsiveUtils.getRowHeight(
-                    screenWidth, TableConstants.kRowHeight),
-                headingRowDecoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
-                columns: [
-                  if (widget.isLoggedIn)
-                    DataColumn2(
-                      label: _buildColumnLabel(
-                          context, TableColumns.deleteColumn.label),
-                      size: TableColumns.deleteColumn.size,
-                      fixedWidth: ResponsiveUtils.getColumnWidth(
-                          screenWidth, TableColumns.deleteColumn.width),
-                    ),
-                  ...TableColumns.coffeeColumns.map((def) => DataColumn2(
-                        label: _buildColumnLabel(context, def.label),
-                        size: def.size,
-                        fixedWidth: ResponsiveUtils.getColumnWidth(
-                            screenWidth, def.width),
-                      )),
-                ],
-                rows: widget.coffeeData
-                    .map((data) => _buildDataRow(context, data))
-                    .toList(),
-              ),
-            ),
-          ),
-          if (_showHeaderBorder)
-            TableBorderHandler.buildHeaderBorder(
-              ResponsiveUtils.getRowHeight(
-                  screenWidth, TableConstants.kHeaderHeight),
-            ),
-          TableBorderHandler.buildHeaderShadow(
-            context,
-            ResponsiveUtils.getRowHeight(
-                screenWidth, TableConstants.kHeaderHeight - 1),
-          ),
-        ],
-      ),
-    );
-  }
-
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification) {
-      final isVerticalScroll =
-          notification.metrics.axisDirection == AxisDirection.down ||
-              notification.metrics.axisDirection == AxisDirection.up;
-
-      if (isVerticalScroll) {
-        final showBorder = notification.metrics.pixels > 0;
-        if (showBorder != _showHeaderBorder) {
-          setState(() => _showHeaderBorder = showBorder);
-        }
-      }
-    }
-    return true;
-  }
-
-  // Optimized text styles
-  TextStyle _getDataTextStyle(BuildContext context) {
-    return AppTextStyles.tableData(context);
-  }
-
-  TextStyle _getHeaderTextStyle(BuildContext context) {
-    return AppTextStyles.tableHeader(context);
-  }
-
-  Widget _buildColumnLabel(BuildContext context, String text) {
-    return Row(
-      children: [
-        Expanded(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: TableConstants.kHorizontalPadding,
-                vertical: TableConstants.kVerticalPadding,
-              ),
-              child: Text(
-                text,
-                style: _getHeaderTextStyle(context),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-        TableBorderHandler.buildHeaderVerticalDivider(context),
-      ],
-    );
-  }
-
-  DataCell _buildDataCell(BuildContext context, String text) {
-    return DataCell(
-      LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final availableWidth =
-              constraints.maxWidth - (2 * TableConstants.kHorizontalPadding);
-
-          // Create a TextPainter to measure the text
-          final textSpan = TextSpan(
-            text: text,
-            style: _getDataTextStyle(context),
-          );
-
-          final textPainter = TextPainter(
-            text: textSpan,
-            textDirection: TextDirection.ltr,
-            maxLines: 1,
-          );
-
-          // Layout with the available width
-          textPainter.layout(maxWidth: double.infinity);
-          final bool isTextTruncated = textPainter.width > availableWidth - 10;
-
-          Widget content = Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: TableConstants.kHorizontalPadding,
-                vertical: TableConstants.kVerticalPadding,
-              ),
-              child: Text(
-                text,
-                style: _getDataTextStyle(context),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ),
-          );
-
-          if (isTextTruncated) {
             return Tooltip(
-              message: text,
-              child: content,
+              message: tooltip,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: TableConstants.kHorizontalPadding,
+                    vertical: TableConstants.kVerticalPadding,
+                  ),
+                  child: Text(
+                    formattedArea,
+                    style: AppTextStyles.tableData(context),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              ),
             );
-          }
-          return content;
-        },
+          },
+        ),
       ),
+      buildDataCell(
+          context, TableConstants.formatNumber(data.plantationYear.toDouble())),
+      buildDataCell(context, data.plantVarieties.join(', ')),
+      buildDataCell(context,
+          TableConstants.formatNumber(data.averageHeight, suffix: ' ft')),
+      buildDataCell(context,
+          TableConstants.formatNumber(data.averageYield, suffix: ' kg/ha')),
+      buildDataCell(
+          context, TableConstants.formatNumber(data.beneficiaries.toDouble())),
+      buildDataCell(context,
+          TableConstants.formatNumber(data.survivalPercentage, suffix: ' %')),
+      buildDataCell(context, data.plotNumber),
+      buildDataCell(context, data.khataNumber),
+      buildDataCell(context, data.agencyName),
+      buildDataCell(context, data.savedBy),
+      buildDataCell(context, data.dateUpdated),
+      data.mediaURLs.isEmpty
+          ? DataCell(Center(
+              child: Text('',
+                  style: AppTextStyles.viewButtonText(context).copyWith(
+                      color: Theme.of(context).scaffoldBackgroundColor))))
+          : DataCell(buildViewButton(context, 'View', () {
+              MediaCarouselDialog.show(context, data.mediaURLs);
+            })),
+      data.boundaryImageURLs.isEmpty
+          ? DataCell(Center(
+              child: Text('-',
+                  style: AppTextStyles.viewButtonText(context).copyWith(
+                      color: Theme.of(context).scaffoldBackgroundColor))))
+          : DataCell(buildViewButton(context, 'View', () {
+              final polygonCoordinates = data.polygonCoordinates
+                  .map((coord) {
+                    final parts = coord.split(',');
+                    if (parts.length == 2) {
+                      final lat = double.tryParse(parts[0]);
+                      final lng = double.tryParse(parts[1]);
+                      if (lat != null && lng != null) {
+                        return gmap.LatLng(lat, lng);
+                      }
+                    }
+                    return null;
+                  })
+                  .whereType<gmap.LatLng>()
+                  .toList();
+
+              final markers = data.boundaryImageURLs
+                  .map((url) {
+                    final uri = Uri.parse(url);
+                    final pathSegments = uri.pathSegments;
+                    if (pathSegments.isEmpty) return null;
+
+                    final filename = pathSegments.last;
+                    final coordPart =
+                        filename.split('/').last.split('.jpg').first;
+                    final coords = coordPart.split('_');
+
+                    if (coords.length == 2) {
+                      final lat = double.tryParse(coords[0]);
+                      final lng = double.tryParse(coords[1]);
+                      if (lat != null && lng != null) {
+                        return MarkerData(
+                          imageUrl: url,
+                          position: gmap.LatLng(lat, lng),
+                        );
+                      }
+                    }
+                    return null;
+                  })
+                  .whereType<MarkerData>()
+                  .toList();
+
+              if (markers.isNotEmpty) {
+                BoundaryMapDialog.show(
+                  context,
+                  markers: markers,
+                  polygonPoints: polygonCoordinates,
+                );
+              }
+            })),
+      DataCell(_buildStatusCell(context, data.status)),
+    ]);
+
+    return DataRow(
+      cells: cells,
+      onSelectChanged: null,
     );
   }
 
@@ -261,193 +286,16 @@ class _CoffeeTableState extends State<CoffeeTable> {
     );
   }
 
-  Widget _buildViewButton(
-      BuildContext context, String text, VoidCallback onPressed) {
-    return Center(
-      child: TextButton(
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: AppTextStyles.viewButtonText(context),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
-  DataRow _buildDataRow(BuildContext context, CoffeeData data) {
-    List<DataCell> cells = [];
-
-    // Add delete button if logged in
-    if (widget.isLoggedIn) {
-      cells.add(DataCell(
-        Center(
-          child: Tooltip(
-            message: 'Delete Coffee',
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(
-                  maxHeight: TableConstants.kDeleteButtonMaxHeight),
-              icon: const Icon(
-                Icons.remove_circle_outline,
-                size: TableConstants.kDeleteIconSize,
-              ),
-              onPressed: () => _showDeleteDialog(context, data),
-            ),
-          ),
-        ),
-      ));
-    }
-
-    // Add data cells based on column definitions
-    cells.addAll([
-      _buildDataCell(context, data.region),
-      _buildDataCell(context, data.regionCategory),
-      _buildDataCell(
-          context, TableConstants.formatNumber(data.perimeter, suffix: ' m')),
-      DataCell(
-        LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final formattedArea = AreaFormatter.formatArea(data.area);
-            final tooltip = AreaFormatter.getAreaTooltip(data.area);
-
-            return Tooltip(
-              message: tooltip,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TableConstants.kHorizontalPadding,
-                    vertical: TableConstants.kVerticalPadding,
-                  ),
-                  child: Text(
-                    formattedArea,
-                    style: _getDataTextStyle(context),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-      _buildDataCell(context, data.shadeType),
-      _buildDataCell(
-          context, TableConstants.formatNumber(data.plantationYear.toDouble())),
-      _buildDataCell(context, data.plantVarieties.join(', ')),
-      _buildDataCell(context,
-          TableConstants.formatNumber(data.averageHeight, suffix: ' ft')),
-      _buildDataCell(context,
-          TableConstants.formatNumber(data.averageYield, suffix: ' kg/ha')),
-      _buildDataCell(
-          context, TableConstants.formatNumber(data.beneficiaries.toDouble())),
-      _buildDataCell(context,
-          TableConstants.formatNumber(data.survivalPercentage, suffix: ' %')),
-      _buildDataCell(context, data.plotNumber),
-      _buildDataCell(context, data.khataNumber),
-      _buildDataCell(context, data.agencyName),
-      _buildDataCell(context, data.savedBy),
-      _buildDataCell(context, data.dateUpdated),
-      data.mediaURLs.isEmpty
-          ? DataCell(
-              Center(
-                child: Text(
-                  '',
-                  style: AppTextStyles.viewButtonText(context).copyWith(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-              ),
-            )
-          : DataCell(_buildViewButton(context, 'View', () {
-              MediaCarouselDialog.show(context, data.mediaURLs);
-            })),
-      data.boundaryImageURLs.isEmpty
-          ? DataCell(
-              Center(
-                child: Text(
-                  '-',
-                  style: AppTextStyles.viewButtonText(context).copyWith(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-              ),
-            )
-          : DataCell(_buildViewButton(context, 'View', () {
-              // Extract polygon coordinates for the boundary
-              final polygonCoordinates = data.polygonCoordinates
-                  .map((coord) {
-                    final parts = coord.split(',');
-                    if (parts.length == 2) {
-                      final lat = double.tryParse(parts[0]);
-                      final lng = double.tryParse(parts[1]);
-                      if (lat != null && lng != null) {
-                        return gmap.LatLng(lat, lng);
-                      }
-                    }
-                    return null;
-                  })
-                  .whereType<gmap.LatLng>()
-                  .toList();
-
-              // Extract coordinates from image URLs for markers
-              final markers = data.boundaryImageURLs
-                  .map((url) {
-                    // Extract filename from the URL
-                    final uri = Uri.parse(url);
-                    final pathSegments = uri.pathSegments;
-                    if (pathSegments.isEmpty) return null;
-
-                    // Get the filename (last segment)
-                    final filename = pathSegments.last;
-
-                    // Extract coordinates part (remove extension and token)
-                    final coordPart =
-                        filename.split('/').last.split('.jpg').first;
-                    final coords = coordPart.split('_');
-
-                    if (coords.length == 2) {
-                      final lat = double.tryParse(coords[0]);
-                      final lng = double.tryParse(coords[1]);
-                      if (lat != null && lng != null) {
-                        return MarkerData(
-                          imageUrl: url,
-                          position: gmap.LatLng(lat, lng),
-                        );
-                      }
-                    }
-                    return null;
-                  })
-                  .whereType<MarkerData>()
-                  .toList();
-
-              if (markers.isNotEmpty) {
-                BoundaryMapDialog.show(
-                  context,
-                  markers: markers,
-                  polygonPoints: polygonCoordinates,
-                );
-              }
-            })),
-      DataCell(_buildStatusCell(context, data.status)),
-    ]);
-
-    return DataRow(
-      cells: cells,
-      onSelectChanged: null,
-    );
-  }
-
-  Future<void> _showDeleteDialog(BuildContext context, CoffeeData data) async {
-    return showDialog(
+  @override
+  void handleDelete(BuildContext context, CoffeeData data) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return DeleteConfirmationDialog<CoffeeData>(
           data: data,
           onDelete: (data) async {
             setState(() {
-              _isDeleting = true;
+              isDeleting = true;
             });
 
             if (widget.onDelete != null) {
@@ -455,7 +303,7 @@ class _CoffeeTableState extends State<CoffeeTable> {
             }
 
             setState(() {
-              _isDeleting = false;
+              isDeleting = false;
             });
           },
         );

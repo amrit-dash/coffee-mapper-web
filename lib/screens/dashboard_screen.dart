@@ -7,6 +7,7 @@ import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
 import 'package:coffee_mapper_web/widgets/map/map_overview_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/coffee_highlights/coffee_highlights_section.dart';
+import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -180,7 +181,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
                 child: const NurseryHighlightsSection(),
               ),
-            ]
+              const SizedBox(height: 30),
+            ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+              child: const LegacyHighlightsSection(),
+            ),
           ],
         ),
       ),

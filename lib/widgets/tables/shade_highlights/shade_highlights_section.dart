@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:coffee_mapper_web/models/shade_data.dart';
+import 'package:coffee_mapper_web/services/shade_service.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_header.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_table.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:coffee_mapper_web/services/shade_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class ShadeHighlightsSection extends StatefulWidget {
   const ShadeHighlightsSection({super.key});
@@ -171,7 +171,7 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
                     builder: (context, authSnapshot) {
                       final isLoggedIn = authSnapshot.hasData;
                       return ShadeTable(
-                        shadeData: filteredData,
+                        data: filteredData,
                         isLoggedIn: isLoggedIn,
                         onDelete: _handleDelete,
                       );

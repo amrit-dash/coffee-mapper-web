@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_mapper_web/providers/admin_provider.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:coffee_mapper_web/providers/admin_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   final Widget returnScreen;
@@ -198,7 +198,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         style: TextStyle(
                                           fontFamily: 'Gilroy-SemiBold',
                                           fontSize: ResponsiveUtils.getFontSize(
-                                              screenWidth, 20),
+                                              screenWidth, 22),
                                         ),
                                       ),
                                       SizedBox(height: screenHeight * 0.07),
