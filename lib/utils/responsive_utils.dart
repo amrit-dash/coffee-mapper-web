@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class ResponsiveUtils {
   // Breakpoints
-  static const double mobile = 768;
-  static const double tablet = 1000;
-  static const double desktop = 1200;
+  static const double mobile = 650;
+  static const double tablet = 1100;
+  static const double desktop = 1920;
 
   // Device type checks
   static bool isMobile(double width) => width < mobile;
-  static bool isTablet(double width) => width >= mobile && width < desktop;
-  static bool isDesktop(double width) => width >= desktop;
+  static bool isTablet(double width) => width >= mobile && width < tablet;
+  static bool isDesktop(double width) => width >= tablet;
 
   // Layout dimensions
   static double getSideMenuWidth(double screenWidth) {
@@ -20,8 +20,7 @@ class ResponsiveUtils {
 
   // Font sizes
   static double getFontSize(double screenWidth, double baseSize) {
-    if (screenWidth < 360) return baseSize * 0.65;
-    if (screenWidth < mobile) return baseSize * 0.75;
+    if (screenWidth < mobile) return baseSize * 0.8;
     if (screenWidth < desktop) return baseSize * 0.9;
     return baseSize;
   }
@@ -29,8 +28,8 @@ class ResponsiveUtils {
   // Dashboard header font size
   static double getDashboardHeaderSize(double screenWidth) {
     if (screenWidth < mobile) return 20;
-    if (screenWidth < desktop) return 22;
-    return 24;
+    if (screenWidth < desktop) return 24;
+    return 28;
   }
 
   // Logo dimensions

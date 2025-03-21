@@ -28,9 +28,10 @@ class TableConstants {
       150; // Renamed from kShadeCategoryWidth
   static const double kDefaultColumnWidth = 100;
   static const double kBoundaryWidth = 100; // Renamed from kShadeBoundaryWidth
-  static const double kAreaWidth = 100; // Renamed from kShadeAreaWidth
+  static const double kAreaWidth = 120; // Renamed from kShadeAreaWidth
   static const double kPlantationYearWidth = 100;
   static const double kPlantVarietyWidth = 180;
+  static const double kShadeTypeWidth = 180;
   static const double kAverageHeightWidth = 100;
   static const double kBeneficiariesCountWidth = 100;
   static const double kSurvivalPercentageWidth = 100;
@@ -43,9 +44,6 @@ class TableConstants {
   static const double kUpdatedOnWidth = 160;
   static const double kMediaWidth = 80; // Renamed from kShadeMediaWidth
   static const double kBoundaryImageWidth = 80;
-
-  // New coffee-specific column widths
-  static const double kShadeTypeWidth = 160;
   static const double kAverageYieldWidth = 100;
 
   // Colors
@@ -75,4 +73,12 @@ class TableConstants {
 
     return '${value.toStringAsFixed(kDecimalPrecision)}${suffix ?? ''}';
   }
+
+  // Legacy table constants
+  static const double kNameWidth = 220.0;
+  static const double kCareOfNameWidth = 250.0;
+  static const double kBlockWidth = 200.0;
+  static const double kPanchayatWidth = 200.0;
+  static const double kVillageWidth = 200.0;
+  static const double kYearWidth = 130.0;
 }
