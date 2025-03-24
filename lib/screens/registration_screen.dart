@@ -2,6 +2,7 @@ import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/forms/farmer_application/farmer_form_dialog.dart';
+import 'package:coffee_mapper_web/widgets/layout/footer.dart';
 import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
@@ -84,6 +85,7 @@ class RegistrationScreen extends ConsumerWidget {
     final bool isLoggedIn = user != null && (adminData?.isAdmin ?? false);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       body: SafeArea(
         child: Column(
@@ -91,227 +93,251 @@ class RegistrationScreen extends ConsumerWidget {
             const Header(),
             Expanded(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (!isMobile) const SideMenu(renderDashboard: true),
                   Expanded(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.all(isMobile ? 16 : 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Title section with back button and officials
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: isMobile ? 10 : 20,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(
-                                            Icons.arrow_circle_left_outlined,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            size: isTablet ? 24 : 32,
-                                          ),
-                                          tooltip: 'Back to Dashboard',
-                                          onPressed: () {
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const DashboardScreen(),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              'Beneficiary Application Section',
-                                              style: TextStyle(
-                                                fontFamily: 'Gilroy-SemiBold',
-                                                fontSize: ResponsiveUtils
-                                                    .getDashboardHeaderSize(
-                                                  screenWidth,
-                                                ),
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .error,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (!isTablet && !isMobile)
-                                    const OfficialsRow(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (isMobile)
-                            const Center(
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: OfficialsRow(),
-                              ),
-                            ),
-                          const SizedBox(height: 40),
-                          // Farmer Application Section
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isMobile ? 10 : 20,
-                            ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            padding: EdgeInsets.all(isMobile ? 16 : 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Beneficiary Application',
-                                  style: TextStyle(
-                                    fontFamily: 'Gilroy-SemiBold',
-                                    fontSize: ResponsiveUtils.getFontSize(
-                                      screenWidth,
-                                      isMobile ? 19 : 21,
-                                    ),
-                                    color: Theme.of(context).highlightColor,
+                                // Title section with back button and officials
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile ? 10 : 20,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons
+                                                    .arrow_circle_left_outlined,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                size: isTablet ? 24 : 32,
+                                              ),
+                                              tooltip: 'Back to Dashboard',
+                                              onPressed: () {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const DashboardScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                'Beneficiary Application Section',
+                                                style: TextStyle(
+                                                  fontFamily: 'Gilroy-SemiBold',
+                                                  fontSize: ResponsiveUtils
+                                                      .getDashboardHeaderSize(
+                                                          screenWidth),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .error,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (!isTablet && !isMobile)
+                                        const OfficialsRow(),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(height: 20),
-                                Row(
-                                  crossAxisAlignment: (!isTablet && !isMobile)
-                                      ? CrossAxisAlignment.center
-                                      : CrossAxisAlignment.start,
-                                  mainAxisAlignment: (!isTablet && !isMobile)
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                    ElevatedButton.icon(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            Theme.of(context).colorScheme.error,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 15,
-                                        ),
-                                      ),
-                                      onPressed: () => _showFormDialog(context),
-                                      icon: Icon(
-                                        Icons.edit_document,
-                                        color: Theme.of(context).cardColor,
-                                      ),
-                                      label: Text(
-                                        'Fill Form Now',
+                                if (isMobile)
+                                  const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: OfficialsRow(),
+                                    ),
+                                  ),
+                                const SizedBox(height: 40),
+                                // Farmer Application Section
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile ? 10 : 20,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Beneficiary Application',
                                         style: TextStyle(
-                                          fontFamily: 'Gilroy-Medium',
+                                          fontFamily: 'Gilroy-SemiBold',
                                           fontSize: ResponsiveUtils.getFontSize(
                                             screenWidth,
-                                            16,
+                                            isMobile ? 19 : 21,
                                           ),
-                                          color: Theme.of(context).cardColor,
+                                          color:
+                                              Theme.of(context).highlightColor,
                                         ),
                                       ),
-                                    ),
-                                    if (!isMobile) ...[
-                                      const SizedBox(width: 20),
-                                      ElevatedButton.icon(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .error,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 20,
-                                            vertical: 15,
-                                          ),
-                                        ),
-                                        onPressed: () => _downloadPDF(context),
-                                        icon: Icon(
-                                          Icons.download,
-                                          color: Theme.of(context).cardColor,
-                                        ),
-                                        label: Text(
-                                          'Download Form in PDF Format',
-                                          style: TextStyle(
-                                            fontFamily: 'Gilroy-Medium',
-                                            fontSize:
-                                                ResponsiveUtils.getFontSize(
-                                              screenWidth,
-                                              16,
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        crossAxisAlignment:
+                                            (!isTablet && !isMobile)
+                                                ? CrossAxisAlignment.center
+                                                : CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            (!isTablet && !isMobile)
+                                                ? MainAxisAlignment.center
+                                                : MainAxisAlignment.start,
+                                        children: [
+                                          ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 20,
+                                                vertical: 15,
+                                              ),
                                             ),
-                                            color: Theme.of(context).cardColor,
+                                            onPressed: () =>
+                                                _showFormDialog(context),
+                                            icon: Icon(
+                                              Icons.edit_document,
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                            ),
+                                            label: Text(
+                                              'Fill Form Now',
+                                              style: TextStyle(
+                                                fontFamily: 'Gilroy-Medium',
+                                                fontSize:
+                                                    ResponsiveUtils.getFontSize(
+                                                  screenWidth,
+                                                  16,
+                                                ),
+                                                color:
+                                                    Theme.of(context).cardColor,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          if (!isMobile) ...[
+                                            const SizedBox(width: 20),
+                                            ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .error,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                  vertical: 15,
+                                                ),
+                                              ),
+                                              onPressed: () =>
+                                                  _downloadPDF(context),
+                                              icon: Icon(
+                                                Icons.download,
+                                                color:
+                                                    Theme.of(context).cardColor,
+                                              ),
+                                              label: Text(
+                                                'Download Form in PDF Format',
+                                                style: TextStyle(
+                                                  fontFamily: 'Gilroy-Medium',
+                                                  fontSize: ResponsiveUtils
+                                                      .getFontSize(
+                                                    screenWidth,
+                                                    16,
+                                                  ),
+                                                  color: Theme.of(context)
+                                                      .cardColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                          if (!isTablet && !isMobile) ...[
+                                            const SizedBox(width: 20),
+                                            Expanded(
+                                              child: _buildHelpText(
+                                                context,
+                                                screenWidth,
+                                              ),
+                                            ),
+                                          ],
+                                        ],
                                       ),
+                                      if (isTablet || isMobile) ...[
+                                        if (isMobile) ...[
+                                          const SizedBox(height: 10),
+                                          ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .error,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 20,
+                                                vertical: 15,
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                _downloadPDF(context),
+                                            icon: Icon(
+                                              Icons.download,
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                            ),
+                                            label: Text(
+                                              'Download Form in PDF Format',
+                                              style: TextStyle(
+                                                fontFamily: 'Gilroy-Medium',
+                                                fontSize:
+                                                    ResponsiveUtils.getFontSize(
+                                                  screenWidth,
+                                                  16,
+                                                ),
+                                                color:
+                                                    Theme.of(context).cardColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        const SizedBox(height: 10),
+                                        _buildHelpText(context, screenWidth),
+                                      ],
                                     ],
-                                    if (!isTablet && !isMobile) ...[
-                                      const SizedBox(width: 20),
-                                      Expanded(
-                                        child: _buildHelpText(
-                                          context,
-                                          screenWidth,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
+                                  ),
                                 ),
-                                if (isTablet || isMobile) ...[
-                                  if (isMobile) ...[
-                                    const SizedBox(height: 10),
-                                    ElevatedButton.icon(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            Theme.of(context).colorScheme.error,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 15,
-                                        ),
-                                      ),
-                                      onPressed: () => _downloadPDF(context),
-                                      icon: Icon(
-                                        Icons.download,
-                                        color: Theme.of(context).cardColor,
-                                      ),
-                                      label: Text(
-                                        'Download Form in PDF Format',
-                                        style: TextStyle(
-                                          fontFamily: 'Gilroy-Medium',
-                                          fontSize: ResponsiveUtils.getFontSize(
-                                            screenWidth,
-                                            16,
-                                          ),
-                                          color: Theme.of(context).cardColor,
-                                        ),
-                                      ),
+                                const SizedBox(height: 30),
+                                // Beneficiary table section with login check
+                                if (isLoggedIn)
+                                  SizedBox(
+                                    height: 450,
+                                    child: BeneficiaryHighlightSection(
+                                      isLoggedIn: isLoggedIn,
                                     ),
-                                  ],
-                                  const SizedBox(height: 10),
-                                  _buildHelpText(context, screenWidth),
-                                ],
+                                  ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 30),
-                          // Beneficiary table section with login check
-                          if (isLoggedIn)
-                            SizedBox(
-                              height: 450, // Fixed height for the table section
-                              child: BeneficiaryHighlightSection(
-                                isLoggedIn: isLoggedIn,
-                              ),
-                            )
-                        ],
-                      ),
+                        ),
+                        const Footer(),
+                      ],
                     ),
                   ),
                 ],
