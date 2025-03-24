@@ -1,6 +1,7 @@
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/layout/dashboard_metrics.dart';
+import 'package:coffee_mapper_web/widgets/layout/footer.dart';
 import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/metrics_overview.dart';
 import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
@@ -55,26 +56,34 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             const Header(),
             Expanded(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Only show SideMenu if not in mobile view
                   if (!isMobileView) const SideMenu(),
                   Expanded(
-                    child: _isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).highlightColor,
-                            ),
-                          )
-                        : SingleChildScrollView(
-                            padding: EdgeInsets.all(isMobileView ? 16 : 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildDashboardContent(context),
-                              ],
-                            ),
-                          ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: _isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: Theme.of(context).highlightColor,
+                                  ),
+                                )
+                              : SingleChildScrollView(
+                                  padding:
+                                      EdgeInsets.all(isMobileView ? 16 : 20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildDashboardContent(context),
+                                    ],
+                                  ),
+                                ),
+                        ),
+                        const Footer(),
+                      ],
+                    ),
                   ),
                 ],
               ),

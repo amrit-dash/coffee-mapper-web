@@ -78,6 +78,7 @@ flutter:
     - assets/images/
     - assets/images/sidebar-carousel/
     - assets/logo/
+    - assets/icons/
     - assets/docs/
     - assets/fonts/
     - assets/fonts/Noto_Sans_Odia/NotoSansOdia-Regular.ttf

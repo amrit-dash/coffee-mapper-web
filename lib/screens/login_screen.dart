@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/widgets/layout/footer.dart';
 import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -161,120 +162,131 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const Header(),
             Expanded(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (!isMobileView) const SideMenu(isLoginScreen: true),
                   Expanded(
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth:
-                              screenWidth < 600 ? screenWidth * 0.95 : 500,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  ResponsiveUtils.getPadding(screenWidth)),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                  height:
-                                      ResponsiveUtils.getPadding(screenHeight) *
-                                          5),
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: ResponsiveUtils.getPadding(
-                                              screenWidth) *
-                                          0.5),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Log in to continue',
-                                        style: TextStyle(
-                                          fontFamily: 'Gilroy-SemiBold',
-                                          fontSize: ResponsiveUtils.getFontSize(
-                                              screenWidth, 22),
-                                        ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth: screenWidth < 600
+                                    ? screenWidth * 0.95
+                                    : 500,
+                              ),
+                              child: SingleChildScrollView(
+                                padding: EdgeInsets.all(isMobileView ? 16 : 20),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                        height: ResponsiveUtils.getPadding(
+                                                screenHeight) *
+                                            5),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: ResponsiveUtils.getPadding(
+                                                screenWidth) *
+                                            0.5,
                                       ),
-                                      SizedBox(height: screenHeight * 0.07),
-                                      _buildEmailTextField(context),
-                                      SizedBox(height: screenHeight * 0.025),
-                                      _buildPasswordTextField(context),
-                                      SizedBox(height: screenHeight * 0.02),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: TextButton(
-                                          onPressed: () async {
-                                            final email = _emailController.text;
-
-                                            if (email.isEmpty) {
-                                              if (!context.mounted) return;
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                        'Please enter your email address')),
-                                              );
-                                              _emailController.selection =
-                                                  TextSelection.fromPosition(
-                                                TextPosition(
-                                                    offset: _emailController
-                                                        .text.length),
-                                              );
-                                              return;
-                                            }
-
-                                            try {
-                                              await FirebaseAuth.instance
-                                                  .sendPasswordResetEmail(
-                                                      email: email);
-                                              if (!context.mounted) return;
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                        'Password reset email sent!')),
-                                              );
-                                            } on FirebaseAuthException catch (e) {
-                                              if (!context.mounted) return;
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(e.message ??
-                                                      'Failed to send reset email'),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                          child: Text(
-                                            'Forgot Password?',
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Log in to continue',
                                             style: TextStyle(
-                                              fontFamily: 'Gilroy-Medium',
+                                              fontFamily: 'Gilroy-SemiBold',
                                               fontSize:
                                                   ResponsiveUtils.getFontSize(
-                                                      screenWidth, 12),
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .error,
+                                                      screenWidth, 22),
                                             ),
                                           ),
-                                        ),
+                                          SizedBox(height: screenHeight * 0.07),
+                                          _buildEmailTextField(context),
+                                          SizedBox(
+                                              height: screenHeight * 0.025),
+                                          _buildPasswordTextField(context),
+                                          SizedBox(height: screenHeight * 0.02),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                final email =
+                                                    _emailController.text;
+
+                                                if (email.isEmpty) {
+                                                  if (!context.mounted) return;
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Please enter your email address')),
+                                                  );
+                                                  _emailController.selection =
+                                                      TextSelection
+                                                          .fromPosition(
+                                                    TextPosition(
+                                                        offset: _emailController
+                                                            .text.length),
+                                                  );
+                                                  return;
+                                                }
+
+                                                try {
+                                                  await FirebaseAuth.instance
+                                                      .sendPasswordResetEmail(
+                                                          email: email);
+                                                  if (!context.mounted) return;
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Password reset email sent!')),
+                                                  );
+                                                } on FirebaseAuthException catch (e) {
+                                                  if (!context.mounted) return;
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(e.message ??
+                                                          'Failed to send reset email'),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              child: Text(
+                                                'Forgot Password?',
+                                                style: TextStyle(
+                                                  fontFamily: 'Gilroy-Medium',
+                                                  fontSize: ResponsiveUtils
+                                                      .getFontSize(
+                                                          screenWidth, 12),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .error,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    _buildLoginButton(context),
+                                    SizedBox(height: screenHeight * 0.07),
+                                  ],
                                 ),
                               ),
-                              _buildLoginButton(context),
-                              SizedBox(height: screenHeight * 0.07),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                        const Footer(),
+                      ],
                     ),
                   ),
                 ],
