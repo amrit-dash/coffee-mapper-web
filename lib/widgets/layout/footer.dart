@@ -10,7 +10,7 @@ class Footer extends StatefulWidget {
 }
 
 class _FooterState extends State<Footer> {
-  bool _switch = true;
+  bool _switch = false;
   String _name = 'Amrit Dash';
   String _url = 'https://www.about.me/amritdash';
   String _verb = 'Developed';
