@@ -241,8 +241,8 @@ abstract class BaseDataTableState<T> extends State<BaseDataTable<T>> {
         ),
         child: Text(
           status,
-          style: AppTextStyles.statusText(context).copyWith(
-              color: textColor, fontFamily: 'Gilroy-SemiBold', fontSize: 11.5),
+          style: AppTextStyles.statusText(context)
+              .copyWith(color: textColor, fontFamily: 'Gilroy-SemiBold'),
           textAlign: TextAlign.center,
         ),
       ),

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:flutter/material.dart';
 
 class AppTextStyles {
   static TextStyle gilroyMedium(
@@ -59,7 +59,8 @@ class AppTextStyles {
   static TextStyle statusText(BuildContext context) {
     return gilroySemiBold(
       context,
-      fontSize: 11,
+      fontSize:
+          ResponsiveUtils.getFontSize(MediaQuery.of(context).size.width, 12),
     );
   }
 
