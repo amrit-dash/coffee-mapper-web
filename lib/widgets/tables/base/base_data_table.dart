@@ -206,6 +206,49 @@ abstract class BaseDataTableState<T> extends State<BaseDataTable<T>> {
     );
   }
 
+  Widget buildStatusCell(BuildContext context, String status) {
+    Color backgroundColor;
+    Color textColor;
+
+    switch (status.toLowerCase()) {
+      case 'active':
+      case 'completed':
+        backgroundColor = Theme.of(context).colorScheme.primary;
+        textColor = Colors.white;
+        break;
+      case 'archived':
+      case 'in progress':
+        status = (status == 'Archived') ? 'Inactive' : status;
+        backgroundColor = Theme.of(context).colorScheme.tertiary;
+        textColor = Theme.of(context).colorScheme.primary;
+        break;
+      default:
+        backgroundColor = Colors.grey;
+        textColor = Colors.white;
+    }
+
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: TableConstants.kHorizontalPadding,
+          vertical: TableConstants.kVerticalPadding,
+        ),
+        width: 80,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius:
+              BorderRadius.circular(TableConstants.kStatusBorderRadius),
+        ),
+        child: Text(
+          status,
+          style: AppTextStyles.statusText(context).copyWith(
+              color: textColor, fontFamily: 'Gilroy-SemiBold', fontSize: 11.5),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
   DataCell buildDeleteCell(BuildContext context, T data) {
     return DataCell(
       Center(

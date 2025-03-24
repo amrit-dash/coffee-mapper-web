@@ -7,6 +7,7 @@ class LegacyService {
   Stream<List<LegacyData>> getLegacyDataStream() {
     return _firestore
         .collection('legacyApplications')
+        .orderBy('status', descending: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) => LegacyData.fromFirestore(doc)).toList();

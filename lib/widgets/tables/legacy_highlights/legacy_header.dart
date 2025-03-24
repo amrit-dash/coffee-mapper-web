@@ -50,7 +50,7 @@ class _LegacyHeaderState extends State<LegacyHeader> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Beneficiery Applications - Legacy',
+                'Beneficiery Allocation Data',
                 style: TextStyle(
                   fontFamily: 'Gilroy-SemiBold',
                   fontSize: ResponsiveUtils.getFontSize(screenWidth, 23),

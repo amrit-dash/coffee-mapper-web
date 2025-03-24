@@ -46,11 +46,12 @@ class LegacyTableState extends BaseDataTableState<LegacyData> {
     cells.addAll([
       buildDataCell(context, data.name),
       buildDataCell(context, data.careOfName),
+      buildDataCell(context, data.year.toString()),
       buildDataCell(context, '${data.area} ha'),
       buildDataCell(context, data.block),
       buildDataCell(context, data.panchayat),
       buildDataCell(context, data.village),
-      buildDataCell(context, data.year.toString()),
+      DataCell(buildStatusCell(context, data.status)),
     ]);
 
     return DataRow2(cells: cells);

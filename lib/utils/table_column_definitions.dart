@@ -366,7 +366,7 @@ class TableColumns {
     ),
   ];
 
-  static const List<ColumnDef> legacyColumns = [
+  static final List<ColumnDef> legacyColumns = [
     ColumnDef(
       label: 'Name',
       size: ColumnSize.M,
@@ -378,8 +378,13 @@ class TableColumns {
       width: TableConstants.kCareOfNameWidth,
     ),
     ColumnDef(
+      label: 'Year',
+      size: ColumnSize.S,
+      width: TableConstants.kYearWidth,
+    ),
+    ColumnDef(
       label: 'Area',
-      size: ColumnSize.M,
+      size: ColumnSize.S,
       width: TableConstants.kAreaWidth,
     ),
     ColumnDef(
@@ -398,9 +403,9 @@ class TableColumns {
       width: TableConstants.kVillageWidth,
     ),
     ColumnDef(
-      label: 'Year',
+      label: 'Status',
       size: ColumnSize.S,
-      width: TableConstants.kYearWidth,
+      width: TableConstants.kStatusWidth,
     ),
   ];
 }
