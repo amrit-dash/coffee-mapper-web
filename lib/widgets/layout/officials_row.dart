@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:flutter/material.dart';
 
 class MarqueeText extends StatefulWidget {
   final String text;
@@ -189,7 +189,7 @@ class OfficialsRow extends StatelessWidget {
               context,
               'assets/images/4.png',
               'Shri V Keerthi Vasan',
-              'Collector & District Magistrate',
+              'IAS, Collector & DM',
             ),
           ],
         ),
