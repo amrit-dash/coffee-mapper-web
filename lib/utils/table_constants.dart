@@ -75,10 +75,11 @@ class TableConstants {
   }
 
   // Legacy table constants
-  static const double kNameWidth = 220.0;
-  static const double kCareOfNameWidth = 250.0;
-  static const double kBlockWidth = 200.0;
-  static const double kPanchayatWidth = 200.0;
-  static const double kVillageWidth = 200.0;
+  static const double kNameWidth = 230.0;
+  static const double kCareOfNameWidth = 230.0;
+  static const double kBlockWidth = 180.0;
+  static const double kPanchayatWidth = 180.0;
+  static const double kVillageWidth = 180.0;
   static const double kYearWidth = 130.0;
+  static const double kStatusWidth = 150.0;
 }
