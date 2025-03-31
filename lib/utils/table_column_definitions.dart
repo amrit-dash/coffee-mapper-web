@@ -206,6 +206,101 @@ class TableColumns {
     ),
   ];
 
+  static const List<ColumnDef> nurseryColumns = [
+    ColumnDef(
+      label: 'SHG/SC Range Name',
+      size: ColumnSize.L,
+      width: TableConstants.kRegionNameWidth,
+    ),
+    ColumnDef(
+      label: 'Boundary',
+      size: ColumnSize.M,
+      width: TableConstants.kBoundaryWidth,
+      suffix: 'm',
+    ),
+    ColumnDef(
+      label: 'Area',
+      size: ColumnSize.M,
+      width: TableConstants.kAreaWidth,
+      suffix: 'm²',
+    ),
+    ColumnDef(
+      label: 'Coffee\nVariety',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Seeds\nQuantity',
+      size: ColumnSize.M,
+      width: 100.0,
+    ),
+    ColumnDef(
+      label: 'Seedlings\nRaised',
+      size: ColumnSize.M,
+      width: 100.0,
+    ),
+    ColumnDef(
+      label: 'Sowing\nDate',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Transplanting\nDate',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'First Pair\nLeaves',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Second Pair\nLeaves',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Third Pair\nLeaves',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Fourth Pair\nLeaves',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Fifth Pair\nLeaves',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Sixth Pair\nLeaves',
+      size: ColumnSize.M,
+      width: 150.0,
+    ),
+    ColumnDef(
+      label: 'Saved By',
+      size: ColumnSize.M,
+      width: TableConstants.kSavedByWidth,
+    ),
+    ColumnDef(
+      label: 'Updated On',
+      size: ColumnSize.L,
+      width: TableConstants.kUpdatedOnWidth,
+    ),
+    ColumnDef(
+      label: 'Project\nMedia',
+      size: ColumnSize.S,
+      width: TableConstants.kMediaWidth,
+    ),
+    ColumnDef(
+      label: 'Boundary\nImages',
+      size: ColumnSize.S,
+      width: TableConstants.kBoundaryImageWidth,
+    ),
+  ];
+
   static const ColumnDef deleteColumn = ColumnDef(
     label: 'X',
     size: ColumnSize.S,
