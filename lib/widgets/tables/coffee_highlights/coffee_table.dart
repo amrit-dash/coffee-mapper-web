@@ -42,80 +42,14 @@ class CoffeeTableState extends BaseDataTableState<CoffeeData> {
       ));
     }
 
-    columns.addAll([
-      DataColumn2(
-        label: buildColumnLabel(context, 'Region'),
-        size: ColumnSize.M,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Region Category'),
-        size: ColumnSize.M,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Perimeter'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Area'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Plantation Year'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Plant Varieties'),
-        size: ColumnSize.M,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Average Height'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Average Yield'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Beneficiaries'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Survival %'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Plot Number'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Khata Number'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Agency Name'),
-        size: ColumnSize.M,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Saved By'),
-        size: ColumnSize.M,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Date Updated'),
-        size: ColumnSize.M,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Media'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Boundary'),
-        size: ColumnSize.S,
-      ),
-      DataColumn2(
-        label: buildColumnLabel(context, 'Status'),
-        size: ColumnSize.S,
-      ),
-    ]);
+    columns.addAll(
+      TableColumns.coffeeColumns.map((columnDef) => DataColumn2(
+            label: buildColumnLabel(context, columnDef.label),
+            size: columnDef.size,
+            fixedWidth:
+                ResponsiveUtils.getColumnWidth(screenWidth, columnDef.width),
+          )),
+    );
 
     return columns;
   }

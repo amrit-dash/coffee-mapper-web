@@ -23,7 +23,7 @@ class TableConstants {
 
   // Column Widths
   static const double kDeleteColumnWidth = 90;
-  static const double kRegionNameWidth = 120; // Renamed from kShadeNameWidth
+  static const double kRegionNameWidth = 220; // Renamed from kShadeNameWidth
   static const double kRegionCategoryWidth =
       150; // Renamed from kShadeCategoryWidth
   static const double kDefaultColumnWidth = 100;
@@ -33,7 +33,7 @@ class TableConstants {
   static const double kPlantVarietyWidth = 180;
   static const double kShadeTypeWidth = 180;
   static const double kAverageHeightWidth = 100;
-  static const double kBeneficiariesCountWidth = 100;
+  static const double kBeneficiariesCountWidth = 110;
   static const double kSurvivalPercentageWidth = 100;
   static const double kPlotNumberWidth = 100;
   static const double kKhataNumberWidth = 100;
@@ -43,7 +43,7 @@ class TableConstants {
   static const double kSavedOnWidth = 160;
   static const double kUpdatedOnWidth = 160;
   static const double kMediaWidth = 80; // Renamed from kShadeMediaWidth
-  static const double kBoundaryImageWidth = 80;
+  static const double kBoundaryImageWidth = 100;
   static const double kAverageYieldWidth = 100;
 
   // Colors
