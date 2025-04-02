@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class LegacyHeader extends StatefulWidget {
   final List<String> blocks;
-  final List<int> years;
+  final List<String> years;
   final List<String> panchayats;
   final List<String> villages;
   final Function(String) onBlockChanged;
-  final Function(int) onYearChanged;
+  final Function(String) onYearChanged;
   final Function(String) onPanchayatChanged;
   final Function(String) onVillageChanged;
 
@@ -29,7 +29,7 @@ class LegacyHeader extends StatefulWidget {
 
 class _LegacyHeaderState extends State<LegacyHeader> {
   String? selectedBlock;
-  int? selectedYear;
+  String? selectedYear;
   String? selectedPanchayat;
   String? selectedVillage;
 
@@ -127,12 +127,12 @@ class _LegacyHeaderState extends State<LegacyHeader> {
             context,
             'Year',
             widget.years.map((e) => e.toString()).toList(),
-            selectedYear?.toString(),
+            selectedYear,
             (value) {
               setState(() {
-                selectedYear = value.isEmpty ? null : int.parse(value);
+                selectedYear = value.isEmpty ? null : value;
               });
-              widget.onYearChanged(value.isEmpty ? 0 : int.parse(value));
+              widget.onYearChanged(value);
             },
           ),
           if (hasActiveFilters) ...[
@@ -153,7 +153,7 @@ class _LegacyHeaderState extends State<LegacyHeader> {
                     selectedVillage = null;
                   });
                   widget.onBlockChanged('');
-                  widget.onYearChanged(0);
+                  widget.onYearChanged('');
                   widget.onPanchayatChanged('');
                   widget.onVillageChanged('');
                 },

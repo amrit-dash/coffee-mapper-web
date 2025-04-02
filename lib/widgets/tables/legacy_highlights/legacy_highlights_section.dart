@@ -19,11 +19,11 @@ class _LegacyHighlightsSectionState extends State<LegacyHighlightsSection> {
   List<LegacyData> filteredData = [];
   List<LegacyData> allData = [];
   String _selectedBlock = '';
-  int _selectedYear = 0;
+  String _selectedYear = '';
   String _selectedPanchayat = '';
   String _selectedVillage = '';
   List<String> _blocks = [];
-  List<int> _years = [];
+  List<String> _years = [];
   List<String> _panchayats = [];
   List<String> _villages = [];
   bool _isDeleting = false;
@@ -39,7 +39,7 @@ class _LegacyHighlightsSectionState extends State<LegacyHighlightsSection> {
     return allData.where((item) {
       final matchesBlock =
           _selectedBlock.isEmpty || item.block == _selectedBlock;
-      final matchesYear = _selectedYear == 0 || item.year == _selectedYear;
+      final matchesYear = _selectedYear.isEmpty || item.year == _selectedYear;
       final matchesPanchayat =
           _selectedPanchayat.isEmpty || item.panchayat == _selectedPanchayat;
       final matchesVillage =

@@ -9,7 +9,7 @@ class LegacyData {
   final String panchayat;
   final String status;
   final String village;
-  final int year;
+  final String year;
 
   LegacyData({
     required this.id,
@@ -34,7 +34,7 @@ class LegacyData {
       panchayat: data['panchayat'] ?? '',
       status: data['status'] ?? '',
       village: data['village'] ?? '',
-      year: data['year'] ?? 0,
+      year: data['year'] ?? '',
     );
   }
 }
