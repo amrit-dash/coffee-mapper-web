@@ -53,13 +53,16 @@ class _LegacyHeaderState extends State<LegacyHeader> {
                 'Beneficiery Allocation Data',
                 style: TextStyle(
                   fontFamily: 'Gilroy-SemiBold',
-                  fontSize: ResponsiveUtils.getFontSize(screenWidth, 23),
+                  fontSize: ResponsiveUtils.getFontSize(screenWidth, 20),
                   color: Theme.of(context).highlightColor,
                 ),
               ),
               if (isDesktop) const SizedBox(width: 30),
               if (isDesktop) Expanded(child: _buildFiltersRow(context)),
             ],
+          ),
+          SizedBox(
+            height: 10,
           ),
           if (!isDesktop)
             Padding(

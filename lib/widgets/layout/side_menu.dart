@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:coffee_mapper_web/screens/login_screen.dart';
-import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
-import 'package:coffee_mapper_web/screens/registration_screen.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:coffee_mapper_web/config/firebase_config.dart';
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/providers/news_provider.dart';
-import 'package:coffee_mapper_web/widgets/layout/news_scroll_view.dart';
-import 'package:coffee_mapper_web/widgets/dialogs/sidebar_image_card.dart';
-import 'package:coffee_mapper_web/config/firebase_config.dart';
+import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
+import 'package:coffee_mapper_web/screens/login_screen.dart';
+import 'package:coffee_mapper_web/screens/registration_screen.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/dialogs/grievance_form_dialog.dart';
+import 'package:coffee_mapper_web/widgets/layout/news_scroll_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class SideMenu extends ConsumerStatefulWidget {
   final bool isLoginScreen;
@@ -141,16 +140,16 @@ class _SideMenuState extends ConsumerState<SideMenu> {
                         flex: 2,
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
-                            maxHeight: screenHeight * 0.3,
+                            maxHeight: screenHeight * 0.4,
                             minHeight: screenHeight * 0.15,
                           ),
                           child: const NewsScrollView(),
                         ),
                       ),
-                      if (showSidebarImageCard) ...[
-                        SizedBox(height: screenHeight < 700 ? 15 : 20),
-                        const SidebarImageCard(),
-                      ],
+                      // if (showSidebarImageCard) ...[
+                      //   SizedBox(height: screenHeight < 700 ? 15 : 20),
+                      //   const SidebarImageCard(),
+                      // ],
                     ],
                   ),
                 ),

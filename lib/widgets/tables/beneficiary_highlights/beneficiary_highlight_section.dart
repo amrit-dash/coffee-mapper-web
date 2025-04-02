@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:coffee_mapper_web/models/farmer_form_data.dart';
 import 'package:coffee_mapper_web/services/beneficiary_service.dart';
-import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_table.dart';
-import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_header.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_header.dart';
+import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_table.dart';
+import 'package:flutter/material.dart';
 
 class BeneficiaryHighlightSection extends StatefulWidget {
   final bool isLoggedIn;
@@ -146,7 +146,7 @@ class _BeneficiaryHighlightSectionState
                   onVillageChanged: _onVillageChanged,
                   isAdmin: widget.isLoggedIn,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 Expanded(
                   child: Container(
                     clipBehavior: Clip.antiAlias,

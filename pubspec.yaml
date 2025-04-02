@@ -78,6 +78,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/sidebar-carousel/
+    - assets/images/dashboard-carousel/
     - assets/logo/
     - assets/icons/
     - assets/docs/

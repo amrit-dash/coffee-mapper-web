@@ -1,5 +1,6 @@
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/widgets/layout/dashboard_carousel.dart';
 import 'package:coffee_mapper_web/widgets/layout/dashboard_metrics.dart';
 import 'package:coffee_mapper_web/widgets/layout/footer.dart';
 import 'package:coffee_mapper_web/widgets/layout/header.dart';
@@ -8,7 +9,7 @@ import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
 import 'package:coffee_mapper_web/widgets/map/map_overview_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/coffee_highlights/coffee_highlights_section.dart';
-import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_highlights_section.dart';
+//import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -164,7 +165,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   child: OfficialsRow(),
                 ),
               ),
-            const SizedBox(height: 20),
+            SizedBox(height: isMobile ? 10 : 30),
+            // Add Dashboard Carousel
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+              child: const DashboardCarousel(),
+            ),
+            //const SizedBox(height: 10),
             // New Dashboard Metrics Section
             const DashboardMetrics(),
             // Show sensitive components only when logged in
@@ -192,10 +199,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
               const SizedBox(height: 30),
             ],
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
-              child: const LegacyHighlightsSection(),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+            //   child: const LegacyHighlightsSection(),
+            // ),
           ],
         ),
       ),

@@ -1,6 +1,6 @@
+import 'package:coffee_mapper_web/providers/news_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:coffee_mapper_web/providers/news_provider.dart';
 
 class NewsScrollView extends ConsumerStatefulWidget {
   const NewsScrollView({super.key});
@@ -77,7 +77,7 @@ class _NewsScrollViewState extends ConsumerState<NewsScrollView> {
         _startScrolling();
       },
       child: SizedBox(
-        height: 185,
+        height: 200,
         child: ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
           child: ListView.builder(

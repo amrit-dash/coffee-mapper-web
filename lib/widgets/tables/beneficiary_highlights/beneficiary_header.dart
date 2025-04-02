@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:flutter/material.dart';
 
 class BeneficiaryHeader extends StatefulWidget {
   final List<String> districts;
@@ -55,7 +55,7 @@ class _BeneficiaryHeaderState extends State<BeneficiaryHeader> {
                 style: TextStyle(
                   fontFamily: 'Gilroy-SemiBold',
                   fontSize: ResponsiveUtils.getFontSize(screenWidth, 20),
-                  color: Theme.of(context).colorScheme.error,
+                  color: Theme.of(context).highlightColor,
                 ),
               ),
               if (isDesktop) const SizedBox(width: 40),
