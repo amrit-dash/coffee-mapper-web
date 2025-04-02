@@ -323,15 +323,23 @@ class RegistrationScreen extends ConsumerWidget {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 30),
                                 // Beneficiary table section with login check
-                                if (isLoggedIn)
+                                if (isLoggedIn) ...[
+                                  const SizedBox(height: 30),
                                   SizedBox(
                                     height: 450,
                                     child: BeneficiaryHighlightSection(
                                       isLoggedIn: isLoggedIn,
                                     ),
                                   ),
+                                ],
+                                // const SizedBox(height: 30),
+                                // SizedBox(
+                                //   height: 450,
+                                //   child: BeneficiaryHighlightSection(
+                                //     isLoggedIn: isLoggedIn,
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
