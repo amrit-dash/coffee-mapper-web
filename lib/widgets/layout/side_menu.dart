@@ -51,7 +51,7 @@ class _SideMenuState extends ConsumerState<SideMenu> {
     final sideMenuWidth = ResponsiveUtils.getSideMenuWidth(screenWidth);
 
     // Only show sidebar image card if screen height is sufficient
-    final bool showSidebarImageCard = screenHeight > 500;
+    //final bool showSidebarImageCard = screenHeight > 500;
 
     // Only show sidebar menu items if screen height is sufficient
     final bool showSidebarMenuItems = screenHeight > 600;
