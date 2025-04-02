@@ -7,6 +7,7 @@ import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
 import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_highlight_section.dart';
+import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_highlights_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -184,9 +185,7 @@ class RegistrationScreen extends ConsumerWidget {
                                         style: TextStyle(
                                           fontFamily: 'Gilroy-SemiBold',
                                           fontSize: ResponsiveUtils.getFontSize(
-                                            screenWidth,
-                                            isMobile ? 19 : 21,
-                                          ),
+                                              screenWidth, 23),
                                           color:
                                               Theme.of(context).highlightColor,
                                         ),
@@ -323,9 +322,13 @@ class RegistrationScreen extends ConsumerWidget {
                                     ],
                                   ),
                                 ),
+                                const SizedBox(height: 30),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: const LegacyHighlightsSection(),
+                                ),
                                 // Beneficiary table section with login check
                                 if (isLoggedIn) ...[
-                                  const SizedBox(height: 30),
                                   SizedBox(
                                     height: 450,
                                     child: BeneficiaryHighlightSection(
@@ -333,13 +336,6 @@ class RegistrationScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ],
-                                // const SizedBox(height: 30),
-                                // SizedBox(
-                                //   height: 450,
-                                //   child: BeneficiaryHighlightSection(
-                                //     isLoggedIn: isLoggedIn,
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
