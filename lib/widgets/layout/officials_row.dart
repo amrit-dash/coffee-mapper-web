@@ -60,7 +60,13 @@ class _MarqueeTextState extends State<MarqueeText> {
 
       if (!mounted || !_isScrolling) break;
 
-      if (_scrollController.hasClients) {
+      // Wait for scroll controller to have clients
+      if (!_scrollController.hasClients) {
+        await Future.delayed(const Duration(milliseconds: 100));
+        continue;
+      }
+
+      try {
         final maxScroll = _scrollController.position.maxScrollExtent;
         final currentScroll = _scrollController.offset;
 
@@ -86,6 +92,14 @@ class _MarqueeTextState extends State<MarqueeText> {
             curve: Curves.linear,
           );
         }
+      } catch (e) {
+        // If there's an error with the scroll position, reset to start
+        await _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 1500),
+          curve: Curves.easeInOut,
+        );
+        await Future.delayed(const Duration(milliseconds: 1000));
       }
     }
   }

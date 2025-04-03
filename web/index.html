@@ -22,9 +22,12 @@
   <meta name="keywords" content="coffee, mapper, dashboard, coffee mapper, coffee mapper dashboard, coffee mapper web, coffee mapper web dashboard, koraput, koraput coffee, koraput coffee map, koraput coffee mapper, koraput coffee mapper dashboard, koraput coffee mapper web, koraput coffee mapper web dashboard, koraput coffee plantation, koraput coffee, koraput coffee mapper">
 
   <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Coffee Mapper Dashboard">
+  <meta name="mobile-web-app-status-bar-style" content="black">
+  <meta name="mobile-web-app-title" content="Coffee Mapper Dashboard">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
@@ -75,6 +78,25 @@
     // Will be called from Dart code after fetching the API key
     window.initializeGoogleMaps = function(apiKey) {
       return loadGoogleMapsAPI(apiKey);
+    };
+  </script>
+
+  <!-- Preload carousel images -->
+  <script>
+    window.preloadCarouselImages = function() {
+      const imagePaths = [
+        'assets/images/dashboard-carousel/1.png',
+        'assets/images/dashboard-carousel/2.png',
+        'assets/images/dashboard-carousel/3.png',
+        'assets/images/dashboard-carousel/4.png',
+        'assets/images/dashboard-carousel/5.png',
+        'assets/images/dashboard-carousel/6.png'
+      ];
+
+      imagePaths.forEach(path => {
+        const img = new Image();
+        img.src = path;
+      });
     };
   </script>
 </head>
