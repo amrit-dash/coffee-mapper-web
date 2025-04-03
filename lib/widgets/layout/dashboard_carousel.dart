@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:flutter/gestures.dart';
@@ -23,6 +24,9 @@ class NoHorizontalScrollBehavior extends ScrollBehavior {
   }
 }
 
+@JS()
+external void preloadCarouselImages();
+
 class DashboardCarousel extends StatefulWidget {
   static const List<String> carouselImages = [
     'assets/images/dashboard-carousel/1.png',
@@ -40,7 +44,7 @@ class DashboardCarousel extends StatefulWidget {
 }
 
 class _DashboardCarouselState extends State<DashboardCarousel> {
-  late final PageController _pageController;
+  final PageController _pageController = PageController();
   late final FocusNode _focusNode;
   Timer? _autoScrollTimer;
   bool _isUserInteracting = false;
@@ -52,12 +56,18 @@ class _DashboardCarouselState extends State<DashboardCarousel> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _focusNode = FocusNode();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
-      _startAutoScroll();
-    });
+    preloadCarouselImages();
+    _startAutoScroll();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize images in memory
+    for (final imagePath in DashboardCarousel.carouselImages) {
+      precacheImage(AssetImage(imagePath), context);
+    }
   }
 
   @override
@@ -153,7 +163,7 @@ class _DashboardCarouselState extends State<DashboardCarousel> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 26),
+            color: Colors.black.withAlpha(76),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
