@@ -61,7 +61,6 @@ class NurseryService {
     _performCacheCleanup();
 
     if (_activeStream != null) {
-      _logger.info('Returning existing stream');
       return _activeStream!;
     }
 
@@ -71,14 +70,10 @@ class NurseryService {
         .orderBy('updatedOn', descending: true)
         .limit(maxCacheItems);
 
-    _logger.info('Creating new stream from Firestore query');
     _activeStream = query.snapshots().map((snapshot) {
-      _logger.info('Received snapshot with ${snapshot.docs.length} documents');
-
       final List<NurseryData> data = [];
       for (var doc in snapshot.docs) {
         try {
-          _logger.info('Converting document ${doc.id}');
           final nurseryData = _convertToNurseryData(doc);
           data.add(nurseryData);
         } catch (e) {
@@ -90,7 +85,6 @@ class NurseryService {
       if (data.length <= maxCacheItems) {
         _cachedNurseryData = data;
         _lastCacheTime = DateTime.now();
-        _logger.info('Updated cache with ${data.length} items');
       } else {
         _cachedNurseryData = data.sublist(0, maxCacheItems);
         _lastCacheTime = DateTime.now();
