@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_html/html.dart' as html;
 
 class TableScrollBehavior extends ScrollBehavior {
   const TableScrollBehavior();
@@ -20,12 +21,36 @@ class TableScrollBehavior extends ScrollBehavior {
   @override
   Widget buildScrollbar(
       BuildContext context, Widget child, ScrollableDetails details) {
-    return GestureDetector(
-      onHorizontalDragUpdate: (details) {
-        // Prevent browser back/forward gestures
-        details.globalPosition;
+    // Prevent browser back/forward navigation when scrolling horizontally
+    return Listener(
+      onPointerSignal: (event) {
+        if (event is PointerScrollEvent) {
+          if (event.scrollDelta.dx != 0) {
+            html.window.history.pushState(null, '', html.window.location.href);
+          }
+        }
       },
-      child: child,
+      child: RawGestureDetector(
+        gestures: <Type, GestureRecognizerFactory>{
+          HorizontalDragGestureRecognizer: GestureRecognizerFactoryWithHandlers<
+              HorizontalDragGestureRecognizer>(
+            () => HorizontalDragGestureRecognizer(),
+            (HorizontalDragGestureRecognizer instance) {
+              instance
+                ..onStart = (_) {
+                  html.window.history
+                      .pushState(null, '', html.window.location.href);
+                }
+                ..onUpdate = (_) {
+                  html.window.history
+                      .pushState(null, '', html.window.location.href);
+                };
+            },
+          ),
+        },
+        behavior: HitTestBehavior.opaque,
+        child: child,
+      ),
     );
   }
 
