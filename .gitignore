@@ -68,7 +68,6 @@ firebase.json
 .pub/
 build/
 coverage/
-lib/generated_plugin_registrant.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -112,7 +111,6 @@ lib/generated_plugin_registrant.dart
 **/ios/Runner/GeneratedPluginRegistrant.*
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Environment files
 .env
