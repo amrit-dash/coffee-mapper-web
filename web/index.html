@@ -65,7 +65,7 @@
         };
 
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&callback=initMap&v=weekly`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&loading=async&callback=initMap&v=weekly&libraries=marker`;
         script.async = true;
         script.defer = true;
         script.onerror = reject;
