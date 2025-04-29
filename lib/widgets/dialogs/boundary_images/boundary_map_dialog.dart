@@ -1,15 +1,9 @@
+import 'package:coffee_mapper_web/models/marker_data.dart';
+import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/widgets/dialogs/boundary_images/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
-import 'package:coffee_mapper_web/widgets/dialogs/boundary_images/custom_info_window.dart';
-import 'package:coffee_mapper_web/utils/responsive_utils.dart';
-
-class MarkerData {
-  final String imageUrl;
-  final gmap.LatLng position;
-
-  MarkerData({required this.imageUrl, required this.position});
-}
 
 class BoundaryMapDialog extends StatefulWidget {
   final List<MarkerData> markers;

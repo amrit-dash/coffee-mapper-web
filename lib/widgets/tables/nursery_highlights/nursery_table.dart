@@ -1,5 +1,6 @@
 import 'package:coffee_mapper_web/models/nursery_data.dart';
 import 'package:coffee_mapper_web/utils/area_formatter.dart';
+import 'package:coffee_mapper_web/utils/coordinate_extractor.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
 import 'package:coffee_mapper_web/utils/table_constants.dart';
@@ -135,36 +136,20 @@ class NurseryTableState extends BaseDataTableState<NurseryData> {
                   .whereType<gmap.LatLng>()
                   .toList();
 
-              final markers = data.boundaryImageURLs
-                  .map((url) {
-                    final uri = Uri.parse(url);
-                    final pathSegments = uri.pathSegments;
-                    if (pathSegments.isEmpty) return null;
-
-                    final filename = pathSegments.last;
-                    final coordPart =
-                        filename.split('/').last.split('.jpg').first;
-                    final coords = coordPart.split('_');
-
-                    if (coords.length == 2) {
-                      final lat = double.tryParse(coords[0]);
-                      final lng = double.tryParse(coords[1]);
-                      if (lat != null && lng != null) {
-                        return MarkerData(
-                          imageUrl: url,
-                          position: gmap.LatLng(lat, lng),
-                        );
-                      }
-                    }
-                    return null;
-                  })
-                  .whereType<MarkerData>()
-                  .toList();
+              final markers = CoordinateExtractor.extractMarkersFromUrls(
+                  data.boundaryImageURLs);
 
               if (markers.isNotEmpty) {
                 BoundaryMapDialog.show(
                   context,
                   markers: markers,
+                  polygonPoints: polygonCoordinates,
+                );
+              } else if (polygonCoordinates.isNotEmpty) {
+                // If we have a polygon but no markers, still show the map
+                BoundaryMapDialog.show(
+                  context,
+                  markers: const [],
                   polygonPoints: polygonCoordinates,
                 );
               }

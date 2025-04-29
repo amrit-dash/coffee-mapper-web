@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
-import 'package:coffee_mapper_web/services/shade_service.dart';
-import 'package:coffee_mapper_web/services/coffee_service.dart';
-import 'package:coffee_mapper_web/models/shade_data.dart';
 import 'package:coffee_mapper_web/models/coffee_data.dart';
+import 'package:coffee_mapper_web/models/shade_data.dart';
+import 'package:coffee_mapper_web/services/coffee_service.dart';
+import 'package:coffee_mapper_web/services/shade_service.dart';
+import 'package:coffee_mapper_web/utils/coordinate_extractor.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/dialogs/boundary_images/custom_info_window.dart';
 import 'package:coffee_mapper_web/widgets/map/map_header.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 
 class MapOverviewSection extends StatefulWidget {
   const MapOverviewSection({super.key});
@@ -194,74 +195,50 @@ class _MapOverviewSectionState extends State<MapOverviewSection>
 
               // Add markers for boundary images
               if (data.boundaryImageURLs.isNotEmpty) {
-                // Extract coordinates from image URLs for markers
-                for (String url in data.boundaryImageURLs) {
-                  try {
-                    // Extract filename from the URL
-                    final uri = Uri.parse(url);
-                    final pathSegments = uri.pathSegments;
-                    if (pathSegments.isEmpty) continue;
+                final markers = CoordinateExtractor.extractMarkersFromUrls(
+                    data.boundaryImageURLs);
+                for (final marker in markers) {
+                  _markers.add(
+                    gmap.Marker(
+                      markerId: gmap.MarkerId('${data.id}_${_markers.length}'),
+                      position: marker.position,
+                      icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
+                        gmap.BitmapDescriptor.hueOrange,
+                      ),
+                      onTap: () {
+                        if (_currentZoom >= _minMarkerInteractionZoom) {
+                          setState(() {
+                            _selectedLocation = null;
+                            _selectedImageUrl = null;
 
-                    // Get the filename (last segment)
-                    final filename = pathSegments.last;
-
-                    // Extract coordinates part (remove extension and token)
-                    final coordPart =
-                        filename.split('/').last.split('.jpg').first;
-                    final coords = coordPart.split('_');
-
-                    if (coords.length == 2) {
-                      final lat = double.tryParse(coords[0]);
-                      final lng = double.tryParse(coords[1]);
-                      if (lat != null && lng != null) {
-                        final newLocation = gmap.LatLng(lat, lng);
-                        _markers.add(
-                          gmap.Marker(
-                            markerId:
-                                gmap.MarkerId('${data.id}_${_markers.length}'),
-                            position: newLocation,
-                            icon: gmap.BitmapDescriptor.defaultMarkerWithHue(
-                              gmap.BitmapDescriptor.hueOrange,
-                            ),
-                            onTap: () {
-                              if (_currentZoom >= _minMarkerInteractionZoom) {
+                            Future.delayed(const Duration(milliseconds: 50),
+                                () {
+                              if (mounted) {
                                 setState(() {
-                                  _selectedLocation = null;
-                                  _selectedImageUrl = null;
-
-                                  Future.delayed(
-                                      const Duration(milliseconds: 50), () {
-                                    if (mounted) {
-                                      setState(() {
-                                        _selectedLocation = newLocation;
-                                        _selectedImageUrl = url;
-                                      });
-                                    }
-                                  });
-                                });
-                              } else {
-                                setState(() {
-                                  // Reset the animation state
-                                  _messageController.reset();
-                                  _showZoomMessage = true;
-                                });
-
-                                // Start the fade out after 2 seconds
-                                Future.delayed(
-                                    const Duration(milliseconds: 2000), () {
-                                  if (mounted && _showZoomMessage) {
-                                    _messageController.forward(from: 0);
-                                  }
+                                  _selectedLocation = marker.position;
+                                  _selectedImageUrl = marker.imageUrl;
                                 });
                               }
-                            },
-                          ),
-                        );
-                      }
-                    }
-                  } catch (e) {
-                    // Continue to next coordinate instead of throwing
-                  }
+                            });
+                          });
+                        } else {
+                          setState(() {
+                            // Reset the animation state
+                            _messageController.reset();
+                            _showZoomMessage = true;
+                          });
+
+                          // Start the fade out after 2 seconds
+                          Future.delayed(const Duration(milliseconds: 2000),
+                              () {
+                            if (mounted && _showZoomMessage) {
+                              _messageController.forward(from: 0);
+                            }
+                          });
+                        }
+                      },
+                    ),
+                  );
                 }
               }
             }
