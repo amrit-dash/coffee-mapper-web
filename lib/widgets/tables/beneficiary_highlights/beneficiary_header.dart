@@ -11,6 +11,8 @@ class BeneficiaryHeader extends StatefulWidget {
   final Function(String) onPanchayatChanged;
   final Function(String) onVillageChanged;
   final bool isAdmin;
+  final List<List<dynamic>> tableData;
+  final List<String> tableHeaders;
 
   const BeneficiaryHeader({
     super.key,
@@ -23,6 +25,8 @@ class BeneficiaryHeader extends StatefulWidget {
     required this.onPanchayatChanged,
     required this.onVillageChanged,
     required this.isAdmin,
+    required this.tableData,
+    required this.tableHeaders,
   });
 
   @override
@@ -80,69 +84,97 @@ class _BeneficiaryHeaderState extends State<BeneficiaryHeader> {
         selectedPanchayat != null ||
         selectedVillage != null;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildFilterDropdown(
-            context,
-            'District',
-            widget.districts,
-            selectedDistrict,
-            widget.onDistrictChanged,
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Block',
-            widget.blocks,
-            selectedBlock,
-            widget.onBlockChanged,
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Panchayat',
-            widget.panchayats,
-            selectedPanchayat,
-            widget.onPanchayatChanged,
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Village',
-            widget.villages,
-            selectedVillage,
-            widget.onVillageChanged,
-          ),
-          if (hasActiveFilters) ...[
-            SizedBox(width: isMobile ? 8 : 12),
-            Tooltip(
-              message: 'Clear All',
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Theme.of(context).colorScheme.error,
-                  size: isMobile ? 18 : 20,
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildFilterDropdown(
+                  context,
+                  'District',
+                  widget.districts,
+                  selectedDistrict,
+                  widget.onDistrictChanged,
                 ),
-                onPressed: () {
-                  setState(() {
-                    selectedDistrict = null;
-                    selectedBlock = null;
-                    selectedPanchayat = null;
-                    selectedVillage = null;
-                  });
-                  widget.onDistrictChanged('');
-                  widget.onBlockChanged('');
-                  widget.onPanchayatChanged('');
-                  widget.onVillageChanged('');
-                },
-              ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Block',
+                  widget.blocks,
+                  selectedBlock,
+                  widget.onBlockChanged,
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Panchayat',
+                  widget.panchayats,
+                  selectedPanchayat,
+                  widget.onPanchayatChanged,
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Village',
+                  widget.villages,
+                  selectedVillage,
+                  widget.onVillageChanged,
+                ),
+                if (hasActiveFilters) ...[
+                  SizedBox(width: isMobile ? 8 : 12),
+                  Tooltip(
+                    message: 'Clear All',
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Theme.of(context).colorScheme.error,
+                        size: isMobile ? 18 : 20,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectedDistrict = null;
+                          selectedBlock = null;
+                          selectedPanchayat = null;
+                          selectedVillage = null;
+                        });
+                        widget.onDistrictChanged('');
+                        widget.onBlockChanged('');
+                        widget.onPanchayatChanged('');
+                        widget.onVillageChanged('');
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
-        ],
-      ),
+          ),
+        ),
+        /*
+        // Export button - Hidden
+        Tooltip(
+          message: 'Download Table Data',
+          child: IconButton(
+            icon: Icon(
+              Icons.downloading_outlined,
+              color: Theme.of(context).colorScheme.secondary,
+              size: isMobile ? 22 : 25,
+            ),
+            onPressed: () {
+              ExcelExportUtils.downloadExcel(
+                context: context,
+                headers: widget.tableHeaders,
+                data: widget.tableData,
+                fileName: 'Beneficiary_Data',
+                sheetName: 'Beneficiary',
+              );
+            },
+          ),
+        ),
+        */
+      ],
     );
   }
 

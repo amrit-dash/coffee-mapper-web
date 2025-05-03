@@ -18,7 +18,7 @@ class ColumnDef {
 class TableColumns {
   static const List<ColumnDef> shadeColumns = [
     ColumnDef(
-      label: 'Name',
+      label: 'Project Name',
       size: ColumnSize.L,
       width: TableConstants.kRegionNameWidth,
     ),
@@ -110,7 +110,7 @@ class TableColumns {
 
   static const List<ColumnDef> coffeeColumns = [
     ColumnDef(
-      label: 'Name',
+      label: 'Project Name',
       size: ColumnSize.L,
       width: TableConstants.kRegionNameWidth,
     ),

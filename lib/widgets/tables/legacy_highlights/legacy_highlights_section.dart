@@ -1,6 +1,7 @@
 import 'package:coffee_mapper_web/models/legacy_data.dart';
 import 'package:coffee_mapper_web/services/legacy_service.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
 import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_header.dart';
 import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_table.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,6 +82,20 @@ class _LegacyHighlightsSectionState extends State<LegacyHighlightsSection> {
                 years: _years,
                 panchayats: _panchayats,
                 villages: _villages,
+                tableData: filteredData
+                    .map((data) => [
+                          data.name,
+                          data.careOfName,
+                          data.year,
+                          '${data.area} ha',
+                          data.block,
+                          data.panchayat,
+                          data.village,
+                          data.status,
+                        ])
+                    .toList(),
+                tableHeaders:
+                    TableColumns.legacyColumns.map((col) => col.label).toList(),
                 onBlockChanged: (value) {
                   setState(() {
                     _selectedBlock = value;

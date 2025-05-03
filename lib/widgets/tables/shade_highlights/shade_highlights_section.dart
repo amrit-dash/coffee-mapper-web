@@ -1,6 +1,7 @@
 import 'package:coffee_mapper_web/models/shade_data.dart';
 import 'package:coffee_mapper_web/services/shade_service.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_header.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_table.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -143,6 +144,29 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
                 onPanchayatChanged: _onPanchayatChanged,
                 onVillageChanged: _onVillageChanged,
                 onRegionCategoryChanged: _onRegionCategoryChanged,
+                tableData: filteredData
+                    .map((data) => [
+                          data.region,
+                          data.regionCategory,
+                          data.perimeter,
+                          data.area,
+                          data.plantationYear,
+                          data.shadeType,
+                          data.averageHeight,
+                          data.beneficiaries,
+                          data.survivalPercentage,
+                          data.plotNumber,
+                          data.khataNumber,
+                          data.agencyName,
+                          data.savedBy,
+                          data.dateUpdated,
+                          '-',
+                          '-',
+                          data.status,
+                        ])
+                    .toList(),
+                tableHeaders:
+                    TableColumns.shadeColumns.map((col) => col.label).toList(),
               ),
               const SizedBox(height: 16),
               Expanded(
