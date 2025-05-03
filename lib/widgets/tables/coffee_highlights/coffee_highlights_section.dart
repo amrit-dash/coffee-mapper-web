@@ -146,6 +146,9 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
                 tableData: filteredData
                     .map((data) => [
                           data.region,
+                          data.block,
+                          data.panchayat,
+                          data.village,
                           data.regionCategory,
                           data.perimeter,
                           data.area,
