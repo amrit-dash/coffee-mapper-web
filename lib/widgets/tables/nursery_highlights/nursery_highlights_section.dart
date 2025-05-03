@@ -136,6 +136,9 @@ class _NurseryHighlightsSectionState extends State<NurseryHighlightsSection> {
                 tableData: filteredData
                     .map((data) => [
                           data.regionName,
+                          data.block,
+                          data.panchayat,
+                          data.village,
                           data.perimeter,
                           data.area,
                           data.coffeeVariety ?? '-',

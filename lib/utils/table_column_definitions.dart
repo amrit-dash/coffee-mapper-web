@@ -23,6 +23,21 @@ class TableColumns {
       width: TableConstants.kRegionNameWidth,
     ),
     ColumnDef(
+      label: 'Block',
+      size: ColumnSize.M,
+      width: TableConstants.kBlockWidth,
+    ),
+    ColumnDef(
+      label: 'Panchayat',
+      size: ColumnSize.M,
+      width: TableConstants.kPanchayatWidth,
+    ),
+    ColumnDef(
+      label: 'Village',
+      size: ColumnSize.M,
+      width: TableConstants.kVillageWidth,
+    ),
+    ColumnDef(
       label: 'Category',
       size: ColumnSize.L,
       width: TableConstants.kRegionCategoryWidth,
@@ -113,6 +128,21 @@ class TableColumns {
       label: 'Project Name',
       size: ColumnSize.L,
       width: TableConstants.kRegionNameWidth,
+    ),
+    ColumnDef(
+      label: 'Block',
+      size: ColumnSize.M,
+      width: TableConstants.kBlockWidth,
+    ),
+    ColumnDef(
+      label: 'Panchayat',
+      size: ColumnSize.M,
+      width: TableConstants.kPanchayatWidth,
+    ),
+    ColumnDef(
+      label: 'Village',
+      size: ColumnSize.M,
+      width: TableConstants.kVillageWidth,
     ),
     ColumnDef(
       label: 'Category',
@@ -211,6 +241,21 @@ class TableColumns {
       label: 'SHG/SC Range Name',
       size: ColumnSize.L,
       width: TableConstants.kRegionNameWidth,
+    ),
+    ColumnDef(
+      label: 'Block',
+      size: ColumnSize.M,
+      width: TableConstants.kBlockWidth,
+    ),
+    ColumnDef(
+      label: 'Panchayat',
+      size: ColumnSize.M,
+      width: TableConstants.kPanchayatWidth,
+    ),
+    ColumnDef(
+      label: 'Village',
+      size: ColumnSize.M,
+      width: TableConstants.kVillageWidth,
     ),
     ColumnDef(
       label: 'Boundary',
@@ -485,17 +530,17 @@ class TableColumns {
     ColumnDef(
       label: 'Block',
       size: ColumnSize.S,
-      width: TableConstants.kBlockWidth,
+      width: TableConstants.kLegacyBlockWidth,
     ),
     ColumnDef(
       label: 'Panchayat',
       size: ColumnSize.S,
-      width: TableConstants.kPanchayatWidth,
+      width: TableConstants.kLegacyPanchayatWidth,
     ),
     ColumnDef(
       label: 'Village',
       size: ColumnSize.S,
-      width: TableConstants.kVillageWidth,
+      width: TableConstants.kLegacyVillageWidth,
     ),
     ColumnDef(
       label: 'Status',

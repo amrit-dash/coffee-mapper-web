@@ -65,6 +65,9 @@ class NurseryTableState extends BaseDataTableState<NurseryData> {
 
     cells.addAll([
       buildDataCell(context, data.regionName),
+      buildDataCell(context, data.block),
+      buildDataCell(context, data.panchayat),
+      buildDataCell(context, data.village),
       buildDataCell(
           context, TableConstants.formatNumber(data.perimeter, suffix: ' m')),
       DataCell(

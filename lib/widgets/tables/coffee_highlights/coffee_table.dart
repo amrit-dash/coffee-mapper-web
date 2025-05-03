@@ -65,6 +65,9 @@ class CoffeeTableState extends BaseDataTableState<CoffeeData> {
 
     cells.addAll([
       buildDataCell(context, data.region),
+      buildDataCell(context, data.block),
+      buildDataCell(context, data.panchayat),
+      buildDataCell(context, data.village),
       buildDataCell(context, data.regionCategory),
       buildDataCell(
           context, TableConstants.formatNumber(data.perimeter, suffix: ' m')),
