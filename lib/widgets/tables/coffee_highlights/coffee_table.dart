@@ -112,6 +112,13 @@ class CoffeeTableState extends BaseDataTableState<CoffeeData> {
       buildDataCell(context, data.plotNumber),
       buildDataCell(context, data.khataNumber),
       buildDataCell(context, data.agencyName),
+      buildDataCell(context,
+          data.shadeType.isNotEmpty ? '${data.shadeType} plants/ac' : ''),
+      buildDataCell(context, data.elevation),
+      buildDataCell(context, data.slope),
+      buildDataCell(context, data.maxTemp),
+      buildDataCell(context, data.ph),
+      buildDataCell(context, data.aspect),
       buildDataCell(context, data.savedBy),
       buildDataCell(context, data.dateUpdated),
       data.mediaURLs.isEmpty
@@ -153,7 +160,6 @@ class CoffeeTableState extends BaseDataTableState<CoffeeData> {
                   polygonPoints: polygonCoordinates,
                 );
               } else if (polygonCoordinates.isNotEmpty) {
-                // If we have a polygon but no markers, still show the map
                 BoundaryMapDialog.show(
                   context,
                   markers: const [],

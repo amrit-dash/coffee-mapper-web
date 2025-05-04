@@ -161,10 +161,19 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
                           data.plotNumber,
                           data.khataNumber,
                           data.agencyName,
+                          data.elevation,
+                          data.slope,
+                          data.maxTemp,
+                          data.ph,
+                          data.aspect,
                           data.savedBy,
                           data.dateUpdated,
-                          '-',
-                          '-',
+                          data.mediaURLs.isEmpty
+                              ? '-'
+                              : data.mediaURLs.join('\n\n'),
+                          data.boundaryImageURLs.isEmpty
+                              ? '-'
+                              : data.boundaryImageURLs.join('\n\n'),
                           data.status,
                         ])
                     .toList(),

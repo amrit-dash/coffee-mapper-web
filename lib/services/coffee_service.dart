@@ -214,6 +214,13 @@ class CoffeeService {
           ? List<String>.from(dashboard['plantVarieties'] as List)
           : [],
       plantationYear: dashboard['plantationYear'] ?? 0,
+
+      // New fields from dashboard
+      elevation: dashboard['elevation'] ?? '',
+      slope: dashboard['slope'] ?? '',
+      maxTemp: dashboard['maxTemp'] ?? '',
+      ph: dashboard['ph'] ?? '',
+      aspect: dashboard['aspect'] ?? '',
     );
   }
 

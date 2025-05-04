@@ -8,7 +8,7 @@ class TableConstants {
   static const double kHeaderHeight = 55;
   static const double kRowHeight = 45;
   static const double kMinTableWidth =
-      2700; // Increased to accommodate new columns
+      3500; // Increased to accommodate all columns including new ones
   static const double kStatusBorderRadius = 12;
   static const double kDeleteIconSize = 18;
   static const double kDeleteButtonMaxHeight = 28;
@@ -28,6 +28,13 @@ class TableConstants {
   static const double kPanchayatWidth = 150;
   static const double kVillageWidth = 180;
   static const double kRegionCategoryWidth = 150;
+  static const double kAgencyNameWidth = 200;
+  static const double kElevationWidth = 130;
+  static const double kSlopeWidth = 130;
+  static const double kMaxTempWidth = 130;
+  static const double kPhWidth = 130;
+  static const double kAspectWidth = 100;
+  static const double kShadeStatusWidth = 220;
   static const double kDefaultColumnWidth = 100;
   static const double kBoundaryWidth = 100; // Renamed from kShadeBoundaryWidth
   static const double kAreaWidth = 120; // Renamed from kShadeAreaWidth
