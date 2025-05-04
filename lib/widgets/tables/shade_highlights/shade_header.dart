@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:coffee_mapper_web/utils/excel_export_utils.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:flutter/material.dart';
 
 class ShadeHeader extends StatefulWidget {
   final List<String> districts;
@@ -12,6 +13,8 @@ class ShadeHeader extends StatefulWidget {
   final Function(String)? onPanchayatChanged;
   final Function(String)? onVillageChanged;
   final Function(String)? onRegionCategoryChanged;
+  final List<List<dynamic>> tableData;
+  final List<String> tableHeaders;
 
   const ShadeHeader({
     super.key,
@@ -20,6 +23,8 @@ class ShadeHeader extends StatefulWidget {
     required this.panchayats,
     required this.villages,
     required this.regionCategories,
+    required this.tableData,
+    required this.tableHeaders,
     this.onDistrictChanged,
     this.onBlockChanged,
     this.onPanchayatChanged,
@@ -87,101 +92,107 @@ class _ShadeHeaderState extends State<ShadeHeader> {
         selectedVillage != null ||
         selectedRegionCategory != null;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildFilterDropdown(
-            context,
-            'District',
-            widget.districts,
-            selectedDistrict,
-            widget.onDistrictChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Block',
-            widget.blocks,
-            selectedBlock,
-            widget.onBlockChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Panchayat',
-            widget.panchayats,
-            selectedPanchayat,
-            widget.onPanchayatChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Village',
-            widget.villages,
-            selectedVillage,
-            widget.onVillageChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Region Category',
-            widget.regionCategories,
-            selectedRegionCategory,
-            widget.onRegionCategoryChanged ?? (_) {},
-          ),
-          /* Comment out Status and Saved By
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Survey Status',
-            widget.statuses,
-            selectedStatus,
-            widget.onStatusChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Saved By',
-            widget.savedByUsers,
-            selectedSavedBy,
-            widget.onSavedByChanged ?? (_) {},
-          ),
-          */
-          if (hasActiveFilters) ...[
-            SizedBox(width: isMobile ? 8 : 12),
-            Tooltip(
-              message: 'Clear All',
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Theme.of(context).colorScheme.error,
-                  size: isMobile ? 18 : 20,
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // District filter - commented out
+                // _buildFilterDropdown(
+                //   context,
+                //   'District',
+                //   widget.districts,
+                //   selectedDistrict,
+                //   widget.onDistrictChanged ?? (_) {},
+                // ),
+                // if (!isMobile) const SizedBox(width: 8),
+                // Block filter
+                _buildFilterDropdown(
+                  context,
+                  'Block',
+                  widget.blocks,
+                  selectedBlock,
+                  widget.onBlockChanged ?? (_) {},
                 ),
-                onPressed: () {
-                  setState(() {
-                    selectedDistrict = null;
-                    selectedBlock = null;
-                    selectedPanchayat = null;
-                    selectedVillage = null;
-                    selectedRegionCategory = null;
-                    // selectedStatus = null;        // Comment out
-                    // selectedSavedBy = null;       // Comment out
-                  });
-                  widget.onDistrictChanged?.call('');
-                  widget.onBlockChanged?.call('');
-                  widget.onPanchayatChanged?.call('');
-                  widget.onVillageChanged?.call('');
-                  widget.onRegionCategoryChanged?.call('');
-                  // widget.onStatusChanged?.call('');       // Comment out
-                  // widget.onSavedByChanged?.call('');      // Comment out
-                },
-              ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Panchayat',
+                  widget.panchayats,
+                  selectedPanchayat,
+                  widget.onPanchayatChanged ?? (_) {},
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Village',
+                  widget.villages,
+                  selectedVillage,
+                  widget.onVillageChanged ?? (_) {},
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Region Category',
+                  widget.regionCategories,
+                  selectedRegionCategory,
+                  widget.onRegionCategoryChanged ?? (_) {},
+                ),
+                if (hasActiveFilters) ...[
+                  SizedBox(width: isMobile ? 8 : 12),
+                  Tooltip(
+                    message: 'Clear All',
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Theme.of(context).colorScheme.error,
+                        size: isMobile ? 18 : 20,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectedDistrict = null;
+                          selectedBlock = null;
+                          selectedPanchayat = null;
+                          selectedVillage = null;
+                          selectedRegionCategory = null;
+                        });
+                        widget.onDistrictChanged?.call('');
+                        widget.onBlockChanged?.call('');
+                        widget.onPanchayatChanged?.call('');
+                        widget.onVillageChanged?.call('');
+                        widget.onRegionCategoryChanged?.call('');
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
-        ],
-      ),
+          ),
+        ),
+        // Export button
+        Tooltip(
+          message: 'Download Table Data',
+          child: IconButton(
+            icon: Icon(
+              Icons.downloading_outlined,
+              color: Theme.of(context).colorScheme.secondary,
+              size: isMobile ? 22 : 25,
+            ),
+            onPressed: () {
+              ExcelExportUtils.downloadExcel(
+                context: context,
+                headers: widget.tableHeaders,
+                data: widget.tableData,
+                fileName: 'Shade_Plantation_Data',
+                sheetName: 'Shade Plantation',
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 

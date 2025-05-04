@@ -1,6 +1,7 @@
 import 'package:coffee_mapper_web/models/nursery_data.dart';
 import 'package:coffee_mapper_web/services/nursery_service.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_header.dart';
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_table.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -132,6 +133,34 @@ class _NurseryHighlightsSectionState extends State<NurseryHighlightsSection> {
                 onBlockChanged: _onBlockChanged,
                 onPanchayatChanged: _onPanchayatChanged,
                 onVillageChanged: _onVillageChanged,
+                tableData: filteredData
+                    .map((data) => [
+                          data.regionName,
+                          data.block,
+                          data.panchayat,
+                          data.village,
+                          data.perimeter,
+                          data.area,
+                          data.coffeeVariety ?? '-',
+                          data.seedsQuantity?.toString() ?? '-',
+                          data.seedlingsRaised?.toString() ?? '-',
+                          data.sowingDate ?? '-',
+                          data.transplantingDate ?? '-',
+                          data.firstPairLeaves ?? '-',
+                          data.secondPairLeaves ?? '-',
+                          data.thirdPairLeaves ?? '-',
+                          data.fourthPairLeaves ?? '-',
+                          data.fifthPairLeaves ?? '-',
+                          data.sixthPairLeaves ?? '-',
+                          data.savedBy,
+                          data.dateUpdated,
+                          '-',
+                          '-',
+                        ])
+                    .toList(),
+                tableHeaders: TableColumns.nurseryColumns
+                    .map((col) => col.label)
+                    .toList(),
               ),
               const SizedBox(height: 16),
               Expanded(

@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_mapper_web/models/shade_data.dart';
-import 'dart:async';
-import 'package:logging/logging.dart';
 import 'package:coffee_mapper_web/utils/archive_utils.dart';
+import 'package:logging/logging.dart';
 
 class ShadeService {
   final _log = Logger('ShadeService');
@@ -14,7 +15,11 @@ class ShadeService {
         cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
 
   // Known shade categories
-  static const List<String> shadeCategories = ['Old Shade', 'New Shade'];
+  static const List<String> shadeCategories = [
+    'Old Shade',
+    'New Shade',
+    'Pre Survey Shade'
+  ];
 
   // Cache settings
   static const Duration cacheDuration = Duration(minutes: 5);
