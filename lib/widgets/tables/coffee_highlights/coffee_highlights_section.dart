@@ -161,10 +161,22 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
                           data.plotNumber,
                           data.khataNumber,
                           data.agencyName,
+                          data.shadeType.isNotEmpty
+                              ? '${data.shadeType} plants/ac'
+                              : '',
+                          data.elevation,
+                          data.slope,
+                          data.maxTemp,
+                          data.ph,
+                          data.aspect,
                           data.savedBy,
                           data.dateUpdated,
-                          '-',
-                          '-',
+                          data.mediaURLs.isEmpty
+                              ? '-'
+                              : data.mediaURLs.join('\n\n'),
+                          data.boundaryImageURLs.isEmpty
+                              ? '-'
+                              : data.boundaryImageURLs.join('\n\n'),
                           data.status,
                         ])
                     .toList(),

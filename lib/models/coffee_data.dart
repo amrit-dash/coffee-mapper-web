@@ -29,5 +29,10 @@ class CoffeeData extends ShadeData {
     required super.survivalPercentage,
     required super.plantVarieties,
     required super.plantationYear,
+    required super.elevation,
+    required super.slope,
+    required super.maxTemp,
+    required super.ph,
+    required super.aspect,
   });
 }

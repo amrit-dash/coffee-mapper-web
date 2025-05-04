@@ -194,8 +194,7 @@ class ShadeService {
       polygonCoordinates: List<String>.from(data['polygonPoints'] as List),
 
       // Optional fields with default values
-      area: (data['area'] ?? 0.0)
-          .toDouble(), // Keep as square meters for consistent storage
+      area: (data['area'] ?? 0.0).toDouble(),
       perimeter: (data['perimeter'] ?? 0.0).toDouble(),
       mapImageUrl: data['mapImageUrl'] ?? '',
       boundaryImageURLs: data['boundaryImageURLs'] != null
@@ -219,6 +218,13 @@ class ShadeService {
           ? List<String>.from(dashboard['plantVarieties'] as List)
           : [],
       plantationYear: dashboard['plantationYear'] ?? 0,
+
+      // New fields from dashboard
+      elevation: dashboard['elevation'] ?? '',
+      slope: dashboard['slope'] ?? '',
+      maxTemp: dashboard['maxTemp'] ?? '',
+      ph: dashboard['ph'] ?? '',
+      aspect: dashboard['aspect'] ?? '',
     );
   }
 
