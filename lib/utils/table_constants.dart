@@ -23,9 +23,11 @@ class TableConstants {
 
   // Column Widths
   static const double kDeleteColumnWidth = 90;
-  static const double kRegionNameWidth = 220; // Renamed from kShadeNameWidth
-  static const double kRegionCategoryWidth =
-      150; // Renamed from kShadeCategoryWidth
+  static const double kRegionNameWidth = 220;
+  static const double kBlockWidth = 150;
+  static const double kPanchayatWidth = 150;
+  static const double kVillageWidth = 180;
+  static const double kRegionCategoryWidth = 150;
   static const double kDefaultColumnWidth = 100;
   static const double kBoundaryWidth = 100; // Renamed from kShadeBoundaryWidth
   static const double kAreaWidth = 120; // Renamed from kShadeAreaWidth
@@ -77,9 +79,9 @@ class TableConstants {
   // Legacy table constants
   static const double kNameWidth = 250.0;
   static const double kCareOfNameWidth = 250.0;
-  static const double kBlockWidth = 200.0;
-  static const double kPanchayatWidth = 200.0;
-  static const double kVillageWidth = 200.0;
+  static const double kLegacyBlockWidth = 200.0;
+  static const double kLegacyPanchayatWidth = 200.0;
+  static const double kLegacyVillageWidth = 200.0;
   static const double kYearWidth = 150.0;
   static const double kStatusWidth = 160.0;
 }

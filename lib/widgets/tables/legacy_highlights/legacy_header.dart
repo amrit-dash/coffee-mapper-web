@@ -1,3 +1,4 @@
+import 'package:coffee_mapper_web/utils/excel_export_utils.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,8 @@ class LegacyHeader extends StatefulWidget {
   final Function(String) onYearChanged;
   final Function(String) onPanchayatChanged;
   final Function(String) onVillageChanged;
+  final List<List<dynamic>> tableData;
+  final List<String> tableHeaders;
 
   const LegacyHeader({
     super.key,
@@ -21,6 +24,8 @@ class LegacyHeader extends StatefulWidget {
     required this.onYearChanged,
     required this.onPanchayatChanged,
     required this.onVillageChanged,
+    required this.tableData,
+    required this.tableHeaders,
   });
 
   @override
@@ -82,89 +87,115 @@ class _LegacyHeaderState extends State<LegacyHeader> {
         selectedPanchayat != null ||
         selectedVillage != null;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildFilterDropdown(
-            context,
-            'Block',
-            widget.blocks.map((e) => e.toString()).toList(),
-            selectedBlock,
-            (value) {
-              setState(() {
-                selectedBlock = value.isEmpty ? null : value;
-              });
-              widget.onBlockChanged(value);
-            },
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Panchayat',
-            widget.panchayats.map((e) => e.toString()).toList(),
-            selectedPanchayat,
-            (value) {
-              setState(() {
-                selectedPanchayat = value.isEmpty ? null : value;
-              });
-              widget.onPanchayatChanged(value);
-            },
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Village',
-            widget.villages.map((e) => e.toString()).toList(),
-            selectedVillage,
-            (value) {
-              setState(() {
-                selectedVillage = value.isEmpty ? null : value;
-              });
-              widget.onVillageChanged(value);
-            },
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Year',
-            widget.years.map((e) => e.toString()).toList(),
-            selectedYear,
-            (value) {
-              setState(() {
-                selectedYear = value.isEmpty ? null : value;
-              });
-              widget.onYearChanged(value);
-            },
-          ),
-          if (hasActiveFilters) ...[
-            SizedBox(width: isMobile ? 8 : 12),
-            Tooltip(
-              message: 'Clear All',
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Theme.of(context).colorScheme.error,
-                  size: isMobile ? 18 : 20,
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildFilterDropdown(
+                  context,
+                  'Block',
+                  widget.blocks.map((e) => e.toString()).toList(),
+                  selectedBlock,
+                  (value) {
+                    setState(() {
+                      selectedBlock = value.isEmpty ? null : value;
+                    });
+                    widget.onBlockChanged(value);
+                  },
                 ),
-                onPressed: () {
-                  setState(() {
-                    selectedBlock = null;
-                    selectedYear = null;
-                    selectedPanchayat = null;
-                    selectedVillage = null;
-                  });
-                  widget.onBlockChanged('');
-                  widget.onYearChanged('');
-                  widget.onPanchayatChanged('');
-                  widget.onVillageChanged('');
-                },
-              ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Panchayat',
+                  widget.panchayats.map((e) => e.toString()).toList(),
+                  selectedPanchayat,
+                  (value) {
+                    setState(() {
+                      selectedPanchayat = value.isEmpty ? null : value;
+                    });
+                    widget.onPanchayatChanged(value);
+                  },
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Village',
+                  widget.villages.map((e) => e.toString()).toList(),
+                  selectedVillage,
+                  (value) {
+                    setState(() {
+                      selectedVillage = value.isEmpty ? null : value;
+                    });
+                    widget.onVillageChanged(value);
+                  },
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Year',
+                  widget.years.map((e) => e.toString()).toList(),
+                  selectedYear,
+                  (value) {
+                    setState(() {
+                      selectedYear = value.isEmpty ? null : value;
+                    });
+                    widget.onYearChanged(value);
+                  },
+                ),
+                if (hasActiveFilters) ...[
+                  SizedBox(width: isMobile ? 8 : 12),
+                  Tooltip(
+                    message: 'Clear All',
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Theme.of(context).colorScheme.error,
+                        size: isMobile ? 18 : 20,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectedBlock = null;
+                          selectedYear = null;
+                          selectedPanchayat = null;
+                          selectedVillage = null;
+                        });
+                        widget.onBlockChanged('');
+                        widget.onYearChanged('');
+                        widget.onPanchayatChanged('');
+                        widget.onVillageChanged('');
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
-        ],
-      ),
+          ),
+        ),
+        // Export button
+        Tooltip(
+          message: 'Download Table Data',
+          child: IconButton(
+            icon: Icon(
+              Icons.downloading_outlined,
+              color: Theme.of(context).colorScheme.secondary,
+              size: isMobile ? 22 : 25,
+            ),
+            onPressed: () {
+              ExcelExportUtils.downloadExcel(
+                context: context,
+                headers: widget.tableHeaders,
+                data: widget.tableData,
+                fileName: 'Legacy_Data',
+                sheetName: 'Legacy',
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 

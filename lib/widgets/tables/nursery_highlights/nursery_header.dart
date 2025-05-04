@@ -1,3 +1,4 @@
+import 'package:coffee_mapper_web/utils/excel_export_utils.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,8 @@ class NurseryHeader extends StatefulWidget {
   final Function(String)? onBlockChanged;
   final Function(String)? onPanchayatChanged;
   final Function(String)? onVillageChanged;
+  final List<List<dynamic>> tableData;
+  final List<String> tableHeaders;
 
   const NurseryHeader({
     super.key,
@@ -17,6 +20,8 @@ class NurseryHeader extends StatefulWidget {
     required this.blocks,
     required this.panchayats,
     required this.villages,
+    required this.tableData,
+    required this.tableHeaders,
     this.onDistrictChanged,
     this.onBlockChanged,
     this.onPanchayatChanged,
@@ -78,69 +83,97 @@ class _NurseryHeaderState extends State<NurseryHeader> {
         selectedPanchayat != null ||
         selectedVillage != null;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildFilterDropdown(
-            context,
-            'District',
-            widget.districts,
-            selectedDistrict,
-            widget.onDistrictChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Block',
-            widget.blocks,
-            selectedBlock,
-            widget.onBlockChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Panchayat',
-            widget.panchayats,
-            selectedPanchayat,
-            widget.onPanchayatChanged ?? (_) {},
-          ),
-          SizedBox(width: isMobile ? 8 : 12),
-          _buildFilterDropdown(
-            context,
-            'Village',
-            widget.villages,
-            selectedVillage,
-            widget.onVillageChanged ?? (_) {},
-          ),
-          if (hasActiveFilters) ...[
-            SizedBox(width: isMobile ? 8 : 12),
-            Tooltip(
-              message: 'Clear All',
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: Theme.of(context).colorScheme.error,
-                  size: isMobile ? 18 : 20,
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // District filter - commented out
+                // _buildFilterDropdown(
+                //   context,
+                //   'District',
+                //   widget.districts,
+                //   selectedDistrict,
+                //   widget.onDistrictChanged ?? (_) {},
+                // ),
+                // if (!isMobile) const SizedBox(width: 8),
+                // Block filter
+                _buildFilterDropdown(
+                  context,
+                  'Block',
+                  widget.blocks,
+                  selectedBlock,
+                  widget.onBlockChanged ?? (_) {},
                 ),
-                onPressed: () {
-                  setState(() {
-                    selectedDistrict = null;
-                    selectedBlock = null;
-                    selectedPanchayat = null;
-                    selectedVillage = null;
-                  });
-                  widget.onDistrictChanged?.call('');
-                  widget.onBlockChanged?.call('');
-                  widget.onPanchayatChanged?.call('');
-                  widget.onVillageChanged?.call('');
-                },
-              ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Panchayat',
+                  widget.panchayats,
+                  selectedPanchayat,
+                  widget.onPanchayatChanged ?? (_) {},
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Village',
+                  widget.villages,
+                  selectedVillage,
+                  widget.onVillageChanged ?? (_) {},
+                ),
+                if (hasActiveFilters) ...[
+                  SizedBox(width: isMobile ? 8 : 12),
+                  Tooltip(
+                    message: 'Clear All',
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Theme.of(context).colorScheme.error,
+                        size: isMobile ? 18 : 20,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          selectedDistrict = null;
+                          selectedBlock = null;
+                          selectedPanchayat = null;
+                          selectedVillage = null;
+                        });
+                        widget.onDistrictChanged?.call('');
+                        widget.onBlockChanged?.call('');
+                        widget.onPanchayatChanged?.call('');
+                        widget.onVillageChanged?.call('');
+                      },
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
-        ],
-      ),
+          ),
+        ),
+        // Export button
+        Tooltip(
+          message: 'Download Table Data',
+          child: IconButton(
+            icon: Icon(
+              Icons.downloading_outlined,
+              color: Theme.of(context).colorScheme.secondary,
+              size: isMobile ? 22 : 25,
+            ),
+            onPressed: () {
+              ExcelExportUtils.downloadExcel(
+                context: context,
+                headers: widget.tableHeaders,
+                data: widget.tableData,
+                fileName: 'Nursery_Data',
+                sheetName: 'Nursery',
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 

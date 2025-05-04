@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_mapper_web/models/coffee_data.dart';
-import 'dart:async';
-import 'package:logging/logging.dart';
 import 'package:coffee_mapper_web/utils/archive_utils.dart';
+import 'package:logging/logging.dart';
 
 class CoffeeService {
   final _log = Logger('CoffeeService');
@@ -15,6 +16,7 @@ class CoffeeService {
 
   // Known coffee categories
   static const List<String> coffeeCategories = [
+    'Pre Survey Coffee',
     'Bearing Coffee',
     'Non Bearing Coffee',
     'Private Plantation Coffee'

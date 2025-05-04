@@ -1,6 +1,7 @@
 import 'package:coffee_mapper_web/models/farmer_form_data.dart';
 import 'package:coffee_mapper_web/services/beneficiary_service.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:coffee_mapper_web/utils/table_column_definitions.dart';
 import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_header.dart';
 import 'package:coffee_mapper_web/widgets/tables/beneficiary_highlights/beneficiary_table.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +146,34 @@ class _BeneficiaryHighlightSectionState
                   onPanchayatChanged: _onPanchayatChanged,
                   onVillageChanged: _onVillageChanged,
                   isAdmin: widget.isLoggedIn,
+                  tableData: filteredData
+                      .map((data) => [
+                            data.ticketId?.toString() ?? '',
+                            data.name ?? '',
+                            data.careOfName ?? '',
+                            data.classType ?? '',
+                            data.village ?? '',
+                            data.post ?? '',
+                            data.policeStation ?? '',
+                            data.mobileNumber ?? '',
+                            data.landSize?.toString() ?? '',
+                            data.landCategory ?? '',
+                            data.khataNumber ?? '',
+                            data.plotNumber ?? '',
+                            data.mauja ?? '',
+                            data.aadharNumber ?? '',
+                            data.bankAccountNumber ?? '',
+                            data.bankName ?? '',
+                            data.bankBranch ?? '',
+                            data.bankIFSC ?? '',
+                            data.submittedOn != null
+                                ? '${data.submittedOn!.day}-${data.submittedOn!.month}-${data.submittedOn!.year}'
+                                : '',
+                          ])
+                      .toList(),
+                  tableHeaders: TableColumns.beneficiaryAdminColumns
+                      .map((col) => col.label)
+                      .toList(),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
