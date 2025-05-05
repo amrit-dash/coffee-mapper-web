@@ -150,14 +150,18 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
                           data.panchayat,
                           data.village,
                           data.regionCategory,
-                          data.perimeter,
-                          data.area,
+                          data.perimeter > 0 ? '${data.perimeter} m' : '',
+                          data.area > 0 ? '${data.area} m²' : '',
                           data.plantationYear,
                           data.plantVarieties.join(', '),
-                          data.averageHeight,
+                          data.averageHeight > 0
+                              ? '${data.averageHeight} ft'
+                              : '',
                           data.averageYield,
                           data.beneficiaries,
-                          data.survivalPercentage,
+                          data.survivalPercentage > 0
+                              ? '${data.survivalPercentage} %'
+                              : '',
                           data.plotNumber,
                           data.khataNumber,
                           data.agencyName,
