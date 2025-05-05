@@ -26,6 +26,11 @@ class ShadeData {
   final double survivalPercentage;
   final List<String> plantVarieties;
   final int plantationYear;
+  final String elevation;
+  final String slope;
+  final String maxTemp;
+  final String ph;
+  final String aspect;
 
   ShadeData({
     required this.id,
@@ -55,5 +60,10 @@ class ShadeData {
     required this.survivalPercentage,
     required this.plantVarieties,
     required this.plantationYear,
+    required this.elevation,
+    required this.slope,
+    required this.maxTemp,
+    required this.ph,
+    required this.aspect,
   });
 }

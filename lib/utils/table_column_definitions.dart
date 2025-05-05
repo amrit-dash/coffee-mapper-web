@@ -94,7 +94,32 @@ class TableColumns {
     ColumnDef(
       label: 'Implementing\nAgency',
       size: ColumnSize.L,
-      width: TableConstants.kAgencyWidth,
+      width: TableConstants.kAgencyNameWidth,
+    ),
+    ColumnDef(
+      label: 'Elevation',
+      size: ColumnSize.M,
+      width: TableConstants.kElevationWidth,
+    ),
+    ColumnDef(
+      label: 'Slope',
+      size: ColumnSize.M,
+      width: TableConstants.kSlopeWidth,
+    ),
+    ColumnDef(
+      label: 'Maximum\nTemperature',
+      size: ColumnSize.M,
+      width: TableConstants.kMaxTempWidth,
+    ),
+    ColumnDef(
+      label: 'Soil Acidity\n(in pH)',
+      size: ColumnSize.M,
+      width: TableConstants.kPhWidth,
+    ),
+    ColumnDef(
+      label: 'Aspect',
+      size: ColumnSize.M,
+      width: TableConstants.kAspectWidth,
     ),
     ColumnDef(
       label: 'Saved By',
@@ -206,8 +231,38 @@ class TableColumns {
     ),
     ColumnDef(
       label: 'Implementing\nAgency',
-      size: ColumnSize.L,
-      width: TableConstants.kAgencyWidth,
+      size: ColumnSize.M,
+      width: TableConstants.kAgencyNameWidth,
+    ),
+    ColumnDef(
+      label: 'Shade Status',
+      size: ColumnSize.M,
+      width: TableConstants.kShadeStatusWidth,
+    ),
+    ColumnDef(
+      label: 'Elevation',
+      size: ColumnSize.M,
+      width: TableConstants.kElevationWidth,
+    ),
+    ColumnDef(
+      label: 'Slope',
+      size: ColumnSize.M,
+      width: TableConstants.kSlopeWidth,
+    ),
+    ColumnDef(
+      label: 'Maximum\nTemperature',
+      size: ColumnSize.M,
+      width: TableConstants.kMaxTempWidth,
+    ),
+    ColumnDef(
+      label: 'Soil Acidity\n(in pH)',
+      size: ColumnSize.M,
+      width: TableConstants.kPhWidth,
+    ),
+    ColumnDef(
+      label: 'Aspect',
+      size: ColumnSize.M,
+      width: TableConstants.kAspectWidth,
     ),
     ColumnDef(
       label: 'Saved By',
