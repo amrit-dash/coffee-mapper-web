@@ -175,6 +175,7 @@ class _LegacyHeaderState extends State<LegacyHeader> {
             ),
           ),
         ),
+        SizedBox(width: 15),
         // Export button
         Tooltip(
           message: 'Download Table Data',
