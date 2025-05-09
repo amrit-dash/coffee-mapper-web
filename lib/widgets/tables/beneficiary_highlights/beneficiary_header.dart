@@ -153,6 +153,7 @@ class _BeneficiaryHeaderState extends State<BeneficiaryHeader> {
           ),
         ),
         /*
+        SizedBox(width: 15),
         // Export button - Hidden
         Tooltip(
           message: 'Download Table Data',

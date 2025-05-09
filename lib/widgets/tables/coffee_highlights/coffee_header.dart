@@ -185,6 +185,7 @@ class _CoffeeHeaderState extends State<CoffeeHeader> {
             ),
           ),
         ),
+        SizedBox(width: 15),
         // Export button
         Tooltip(
           message: 'Download Table Data',

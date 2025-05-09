@@ -153,6 +153,7 @@ class _NurseryHeaderState extends State<NurseryHeader> {
             ),
           ),
         ),
+        SizedBox(width: 15),
         // Export button
         Tooltip(
           message: 'Download Table Data',
