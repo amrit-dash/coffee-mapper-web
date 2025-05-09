@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
+import 'package:flutter/material.dart';
 
 class MapHeader extends StatefulWidget {
   final List<String> districts;
@@ -235,7 +235,7 @@ class _MapHeaderState extends State<MapHeader> {
           children: [
             Text(
               widget.selectedRegionCategories.isEmpty
-                  ? 'Region Category'
+                  ? 'Category'
                   : '${widget.selectedRegionCategories.length} Selected',
               style: TextStyle(
                 color: Colors.white,

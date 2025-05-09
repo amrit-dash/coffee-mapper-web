@@ -23,6 +23,7 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
   String? selectedVillage;
   String? selectedPanchayat;
   String? selectedRegionCategory;
+  String? selectedYear;
   // String? selectedStatus;      // Comment out
   // String? selectedSavedBy;     // Comment out
 
@@ -47,12 +48,15 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
           selectedVillage == null || data.village == selectedVillage;
       bool matchesRegionCategory = selectedRegionCategory == null ||
           data.regionCategory == selectedRegionCategory;
+      bool matchesYear = selectedYear == null ||
+          data.plantationYear.toString() == selectedYear;
 
       return matchesDistrict &&
           matchesBlock &&
           matchesPanchayat &&
           matchesVillage &&
-          matchesRegionCategory;
+          matchesRegionCategory &&
+          matchesYear;
     }).toList();
   }
 
@@ -82,13 +86,22 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
     return _getUniqueValues(currentData, (data) => data.regionCategory);
   }
 
+  List<String> _getFilteredYears() {
+    var currentData = _getCurrentFilteredData();
+    return _getUniqueValues(
+            currentData, (data) => data.plantationYear.toString())
+        .where((year) => year.isNotEmpty && year != '0')
+        .toList();
+  }
+
   void _filterData() {
     setState(() {
       bool hasActiveFilters = selectedDistrict != null ||
           selectedBlock != null ||
           selectedPanchayat != null ||
           selectedVillage != null ||
-          selectedRegionCategory != null;
+          selectedRegionCategory != null ||
+          selectedYear != null;
 
       if (!hasActiveFilters) {
         filteredData = allData;
@@ -139,11 +152,13 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
                 panchayats: _getFilteredPanchayats(),
                 villages: _getFilteredVillages(),
                 regionCategories: _getFilteredRegionCategories(),
+                years: _getFilteredYears(),
                 onDistrictChanged: _onDistrictChanged,
                 onBlockChanged: _onBlockChanged,
                 onPanchayatChanged: _onPanchayatChanged,
                 onVillageChanged: _onVillageChanged,
                 onRegionCategoryChanged: _onRegionCategoryChanged,
+                onYearChanged: _onYearChanged,
                 tableData: filteredData
                     .map((data) => [
                           data.region,
@@ -231,7 +246,8 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
         selectedBlock != null ||
         selectedPanchayat != null ||
         selectedVillage != null ||
-        selectedRegionCategory != null;
+        selectedRegionCategory != null ||
+        selectedYear != null;
   }
 
   void _onDistrictChanged(String value) {
@@ -265,6 +281,13 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
   void _onRegionCategoryChanged(String value) {
     setState(() {
       selectedRegionCategory = value.isEmpty ? null : value;
+      _filterData();
+    });
+  }
+
+  void _onYearChanged(String value) {
+    setState(() {
+      selectedYear = value.isEmpty ? null : value;
       _filterData();
     });
   }
