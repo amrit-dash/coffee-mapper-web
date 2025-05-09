@@ -188,6 +188,7 @@ class _ShadeHeaderState extends State<ShadeHeader> {
             ),
           ),
         ),
+        SizedBox(width: 15),
         // Export button
         Tooltip(
           message: 'Download Table Data',
