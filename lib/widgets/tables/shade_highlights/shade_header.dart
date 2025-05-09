@@ -8,11 +8,13 @@ class ShadeHeader extends StatefulWidget {
   final List<String> panchayats;
   final List<String> villages;
   final List<String> regionCategories;
+  final List<String> years;
   final Function(String)? onDistrictChanged;
   final Function(String)? onBlockChanged;
   final Function(String)? onPanchayatChanged;
   final Function(String)? onVillageChanged;
   final Function(String)? onRegionCategoryChanged;
+  final Function(String)? onYearChanged;
   final List<List<dynamic>> tableData;
   final List<String> tableHeaders;
 
@@ -23,6 +25,7 @@ class ShadeHeader extends StatefulWidget {
     required this.panchayats,
     required this.villages,
     required this.regionCategories,
+    required this.years,
     required this.tableData,
     required this.tableHeaders,
     this.onDistrictChanged,
@@ -30,6 +33,7 @@ class ShadeHeader extends StatefulWidget {
     this.onPanchayatChanged,
     this.onVillageChanged,
     this.onRegionCategoryChanged,
+    this.onYearChanged,
   });
 
   @override
@@ -42,6 +46,7 @@ class _ShadeHeaderState extends State<ShadeHeader> {
   String? selectedVillage;
   String? selectedPanchayat;
   String? selectedRegionCategory;
+  String? selectedYear;
   // String? selectedStatus;       // Comment out
   // String? selectedSavedBy;      // Comment out
 
@@ -90,7 +95,8 @@ class _ShadeHeaderState extends State<ShadeHeader> {
         selectedBlock != null ||
         selectedPanchayat != null ||
         selectedVillage != null ||
-        selectedRegionCategory != null;
+        selectedRegionCategory != null ||
+        selectedYear != null;
 
     return Row(
       children: [
@@ -136,10 +142,18 @@ class _ShadeHeaderState extends State<ShadeHeader> {
                 SizedBox(width: isMobile ? 8 : 12),
                 _buildFilterDropdown(
                   context,
-                  'Region Category',
+                  'Category',
                   widget.regionCategories,
                   selectedRegionCategory,
                   widget.onRegionCategoryChanged ?? (_) {},
+                ),
+                SizedBox(width: isMobile ? 8 : 12),
+                _buildFilterDropdown(
+                  context,
+                  'Year',
+                  widget.years,
+                  selectedYear,
+                  widget.onYearChanged ?? (_) {},
                 ),
                 if (hasActiveFilters) ...[
                   SizedBox(width: isMobile ? 8 : 12),
@@ -158,12 +172,14 @@ class _ShadeHeaderState extends State<ShadeHeader> {
                           selectedPanchayat = null;
                           selectedVillage = null;
                           selectedRegionCategory = null;
+                          selectedYear = null;
                         });
                         widget.onDistrictChanged?.call('');
                         widget.onBlockChanged?.call('');
                         widget.onPanchayatChanged?.call('');
                         widget.onVillageChanged?.call('');
                         widget.onRegionCategoryChanged?.call('');
+                        widget.onYearChanged?.call('');
                       },
                     ),
                   ),
@@ -273,8 +289,11 @@ class _ShadeHeaderState extends State<ShadeHeader> {
                             selectedVillage = null;
                           }
                           if (label == 'Village') selectedVillage = null;
-                          if (label == 'Region Category') {
+                          if (label == 'Category') {
                             selectedRegionCategory = null;
+                          }
+                          if (label == 'Year') {
+                            selectedYear = null;
                           }
                         });
                         onChanged('');
@@ -306,8 +325,11 @@ class _ShadeHeaderState extends State<ShadeHeader> {
                   if (label == 'Block') selectedBlock = value;
                   if (label == 'Panchayat') selectedPanchayat = value;
                   if (label == 'Village') selectedVillage = value;
-                  if (label == 'Region Category') {
+                  if (label == 'Category') {
                     selectedRegionCategory = value;
+                  }
+                  if (label == 'Year') {
+                    selectedYear = value;
                   }
                 });
                 onChanged(value);

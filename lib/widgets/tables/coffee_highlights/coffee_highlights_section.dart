@@ -24,6 +24,7 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
   String? selectedVillage;
   String? selectedPanchayat;
   String? selectedRegionCategory;
+  String? selectedYear;
 
   late Stream<List<CoffeeData>> _dataStream;
   bool _isDeleting = false;
@@ -46,12 +47,15 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
           selectedVillage == null || data.village == selectedVillage;
       bool matchesRegionCategory = selectedRegionCategory == null ||
           data.regionCategory == selectedRegionCategory;
+      bool matchesYear = selectedYear == null ||
+          data.plantationYear.toString() == selectedYear;
 
       return matchesDistrict &&
           matchesBlock &&
           matchesPanchayat &&
           matchesVillage &&
-          matchesRegionCategory;
+          matchesRegionCategory &&
+          matchesYear;
     }).toList();
   }
 
@@ -81,13 +85,22 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
     return _getUniqueValues(currentData, (data) => data.regionCategory);
   }
 
+  List<String> _getFilteredYears() {
+    var currentData = _getCurrentFilteredData();
+    return _getUniqueValues(
+            currentData, (data) => data.plantationYear.toString())
+        .where((year) => year.isNotEmpty && year != '0')
+        .toList();
+  }
+
   void _filterData() {
     setState(() {
       bool hasActiveFilters = selectedDistrict != null ||
           selectedBlock != null ||
           selectedPanchayat != null ||
           selectedVillage != null ||
-          selectedRegionCategory != null;
+          selectedRegionCategory != null ||
+          selectedYear != null;
 
       if (!hasActiveFilters) {
         filteredData = allData;
@@ -143,6 +156,8 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
                 onPanchayatChanged: _onPanchayatChanged,
                 onVillageChanged: _onVillageChanged,
                 onRegionCategoryChanged: _onRegionCategoryChanged,
+                onYearChanged: _onYearChanged,
+                years: _getFilteredYears(),
                 tableData: filteredData
                     .map((data) => [
                           data.region,
@@ -234,7 +249,8 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
         selectedBlock != null ||
         selectedPanchayat != null ||
         selectedVillage != null ||
-        selectedRegionCategory != null;
+        selectedRegionCategory != null ||
+        selectedYear != null;
   }
 
   void _onDistrictChanged(String value) {
@@ -268,6 +284,13 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
   void _onRegionCategoryChanged(String value) {
     setState(() {
       selectedRegionCategory = value.isEmpty ? null : value;
+      _filterData();
+    });
+  }
+
+  void _onYearChanged(String value) {
+    setState(() {
+      selectedYear = value.isEmpty ? null : value;
       _filterData();
     });
   }
