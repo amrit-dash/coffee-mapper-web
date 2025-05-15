@@ -38,6 +38,7 @@ class CoffeeMapperWebApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Coffee Mapper Dashboard',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
