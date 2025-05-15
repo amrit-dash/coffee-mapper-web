@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,8 +18,10 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A dashboard for Coffee Mapper App.">
+  <meta name="title" content="Coffee Mapper Dashboard">
+  <meta name="description" content="Coffee Mapper Dashboard - Track coffee plantations, production data, and farmer information for Koraput region. Visualize coffee plantation data, manage farmer records, and analyze coffee production trends.">
   <meta name="keywords" content="coffee, mapper, dashboard, coffee mapper, coffee mapper dashboard, coffee mapper web, coffee mapper web dashboard, koraput, koraput coffee, koraput coffee map, koraput coffee mapper, koraput coffee mapper dashboard, koraput coffee mapper web, koraput coffee mapper web dashboard, koraput coffee plantation, koraput coffee, koraput coffee mapper">
+  <meta name="author" content="Amrit Dash">
 
   <!-- iOS meta tags & icons -->
   
@@ -30,15 +32,35 @@
   <meta name="mobile-web-app-title" content="Coffee Mapper Dashboard">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Coffee Mapper Dashboard">
+  <meta property="og:description" content="Track coffee plantations, production data, and farmer information for Koraput region. Visualize coffee plantation data, manage farmer records, and analyze coffee production trends.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="icons/Icon-512.png">
+  <meta property="og:site_name" content="Coffee Mapper Dashboard">
+  <meta property="og:url" content="https://cdtkoraput.web.app/">
+  
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Coffee Mapper Dashboard">
+  <meta name="twitter:description" content="Track coffee plantations, production data, and farmer information for Koraput region. Visualize coffee plantation data, manage farmer records, and analyze coffee production trends.">
+  <meta name="twitter:image" content="icons/Icon-512.png">
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>Coffee Mapper Dashboard</title>
   <link rel="manifest" href="manifest.json">
 
+  <!-- Canonical URL to prevent duplicate content issues -->
+  <link rel="canonical" href="https://cdtkoraput.web.app/">
+
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = '{{flutter_service_worker_version}}';
+    
+    // Set document title explicitly to ensure consistency
+    document.title = "Coffee Mapper Dashboard";
   </script>
 
   <script>
@@ -102,5 +124,9 @@
 </head>
 <body style="overscroll-behavior-x: none;">
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Set document title explicitly to ensure consistency
+    document.title = "Coffee Mapper Dashboard";
+  </script>
 </body>
 </html>
