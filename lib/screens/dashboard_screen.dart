@@ -16,7 +16,6 @@ import 'package:coffee_mapper_web/widgets/tables/coffee_highlights/coffee_highli
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -104,7 +103,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final isMobile = screenWidth < ResponsiveUtils.tablet;
     final adminData = ref.watch(adminProvider);
     final user = FirebaseAuth.instance.currentUser;
-    final bool isDebugMode = kDebugMode;
+    final bool isDebugMode = const String.fromEnvironment('ENVIRONMENT',
+            defaultValue: 'development') ==
+        'development';
     final bool isLoggedIn =
         user != null && (adminData?.isAdmin ?? false) || isDebugMode;
 
@@ -441,7 +442,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               try {
                                 // Open the APK download URL in a new tab
                                 html.window.open(
-                                    'https://storage.googleapis.com/coffee-mapper-assets/coffee_mapper_dev.apk',
+                                    'https://storage.googleapis.com/coffee-mapper-agent.firebasestorage.app/coffee_mapper_dev.apk',
                                     '_blank');
                               } catch (e) {
                                 if (context.mounted) {
