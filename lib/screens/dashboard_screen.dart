@@ -440,7 +440,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               try {
                                 // Open the APK download URL in a new tab
                                 html.window.open(
-                                    'https://storage.googleapis.com/coffee-mapper-assets/coffee_mapper_dev.apk',
+                                    'https://storage.googleapis.com/coffee-mapper-agent.firebasestorage.app/coffee_mapper_dev.apk',
                                     '_blank');
                               } catch (e) {
                                 if (context.mounted) {
