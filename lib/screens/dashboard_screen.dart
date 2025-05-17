@@ -17,7 +17,6 @@ import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highligh
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -294,25 +293,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               label: 'Download Development APK',
                               onPressed: () async {
                                 try {
-                                  // Load the APK file from assets
-                                  final ByteData data = await rootBundle
-                                      .load('assets/apk/coffee_mapper_dev.apk');
-                                  final List<int> bytes =
-                                      data.buffer.asUint8List();
-
-                                  // Create a blob from the bytes
-                                  final blob = html.Blob([bytes]);
-                                  final url =
-                                      html.Url.createObjectUrlFromBlob(blob);
-
-                                  // Create an anchor element and trigger download
-                                  html.AnchorElement(href: url)
-                                    ..setAttribute(
-                                        'download', 'coffee_mapper_dev.apk')
-                                    ..click();
-
-                                  // Clean up
-                                  html.Url.revokeObjectUrl(url);
+                                  // Open the APK download URL in a new tab
+                                  html.window.open(
+                                      'https://storage.googleapis.com/coffee-mapper-agent.firebasestorage.app/coffee_mapper_dev.apk',
+                                      '_blank');
                                 } catch (e) {
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -454,25 +438,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             label: 'Download Development APK',
                             onPressed: () async {
                               try {
-                                // Load the APK file from assets
-                                final ByteData data = await rootBundle
-                                    .load('assets/apk/coffee_mapper_dev.apk');
-                                final List<int> bytes =
-                                    data.buffer.asUint8List();
-
-                                // Create a blob from the bytes
-                                final blob = html.Blob([bytes]);
-                                final url =
-                                    html.Url.createObjectUrlFromBlob(blob);
-
-                                // Create an anchor element and trigger download
-                                html.AnchorElement(href: url)
-                                  ..setAttribute(
-                                      'download', 'coffee_mapper_dev.apk')
-                                  ..click();
-
-                                // Clean up
-                                html.Url.revokeObjectUrl(url);
+                                // Open the APK download URL in a new tab
+                                html.window.open(
+                                    'https://storage.googleapis.com/coffee-mapper-assets/coffee_mapper_dev.apk',
+                                    '_blank');
                               } catch (e) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
