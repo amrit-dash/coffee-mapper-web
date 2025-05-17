@@ -1,3 +1,4 @@
+// ignore: deprecated_member_use
 import 'dart:html' as html;
 
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
@@ -6,19 +7,11 @@ import 'package:coffee_mapper_web/widgets/layout/dashboard_carousel.dart';
 import 'package:coffee_mapper_web/widgets/layout/dashboard_metrics.dart';
 import 'package:coffee_mapper_web/widgets/layout/footer.dart';
 import 'package:coffee_mapper_web/widgets/layout/header.dart';
-import 'package:coffee_mapper_web/widgets/layout/dashboard_carousel.dart';
-import 'package:coffee_mapper_web/widgets/layout/dashboard_metrics.dart';
-import 'package:coffee_mapper_web/widgets/layout/footer.dart';
-import 'package:coffee_mapper_web/widgets/layout/header.dart';
 import 'package:coffee_mapper_web/widgets/layout/metrics_overview.dart';
 import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
 import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
 import 'package:coffee_mapper_web/widgets/map/map_overview_section.dart';
-import 'package:coffee_mapper_web/widgets/layout/officials_row.dart';
-import 'package:coffee_mapper_web/widgets/layout/side_menu.dart';
-import 'package:coffee_mapper_web/widgets/map/map_overview_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/coffee_highlights/coffee_highlights_section.dart';
-//import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_highlights_section.dart';
 //import 'package:coffee_mapper_web/widgets/tables/legacy_highlights/legacy_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
@@ -30,18 +23,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
-class DashboardScreen extends ConsumerStatefulWidget {
-  const DashboardScreen({super.key});
-
   @override
-  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   bool _isLoading = true;
-  static bool _isFirstLoad = true; // Static variable to track initial load
   static bool _isFirstLoad = true; // Static variable to track initial load
 
   @override
@@ -53,12 +40,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           setState(() {
             _isLoading = false;
             _isFirstLoad = false; // Set to false after first load
-            _isFirstLoad = false; // Set to false after first load
           });
         }
       });
     } else {
-      _isLoading = false; // No loading if not first load
       _isLoading = false; // No loading if not first load
     }
   }
@@ -77,34 +62,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (!isMobileView) const SideMenu(),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: _isLoading
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: Theme.of(context).highlightColor,
-                                  ),
-                                )
-                              : SingleChildScrollView(
-                                  padding:
-                                      EdgeInsets.all(isMobileView ? 16 : 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _buildDashboardContent(context),
-                                    ],
-                                  ),
-                                ),
-                        ),
-                        const Footer(),
-                      ],
-                    ),
                   Expanded(
                     child: Column(
                       children: [
@@ -167,8 +126,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       child: Align(
                         alignment:
                             !isMobile ? Alignment.centerLeft : Alignment.center,
-                        alignment:
-                            !isMobile ? Alignment.centerLeft : Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,14 +134,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               !isMobile
                                   ? 'Koraput Coffee Plantation'
                                   : 'Koraput Coffee Plantation At A Glance',
-                              !isMobile
-                                  ? 'Koraput Coffee Plantation'
-                                  : 'Koraput Coffee Plantation At A Glance',
                               style: TextStyle(
                                 fontFamily: 'Gilroy-SemiBold',
-                                fontSize:
-                                    ResponsiveUtils.getDashboardHeaderSize(
-                                        screenWidth),
                                 fontSize:
                                     ResponsiveUtils.getDashboardHeaderSize(
                                         screenWidth),
@@ -196,12 +147,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 'At A Glance',
                                 style: TextStyle(
                                   fontFamily: 'Gilroy-SemiBold',
-                                  fontSize:
-                                      ResponsiveUtils.getDashboardHeaderSize(
-                                              screenWidth) *
-                                          0.8,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
                                   fontSize:
                                       ResponsiveUtils.getDashboardHeaderSize(
                                               screenWidth) *
@@ -220,20 +165,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
             if (isMobile)
-            if (isMobile)
               const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: OfficialsRow(),
                 ),
               ),
-            SizedBox(height: isMobile ? 10 : 30),
-            // Add Dashboard Carousel
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
-              child: const DashboardCarousel(),
-            ),
-            //const SizedBox(height: 10),
             SizedBox(height: isMobile ? 10 : 30),
             // Add Dashboard Carousel
             Padding(
@@ -504,7 +441,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               try {
                                 // Open the APK download URL in a new tab
                                 html.window.open(
-                                    'https://storage.googleapis.com/coffee-mapper-agent.firebasestorage.app/coffee_mapper_dev.apk',
+                                    'https://storage.googleapis.com/coffee-mapper-assets/coffee_mapper_dev.apk',
                                     '_blank');
                               } catch (e) {
                                 if (context.mounted) {
