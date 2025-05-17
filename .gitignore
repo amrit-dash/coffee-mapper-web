@@ -156,4 +156,6 @@ migrate_working_dir/
 github.sh
 
 # APK files
-assets/apk/*.apk
+*.apk
+**/*.apk
+assets/apk/
