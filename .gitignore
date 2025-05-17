@@ -154,3 +154,8 @@ migrate_working_dir/
 /android/app/profile
 /android/app/release
 github.sh
+
+# APK files
+*.apk
+**/*.apk
+assets/apk/
