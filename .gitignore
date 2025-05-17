@@ -41,6 +41,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+github.sh
+
+# APK files
+*.apk
+**/*.apk
+assets/apk/
 
 # Firebase configuration
 lib/config/firebase_options_dev.dart
@@ -148,14 +154,3 @@ test/coverage_helper_test.dart
 .history
 .svn/
 migrate_working_dir/
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-github.sh
-
-# APK files
-*.apk
-**/*.apk
-assets/apk/
