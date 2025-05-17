@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/utils/responsive_utils.dart';
 import 'package:coffee_mapper_web/widgets/layout/dashboard_carousel.dart';
@@ -13,7 +15,9 @@ import 'package:coffee_mapper_web/widgets/tables/coffee_highlights/coffee_highli
 import 'package:coffee_mapper_web/widgets/tables/nursery_highlights/nursery_highlights_section.dart';
 import 'package:coffee_mapper_web/widgets/tables/shade_highlights/shade_highlights_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -100,7 +104,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final isMobile = screenWidth < ResponsiveUtils.tablet;
     final adminData = ref.watch(adminProvider);
     final user = FirebaseAuth.instance.currentUser;
-    final bool isLoggedIn = user != null && (adminData?.isAdmin ?? false);
+    final bool isDebugMode = kDebugMode;
+    final bool isLoggedIn =
+        user != null && (adminData?.isAdmin ?? false) || isDebugMode;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -174,6 +180,334 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             //const SizedBox(height: 10),
             // New Dashboard Metrics Section
             const DashboardMetrics(),
+            if (isDebugMode) ...[
+              const SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: isMobile ? 10 : 20),
+                child: isMobile
+                    ? Center(
+                        child: Column(
+                          children: [
+                            _buildDebugButton(
+                              context: context,
+                              screenWidth: screenWidth,
+                              icon: Icons.visibility,
+                              label: 'View Login Credentials | App',
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text(
+                                      'Login Credentials | Test User',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontFamily: 'Gilroy-SemiBold',
+                                        fontSize: ResponsiveUtils.getFontSize(
+                                            screenWidth, 30),
+                                      ),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Username:',
+                                              style: TextStyle(
+                                                fontFamily: 'Gilroy-SemiBold',
+                                                fontSize:
+                                                    ResponsiveUtils.getFontSize(
+                                                        screenWidth, 18),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              'test@coffee.mapper',
+                                              style: TextStyle(
+                                                fontFamily: 'Gilroy-Medium',
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Password:',
+                                              style: TextStyle(
+                                                fontFamily: 'Gilroy-SemiBold',
+                                                fontSize:
+                                                    ResponsiveUtils.getFontSize(
+                                                        screenWidth, 18),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              'testMapper',
+                                              style: TextStyle(
+                                                fontFamily: 'Gilroy-Medium',
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text(
+                                          'Close',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                            fontFamily: 'Gilroy-SemiBold',
+                                            fontSize:
+                                                ResponsiveUtils.getFontSize(
+                                                    screenWidth, 15),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            _buildDebugButton(
+                              context: context,
+                              screenWidth: screenWidth,
+                              icon: Icons.android,
+                              label: 'Download Development APK',
+                              onPressed: () async {
+                                try {
+                                  // Load the APK file from assets
+                                  final ByteData data = await rootBundle
+                                      .load('assets/apk/coffee_mapper_dev.apk');
+                                  final List<int> bytes =
+                                      data.buffer.asUint8List();
+
+                                  // Create a blob from the bytes
+                                  final blob = html.Blob([bytes]);
+                                  final url =
+                                      html.Url.createObjectUrlFromBlob(blob);
+
+                                  // Create an anchor element and trigger download
+                                  html.AnchorElement(href: url)
+                                    ..setAttribute(
+                                        'download', 'coffee_mapper_dev.apk')
+                                    ..click();
+
+                                  // Clean up
+                                  html.Url.revokeObjectUrl(url);
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Error downloading APK: ${e.toString()}',
+                                          style: TextStyle(
+                                            fontFamily: 'Gilroy-Medium',
+                                            color: Theme.of(context).cardColor,
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            Theme.of(context).colorScheme.error,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            _buildDebugButton(
+                              context: context,
+                              screenWidth: screenWidth,
+                              icon: Icons.language,
+                              label: 'View Production Website - Live',
+                              onPressed: () {
+                                html.window.open(
+                                    'https://cdtkoraput.web.app', '_blank');
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildDebugButton(
+                            context: context,
+                            screenWidth: screenWidth,
+                            icon: Icons.visibility,
+                            label: 'App Credentials',
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    'Login Credentials | Test User',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontFamily: 'Gilroy-SemiBold',
+                                      fontSize: ResponsiveUtils.getFontSize(
+                                          screenWidth, 30),
+                                    ),
+                                  ),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Username:',
+                                            style: TextStyle(
+                                              fontFamily: 'Gilroy-SemiBold',
+                                              fontSize:
+                                                  ResponsiveUtils.getFontSize(
+                                                      screenWidth, 18),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            'test@coffee.mapper',
+                                            style: TextStyle(
+                                              fontFamily: 'Gilroy-Medium',
+                                              fontSize: 17,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Password:',
+                                            style: TextStyle(
+                                              fontFamily: 'Gilroy-SemiBold',
+                                              fontSize:
+                                                  ResponsiveUtils.getFontSize(
+                                                      screenWidth, 18),
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            'testMapper',
+                                            style: TextStyle(
+                                              fontFamily: 'Gilroy-Medium',
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                        'Close',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          fontFamily: 'Gilroy-SemiBold',
+                                          fontSize: ResponsiveUtils.getFontSize(
+                                              screenWidth, 15),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 30),
+                          _buildDebugButton(
+                            context: context,
+                            screenWidth: screenWidth,
+                            icon: Icons.android,
+                            label: 'Download Development APK',
+                            onPressed: () async {
+                              try {
+                                // Load the APK file from assets
+                                final ByteData data = await rootBundle
+                                    .load('assets/apk/coffee_mapper_dev.apk');
+                                final List<int> bytes =
+                                    data.buffer.asUint8List();
+
+                                // Create a blob from the bytes
+                                final blob = html.Blob([bytes]);
+                                final url =
+                                    html.Url.createObjectUrlFromBlob(blob);
+
+                                // Create an anchor element and trigger download
+                                html.AnchorElement(href: url)
+                                  ..setAttribute(
+                                      'download', 'coffee_mapper_dev.apk')
+                                  ..click();
+
+                                // Clean up
+                                html.Url.revokeObjectUrl(url);
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Error downloading APK: ${e.toString()}',
+                                        style: TextStyle(
+                                          fontFamily: 'Gilroy-Medium',
+                                          color: Theme.of(context).cardColor,
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 30),
+                          _buildDebugButton(
+                            context: context,
+                            screenWidth: screenWidth,
+                            icon: Icons.language,
+                            label: 'Production Website',
+                            onPressed: () {
+                              html.window
+                                  .open('https://cdtkoraput.web.app', '_blank');
+                            },
+                          ),
+                        ],
+                      ),
+              ),
+              const SizedBox(height: 30),
+            ],
             // Show sensitive components only when logged in
             if (isLoggedIn) ...[
               const MetricsOverview(),
@@ -204,6 +538,40 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             //   child: const LegacyHighlightsSection(),
             // ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDebugButton({
+    required BuildContext context,
+    required double screenWidth,
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    final bool isMobile = screenWidth < ResponsiveUtils.tablet;
+
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.error,
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: isMobile ? 15 : 18,
+        ),
+      ),
+      onPressed: onPressed,
+      icon: Icon(
+        icon,
+        color: Theme.of(context).cardColor,
+        size: 28,
+      ),
+      label: Text(
+        label,
+        style: TextStyle(
+          fontFamily: 'Gilroy-Medium',
+          fontSize: ResponsiveUtils.getFontSize(screenWidth, 16),
+          color: Theme.of(context).cardColor,
         ),
       ),
     );

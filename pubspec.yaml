@@ -82,6 +82,8 @@ flutter:
     - assets/logo/
     - assets/icons/
     - assets/docs/
+    - assets/apk/
+    - assets/apk/coffee_mapper_dev.apk
     - assets/fonts/
     - assets/fonts/Noto_Sans_Odia/NotoSansOdia-Regular.ttf
 
