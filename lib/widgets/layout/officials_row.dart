@@ -196,13 +196,13 @@ class OfficialsRow extends StatelessWidget {
             _buildOfficialAvatar(
               context,
               'assets/images/3.png',
-              'Sri Nikhil Pavan Kalyan',
+              'Subrat Kumar Panda',
               'IAS, Director',
             ),
             _buildOfficialAvatar(
               context,
               'assets/images/4.png',
-              'Shri V Keerthi Vasan',
+              'Shri Manoj Satyawan Mahajan',
               'IAS, Collector & DM',
             ),
           ],
