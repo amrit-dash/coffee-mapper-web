@@ -184,7 +184,7 @@ class OfficialsRow extends StatelessWidget {
             _buildOfficialAvatar(
               context,
               'assets/images/1.png',
-              'Shri Kumar Vardhan Singh Deo',
+              'Shri Kanak Vardhan Singh Deo',
               'Hon\'ble Deputy Chief Minister',
             ),
             _buildOfficialAvatar(
