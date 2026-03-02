@@ -146,6 +146,10 @@ class _LegacyHighlightsSectionState extends State<LegacyHighlightsSection> {
                         data: filteredData,
                         isLoggedIn: isLoggedIn,
                         onDelete: _handleDelete,
+                        hasMore: _legacyService.hasMore,
+                        onLoadMore: () {
+                          _legacyService.loadMore();
+                        },
                       );
                     },
                   ),

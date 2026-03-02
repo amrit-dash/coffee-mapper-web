@@ -192,6 +192,10 @@ class _NurseryHighlightsSectionState extends State<NurseryHighlightsSection> {
                         data: filteredData,
                         isLoggedIn: isLoggedIn,
                         onDelete: _handleDelete,
+                        hasMore: _nurseryService.hasMore,
+                        onLoadMore: () {
+                          _nurseryService.loadMore();
+                        },
                       );
                     },
                   ),

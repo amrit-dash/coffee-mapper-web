@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_mapper_web/models/nursery_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
 
 class NurseryService {
   final _logger = Logger('NurseryService');
@@ -28,6 +29,19 @@ class NurseryService {
   // Cache monitoring
   int _cacheHits = 0;
   int _cacheMisses = 0;
+  
+  final BehaviorSubject<int> _limitSubject = BehaviorSubject.seeded(15);
+  bool _hasMore = true;
+  bool _isLoadingMore = false;
+
+  bool get hasMore => _hasMore;
+
+  void loadMore() {
+    if (_hasMore && !_isLoadingMore) {
+      _isLoadingMore = true;
+      _limitSubject.add(_limitSubject.value + 15);
+    }
+  }
 
   NurseryService() {
     // Start automatic cache cleanup
@@ -64,34 +78,44 @@ class NurseryService {
       return _activeStream!;
     }
 
-    final query = _firestore
-        .collection(_collection)
-        .where('status', isNotEqualTo: 'Archived')
-        .orderBy('updatedOn', descending: true)
-        .limit(maxCacheItems);
+    _activeStream = _limitSubject.switchMap((limit) {
+      final query = _firestore
+          .collection(_collection)
+          .where('status', isNotEqualTo: 'Archived')
+          .orderBy('updatedOn', descending: true)
+          .limit(limit);
 
-    _activeStream = query.snapshots().map((snapshot) {
-      final List<NurseryData> data = [];
-      for (var doc in snapshot.docs) {
-        try {
-          final nurseryData = _convertToNurseryData(doc);
-          data.add(nurseryData);
-        } catch (e) {
-          _logger.severe('Failed to convert document ${doc.id}. Error: $e');
-          _logger.severe('Document data: ${doc.data()}');
+      return query.snapshots().map((snapshot) {
+        _isLoadingMore = false;
+
+        if (snapshot.docs.length < limit) {
+          _hasMore = false;
+        } else {
+          _hasMore = true;
         }
-      }
 
-      if (data.length <= maxCacheItems) {
-        _cachedNurseryData = data;
-        _lastCacheTime = DateTime.now();
-      } else {
-        _cachedNurseryData = data.sublist(0, maxCacheItems);
-        _lastCacheTime = DateTime.now();
-        _logger.warning('Cache trimmed to $maxCacheItems items');
-      }
+        final List<NurseryData> data = [];
+        for (var doc in snapshot.docs) {
+          try {
+            final nurseryData = _convertToNurseryData(doc);
+            data.add(nurseryData);
+          } catch (e) {
+            _logger.severe('Failed to convert document ${doc.id}. Error: $e');
+            _logger.severe('Document data: ${doc.data()}');
+          }
+        }
 
-      return data;
+        if (data.length <= maxCacheItems) {
+          _cachedNurseryData = data;
+          _lastCacheTime = DateTime.now();
+        } else {
+          _cachedNurseryData = data.sublist(0, maxCacheItems);
+          _lastCacheTime = DateTime.now();
+          _logger.warning('Cache trimmed to $maxCacheItems items');
+        }
+
+        return data;
+      });
     });
 
     return _activeStream!;
@@ -150,6 +174,7 @@ class NurseryService {
   // Dispose of streams and cache
   void dispose() {
     _cleanupTimer?.cancel();
+    _limitSubject.close();
     clearCache();
   }
 

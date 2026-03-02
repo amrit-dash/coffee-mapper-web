@@ -17,12 +17,21 @@ class AdminNotifier extends StateNotifier<AdminData?> {
       return;
     }
 
-    final adminDoc =
-        await FirebaseFirestore.instance.collection('admins').doc(email).get();
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get();
+
+    if (userDoc.docs.isEmpty) {
+      state = AdminData(isAdmin: false, name: null);
+      return;
+    }
+
+    final userData = userDoc.docs.first.data();
+    final role = userData['role'] as String?;
+    final isAdmin = role == 'ADMIN' || role == 'DEV';
 
     state = AdminData(
-      isAdmin: adminDoc.exists,
-      name: adminDoc.data()?['name'] as String?,
+      isAdmin: isAdmin,
+      name: userData['name'] as String?,
     );
   }
 

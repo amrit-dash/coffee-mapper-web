@@ -22,6 +22,8 @@ class ShadeTable extends BaseDataTable<ShadeData> {
     super.isLoading = false,
     super.error,
     super.onRetry,
+    super.onLoadMore,
+    super.hasMore = false,
   });
 
   @override

@@ -201,6 +201,10 @@ class _BeneficiaryHighlightSectionState
                       beneficiaryData: filteredData,
                       isLoggedIn: widget.isLoggedIn,
                       onDelete: _handleDelete,
+                      hasMore: _beneficiaryService.hasMore,
+                      onLoadMore: () {
+                        _beneficiaryService.loadMore();
+                      },
                     ),
                   ),
                 ),

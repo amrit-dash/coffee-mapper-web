@@ -232,6 +232,10 @@ class _CoffeeHighlightsSectionState extends State<CoffeeHighlightsSection> {
                         data: filteredData,
                         isLoggedIn: isLoggedIn,
                         onDelete: _handleDelete,
+                        hasMore: _coffeeService.hasMore,
+                        onLoadMore: () {
+                          _coffeeService.loadMore();
+                        },
                       );
                     },
                   ),
