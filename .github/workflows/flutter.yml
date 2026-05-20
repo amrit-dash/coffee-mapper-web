@@ -78,13 +78,13 @@ jobs:
           echo "${{ secrets.FIREBASE_INDEXES }}" > firestore.indexes.json
           
           # Verify Firebase configuration files
-          if ! grep -q "const firebaseOptions" lib/config/firebase_options_dev.dart; then
-            echo "Invalid firebase_options_dev.dart: Missing firebaseOptions constant"
+          if ! grep -q "DefaultFirebaseOptions" lib/config/firebase_options_dev.dart; then
+            echo "Invalid firebase_options_dev.dart: Missing DefaultFirebaseOptions class"
             exit 1
           fi
           
-          if ! grep -q "const firebaseOptions" lib/config/firebase_options_prod.dart; then
-            echo "Invalid firebase_options_prod.dart: Missing firebaseOptions constant"
+          if ! grep -q "DefaultFirebaseOptions" lib/config/firebase_options_prod.dart; then
+            echo "Invalid firebase_options_prod.dart: Missing DefaultFirebaseOptions class"
             exit 1
           fi
 
