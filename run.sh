@@ -49,12 +49,12 @@ if [ "$ENV" == "prod" ]; then
     firebase use prod
     
     echo "Starting Flutter web app in production mode..."
-    flutter run -d chrome --web-port=5000 --dart-define=ENVIRONMENT=production
+    flutter run -d web-server --web-port=3000 --dart-define=ENVIRONMENT=production
 else
     echo "Setting up development environment..."
     setup_rules "dev"
     firebase use dev
     
     echo "Starting Flutter web app in development mode..."
-    flutter run -d chrome --web-port=5000 --dart-define=ENVIRONMENT=development
+    flutter run -d web-server --web-port=3000 --dart-define=ENVIRONMENT=development
 fi 
