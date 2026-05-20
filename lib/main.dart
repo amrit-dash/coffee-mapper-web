@@ -45,7 +45,7 @@ class CoffeeMapperWebApp extends StatelessWidget {
         primaryColor: const Color(0xFFc09366),
         scaffoldBackgroundColor: const Color(0xFFD5B799),
         cardColor: const Color(0xFFEADCC8),
-        dialogTheme: DialogTheme(
+        dialogTheme: const DialogThemeData(
           backgroundColor: Colors.white,
         ),
         unselectedWidgetColor: const Color(0xff402200),

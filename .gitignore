@@ -1,3 +1,9 @@
+# Ignore IDE-specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
 # Miscellaneous
 *.class
 *.log
@@ -161,3 +167,7 @@ github.sh
 *.apk
 **/*.apk
 assets/apk/
+
+# Firebase Agent Skills
+.agents/
+skills-lock.json

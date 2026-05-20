@@ -24,7 +24,7 @@ class FirebaseConfig {
   static FirebaseOptions get currentConfig {
     _log.info('Current Firebase Environment: $_buildEnv');
     return _buildEnv == 'production'
-        ? prod.firebaseOptions
-        : dev.firebaseOptions;
+        ? prod.DefaultFirebaseOptions.currentPlatform
+        : dev.DefaultFirebaseOptions.currentPlatform;
   }
 }
