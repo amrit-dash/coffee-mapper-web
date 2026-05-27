@@ -53,7 +53,13 @@ class AttendanceService {
           final name = userData['name'] ?? 'Unknown';
           final email = userData['email'] ?? 'Unknown';
           final lastLogin = userData['lastLogin'] ?? 'Unknown';
-          final allocatedPanchayat = userData['allocatedPanchayat'] ?? 'N/A';
+          final rawPanchayats = userData['allocatedPanchayats'];
+          final allocatedPanchayats = rawPanchayats is List
+              ? rawPanchayats
+                  .whereType<String>()
+                  .where((p) => p.trim().isNotEmpty)
+                  .toList()
+              : <String>[];
 
           return _firestore
               .collection('users')
@@ -94,7 +100,7 @@ class AttendanceService {
               name: name,
               email: email,
               lastLogin: lastLogin,
-              allocatedPanchayat: allocatedPanchayat,
+              allocatedPanchayats: allocatedPanchayats,
               dailyDurations: dailyDurations,
               rawCheckInData: rawCheckInData,
               rawCheckOutData: rawCheckOutData,

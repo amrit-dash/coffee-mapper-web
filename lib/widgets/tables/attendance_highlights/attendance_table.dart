@@ -61,11 +61,11 @@ class AttendanceTableState extends BaseDataTableState<UserAttendanceData> {
       fixedWidth: ResponsiveUtils.getColumnWidth(screenWidth, 180),
     ));
 
-    // Panchayat
+    // Assigned Panchayats
     columns.add(DataColumn2(
-      label: buildColumnLabel(context, 'User Panchayat'),
+      label: buildColumnLabel(context, 'Assigned Panchayats'),
       size: ColumnSize.M,
-      fixedWidth: ResponsiveUtils.getColumnWidth(screenWidth, 150),
+      fixedWidth: ResponsiveUtils.getColumnWidth(screenWidth, 180),
     ));
 
     final daysInMonth = DateUtils.getDaysInMonth(
@@ -112,7 +112,7 @@ class AttendanceTableState extends BaseDataTableState<UserAttendanceData> {
       buildDataCell(context, data.name),
       buildDataCell(context, data.email),
       buildDataCell(context, _formatLastLogin(data.lastLogin)),
-      buildDataCell(context, data.allocatedPanchayat),
+      _buildPanchayatCell(context, data.allocatedPanchayats),
     ]);
 
     final daysInMonth = DateUtils.getDaysInMonth(
@@ -172,6 +172,96 @@ class AttendanceTableState extends BaseDataTableState<UserAttendanceData> {
   @override
   void handleDelete(BuildContext context, UserAttendanceData data) {
     // No deletion required for attendance records from this table view.
+  }
+
+  DataCell _buildPanchayatCell(
+      BuildContext context, List<String> panchayats) {
+    if (panchayats.isEmpty) {
+      return buildDataCell(context, '-');
+    }
+
+    if (panchayats.contains('ALL')) {
+      return DataCell(
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            child: Text(
+              'All Panchayats',
+              style: AppTextStyles.tableData(context).copyWith(
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ),
+      );
+    }
+
+    final primary = Theme.of(context).colorScheme.primary;
+    final first = panchayats.first;
+    final extraCount = panchayats.length - 1;
+
+    final cellContent = Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 6,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                first,
+                style: AppTextStyles.tableData(context),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+            if (extraCount > 0) ...[
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 6,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: primary.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '+$extraCount',
+                  style: AppTextStyles.tableData(context).copyWith(
+                    color: primary,
+                    fontFamily: 'Gilroy-SemiBold',
+                    fontSize: 11.5,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+
+    if (extraCount == 0) {
+      return DataCell(cellContent);
+    }
+
+    return DataCell(
+      Tooltip(
+        message: panchayats.join('\n'),
+        waitDuration: const Duration(milliseconds: 300),
+        child: cellContent,
+      ),
+    );
   }
 
   void _showManualAttendanceDialog(

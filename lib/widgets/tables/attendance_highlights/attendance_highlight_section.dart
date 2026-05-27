@@ -34,14 +34,18 @@ class _AttendanceHighlightSectionState
     final yearStr = state.currentMonth.year.toString();
     final reportTitle = 'User Attendance Report - $monthName, $yearStr';
 
-    final tableHeaders = ['User Name', 'User Email', 'Last Login At', 'User Panchayat'];
+    final tableHeaders = ['User Name', 'User Email', 'Last Login At', 'Assigned Panchayats'];
     for (int i = 1; i <= daysInMonth; i++) {
       tableHeaders.add(
           '${i.toString().padLeft(2, '0')}-${state.currentMonth.month.toString().padLeft(2, '0')}');
     }
 
     final tableData = state.data.map((user) {
-      final row = [user.name, user.email, user.lastLogin, user.allocatedPanchayat];
+      final panchayats = user.allocatedPanchayats;
+      final panchayatExport = panchayats.isEmpty
+          ? '-'
+          : (panchayats.contains('ALL') ? 'All Panchayats' : panchayats.join(', '));
+      final row = [user.name, user.email, user.lastLogin, panchayatExport];
       for (int i = 1; i <= daysInMonth; i++) {
         final displayKey =
             '${i.toString().padLeft(2, '0')}-${state.currentMonth.month.toString().padLeft(2, '0')}';

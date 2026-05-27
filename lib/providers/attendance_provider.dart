@@ -119,7 +119,7 @@ class AttendanceNotifier extends StateNotifier<AttendanceState> {
             name: user.name,
             email: user.email,
             lastLogin: user.lastLogin,
-            allocatedPanchayat: user.allocatedPanchayat,
+            allocatedPanchayats: user.allocatedPanchayats,
             dailyDurations: newDurations,
             rawCheckInData: newCheckInData,
             rawCheckOutData: newCheckOutData,
