@@ -15,6 +15,15 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    ignore:
+      # Riverpod 3.x requires a code migration (StateNotifier/StateProvider
+      # removed). Re-enable major bumps once the migration is done.
+      - dependency-name: "riverpod"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "flutter_riverpod"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "hooks_riverpod"
+        update-types: ["version-update:semver-major"]
     groups:
       firebase:
         patterns:
