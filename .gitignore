@@ -171,3 +171,6 @@ assets/apk/
 # Firebase Agent Skills
 .agents/
 skills-lock.json
+
+plans/*
+plans/
