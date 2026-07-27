@@ -136,4 +136,71 @@ class FarmerFormData {
       ticketId: json['ticketId'] as int?,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is FarmerFormData &&
+        other.id == id &&
+        other.name == name &&
+        other.careOfName == careOfName &&
+        other.classType == classType &&
+        other.district == district &&
+        other.block == block &&
+        other.panchayat == panchayat &&
+        other.village == village &&
+        other.post == post &&
+        other.policeStation == policeStation &&
+        other.mobileNumber == mobileNumber &&
+        other.landSize == landSize &&
+        other.landCategory == landCategory &&
+        other.khataNumber == khataNumber &&
+        other.plotNumber == plotNumber &&
+        other.mauja == mauja &&
+        other.aadharNumber == aadharNumber &&
+        other.bankAccountNumber == bankAccountNumber &&
+        other.bankName == bankName &&
+        other.bankBranch == bankBranch &&
+        other.bankIFSC == bankIFSC &&
+        other.submittedOn == submittedOn &&
+        other.archivedOn == archivedOn &&
+        other.archivedBy == archivedBy &&
+        other.agreement == agreement &&
+        other.status == status &&
+        other.ticketId == ticketId;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hashAll([
+      id,
+      name,
+      careOfName,
+      classType,
+      district,
+      block,
+      panchayat,
+      village,
+      post,
+      policeStation,
+      mobileNumber,
+      landSize,
+      landCategory,
+      khataNumber,
+      plotNumber,
+      mauja,
+      aadharNumber,
+      bankAccountNumber,
+      bankName,
+      bankBranch,
+      bankIFSC,
+      submittedOn,
+      archivedOn,
+      archivedBy,
+      agreement,
+      status,
+      ticketId,
+    ]);
+  }
 }

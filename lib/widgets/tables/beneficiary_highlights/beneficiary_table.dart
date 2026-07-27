@@ -19,6 +19,8 @@ class BeneficiaryTable extends StatefulWidget {
   final bool isLoading;
   final String? error;
   final VoidCallback? onRetry;
+  final VoidCallback? onLoadMore;
+  final bool hasMore;
 
   const BeneficiaryTable({
     super.key,
@@ -28,6 +30,8 @@ class BeneficiaryTable extends StatefulWidget {
     this.isLoading = false,
     this.error,
     this.onRetry,
+    this.onLoadMore,
+    this.hasMore = false,
   });
 
   @override
@@ -135,6 +139,12 @@ class _BeneficiaryTableState extends State<BeneficiaryTable> {
         final showBorder = notification.metrics.pixels > 0;
         if (showBorder != _showHeaderBorder) {
           setState(() => _showHeaderBorder = showBorder);
+        }
+        
+        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+          if (widget.hasMore && widget.onLoadMore != null) {
+            widget.onLoadMore!();
+          }
         }
       }
     }

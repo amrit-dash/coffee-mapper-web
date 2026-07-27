@@ -16,6 +16,8 @@ class LegacyTable extends BaseDataTable<LegacyData> {
     super.isLoading = false,
     super.error,
     super.onRetry,
+    super.onLoadMore,
+    super.hasMore = false,
   });
 
   @override

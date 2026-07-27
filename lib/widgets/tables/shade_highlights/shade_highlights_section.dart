@@ -229,6 +229,10 @@ class _ShadeHighlightsSectionState extends State<ShadeHighlightsSection> {
                         data: filteredData,
                         isLoggedIn: isLoggedIn,
                         onDelete: _handleDelete,
+                        hasMore: _shadeService.hasMore,
+                        onLoadMore: () {
+                          _shadeService.loadMore();
+                        },
                       );
                     },
                   ),

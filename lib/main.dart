@@ -2,6 +2,7 @@ import 'package:coffee_mapper_web/config/firebase_config.dart';
 // import 'firebase_options.dart';  // We'll use our new config instead
 import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
 import 'package:coffee_mapper_web/services/maps_service.dart';
+import 'package:coffee_mapper_web/widgets/maintenance_gate.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class CoffeeMapperWebApp extends StatelessWidget {
           ),
         ),
       ),
+      builder: (context, child) => MaintenanceGate(child: child!),
       home: const AuthWrapper(),
     );
   }

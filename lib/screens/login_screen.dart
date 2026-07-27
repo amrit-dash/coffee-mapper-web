@@ -46,13 +46,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         password: _passwordController.text,
       );
 
-      // Check if user is admin
-      final adminDoc = await _firestore
-          .collection('admins')
-          .doc(userCredential.user?.email)
+      // Check if user is admin or dev
+      final userDoc = await _firestore
+          .collection('users')
+          .doc(userCredential.user?.uid)
           .get();
 
-      if (!adminDoc.exists) {
+      final role = userDoc.data()?['role'] as String?;
+      final isAdmin = role == 'ADMIN' || role == 'DEV';
+
+      if (!userDoc.exists || !isAdmin) {
         // If not admin, sign out and show error
         await FirebaseAuth.instance.signOut();
         if (mounted) {

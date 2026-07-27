@@ -15,6 +15,10 @@ abstract class BaseDataTable<T> extends StatefulWidget {
   final bool isLoading;
   final String? error;
   final VoidCallback? onRetry;
+  final VoidCallback? onLoadMore;
+  final bool hasMore;
+  final int fixedLeftColumns;
+  final double? minWidth;
 
   const BaseDataTable({
     super.key,
@@ -24,6 +28,10 @@ abstract class BaseDataTable<T> extends StatefulWidget {
     this.isLoading = false,
     this.error,
     this.onRetry,
+    this.onLoadMore,
+    this.hasMore = false,
+    this.fixedLeftColumns = 0,
+    this.minWidth,
   });
 
   @override
@@ -70,7 +78,7 @@ abstract class BaseDataTableState<T> extends State<BaseDataTable<T>> {
                 columnSpacing: TableConstants.kColumnSpacing,
                 horizontalMargin: TableConstants.kHorizontalMargin,
                 border: TableBorderHandler.getTableBorder(),
-                minWidth: TableConstants.kMinTableWidth,
+                minWidth: widget.minWidth ?? TableConstants.kMinTableWidth,
                 fixedTopRows: 1,
                 headingRowHeight: ResponsiveUtils.getRowHeight(
                     screenWidth, TableConstants.kHeaderHeight),
@@ -114,6 +122,12 @@ abstract class BaseDataTableState<T> extends State<BaseDataTable<T>> {
         final showBorder = notification.metrics.pixels > 0;
         if (showBorder != _showHeaderBorder) {
           setState(() => _showHeaderBorder = showBorder);
+        }
+        
+        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+          if (widget.hasMore && widget.onLoadMore != null) {
+            widget.onLoadMore!();
+          }
         }
       }
     }

@@ -1,10 +1,13 @@
-// ignore: avoid_web_libraries_in_flutter, deprecated_member_use
-import 'dart:js' as js;
-// ignore: avoid_web_libraries_in_flutter, deprecated_member_use
-import 'dart:js_util';
+import 'dart:js_interop';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:logging/logging.dart';
+
+/// Binds to the `window.initializeGoogleMaps` JS function defined in index.html.
+/// It accepts an API key string and returns a Promise that resolves when the
+/// Google Maps script has loaded.
+@JS('initializeGoogleMaps')
+external JSPromise _initializeGoogleMaps(JSString apiKey);
 
 class MapsService {
   static final _logger = Logger('MapsService');
@@ -35,13 +38,8 @@ class MapsService {
         );
       }
 
-      // Call the JavaScript function to load Google Maps with the API key
-      final result = js.context.callMethod('initializeGoogleMaps', [apiKey]);
-
-      // Convert the JavaScript Promise to a Dart Future and wait for it
-      if (hasProperty(result, 'then')) {
-        await promiseToFuture(result);
-      }
+      // Call the JavaScript function and await the returned Promise
+      await _initializeGoogleMaps(apiKey.toJS).toDart;
 
       _isInitialized = true;
     } catch (e) {

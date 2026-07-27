@@ -12,7 +12,7 @@ permissions:
   deployments: write
 
 env:
-  FLUTTER_VERSION: '3.29.0'
+  FLUTTER_VERSION: '3.44.7'
   FIREBASE_CLI_VERSION: 12.9.1
 
 jobs:
@@ -44,47 +44,44 @@ jobs:
       
       # Set up Firebase configuration
       - name: Create Firebase Config Files
+        env:
+          FIREBASE_OPTIONS_DEV: ${{ secrets.FIREBASE_OPTIONS_DEV }}
+          FIREBASE_OPTIONS_PROD: ${{ secrets.FIREBASE_OPTIONS_PROD }}
+          FIREBASE_JSON: ${{ secrets.FIREBASE_JSON }}
+          FIREBASE_RC: ${{ secrets.FIREBASE_RC }}
+          FIREBASE_RULES: ${{ secrets.FIREBASE_RULES }}
+          STORAGE_RULES: ${{ secrets.STORAGE_RULES }}
+          FIREBASE_INDEXES: ${{ secrets.FIREBASE_INDEXES }}
         run: |
-          # Create Firebase configuration files based on environment
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
-            echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
-          else
-            echo "${{ secrets.FIREBASE_OPTIONS_DEV }}" > lib/config/firebase_options_dev.dart
-            echo "${{ secrets.FIREBASE_OPTIONS_PROD }}" > lib/config/firebase_options_prod.dart
-          fi
-          
-          # Create and validate firebase.json
-          echo '${{ secrets.FIREBASE_JSON }}' > firebase.json
-          echo "Verifying firebase.json:"
-          cat firebase.json
+          # Write config from secrets via env vars + printf so the file contents
+          # (which contain double quotes and rules syntax) are never re-parsed by
+          # the shell. Interpolating secrets directly into the script body breaks
+          # as soon as a payload contains a quote.
+          printf '%s' "$FIREBASE_OPTIONS_DEV" > lib/config/firebase_options_dev.dart
+          printf '%s' "$FIREBASE_OPTIONS_PROD" > lib/config/firebase_options_prod.dart
+          printf '%s' "$FIREBASE_JSON" > firebase.json
+          printf '%s' "$FIREBASE_RC" > .firebaserc
+          printf '%s' "$FIREBASE_RULES" > firestore.rules
+          printf '%s' "$STORAGE_RULES" > storage.rules
+          printf '%s' "$FIREBASE_INDEXES" > firestore.indexes.json
+
+          # Validate JSON config
           if ! jq empty firebase.json; then
             echo "Invalid firebase.json JSON"
             exit 1
           fi
-          
-          # Create and validate .firebaserc
-          echo '${{ secrets.FIREBASE_RC }}' > .firebaserc
-          echo "Verifying .firebaserc:"
-          cat .firebaserc
           if ! jq empty .firebaserc; then
             echo "Invalid .firebaserc JSON"
             exit 1
           fi
-          
-          # Create rules files
-          echo "${{ secrets.FIREBASE_RULES }}" > firestore.rules
-          echo "${{ secrets.STORAGE_RULES }}" > storage.rules
-          echo "${{ secrets.FIREBASE_INDEXES }}" > firestore.indexes.json
-          
-          # Verify Firebase configuration files
-          if ! grep -q "const firebaseOptions" lib/config/firebase_options_dev.dart; then
-            echo "Invalid firebase_options_dev.dart: Missing firebaseOptions constant"
+
+          # Verify Firebase options
+          if ! grep -q "DefaultFirebaseOptions" lib/config/firebase_options_dev.dart; then
+            echo "Invalid firebase_options_dev.dart: Missing DefaultFirebaseOptions class"
             exit 1
           fi
-          
-          if ! grep -q "const firebaseOptions" lib/config/firebase_options_prod.dart; then
-            echo "Invalid firebase_options_prod.dart: Missing firebaseOptions constant"
+          if ! grep -q "DefaultFirebaseOptions" lib/config/firebase_options_prod.dart; then
+            echo "Invalid firebase_options_prod.dart: Missing DefaultFirebaseOptions class"
             exit 1
           fi
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overscroll-behavior-x: none;">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -58,9 +58,19 @@
   <script>
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = '{{flutter_service_worker_version}}';
-    
+
     // Set document title explicitly to ensure consistency
     document.title = "Coffee Mapper Dashboard";
+
+    // Suppress the browser's native back/forward swipe gesture triggered by
+    // 2-finger horizontal trackpad scrolls. Flutter web routes the same wheel
+    // event into its own pointer pipeline, so DataTable2 horizontal scrolling
+    // is unaffected — only the browser's default navigation action is blocked.
+    window.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaX) > 0) {
+        e.preventDefault();
+      }
+    }, { passive: false, capture: true });
   </script>
 
   <script>

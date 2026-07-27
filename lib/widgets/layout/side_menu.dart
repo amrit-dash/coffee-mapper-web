@@ -1,6 +1,7 @@
 import 'package:coffee_mapper_web/config/firebase_config.dart';
 import 'package:coffee_mapper_web/providers/admin_provider.dart';
 import 'package:coffee_mapper_web/providers/news_provider.dart';
+import 'package:coffee_mapper_web/screens/attendance_screen.dart';
 import 'package:coffee_mapper_web/screens/dashboard_screen.dart';
 import 'package:coffee_mapper_web/screens/login_screen.dart';
 import 'package:coffee_mapper_web/screens/registration_screen.dart';
@@ -236,6 +237,20 @@ class _SideMenuState extends ConsumerState<SideMenu> {
                           ),
                         ),
                         SizedBox(height: screenHeight < 700 ? 1 : 2),
+                        _buildMenuButton(
+                          context,
+                          icon: Icons.calendar_month,
+                          title: 'User Attendance',
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AttendanceScreen()),
+                            );
+                          },
+                        ),
+                        SizedBox(height: screenHeight < 700 ? 2 : 5),
                         _buildMenuButton(
                           context,
                           icon: Icons.manage_accounts,

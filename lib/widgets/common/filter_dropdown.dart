@@ -27,7 +27,7 @@ class FilterDropdown extends StatelessWidget {
         ),
         const SizedBox(height: 8.0),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           items: [
             const DropdownMenuItem<String>(
               value: null,

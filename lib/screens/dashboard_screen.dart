@@ -256,7 +256,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                             ),
                                             const SizedBox(width: 10),
                                             Text(
-                                              'testMapper',
+                                              'coffee',
                                               style: TextStyle(
                                                 fontFamily: 'Gilroy-Medium',
                                                 fontSize: 16,
@@ -402,7 +402,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                           ),
                                           const SizedBox(width: 10),
                                           Text(
-                                            'testMapper',
+                                            'coffee',
                                             style: TextStyle(
                                               fontFamily: 'Gilroy-Medium',
                                               fontSize: 16,

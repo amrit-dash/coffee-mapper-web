@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_mapper_web/models/shade_data.dart';
 import 'package:coffee_mapper_web/utils/archive_utils.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ShadeService {
   final _log = Logger('ShadeService');
@@ -33,6 +34,19 @@ class ShadeService {
   // Cache monitoring
   int _cacheHits = 0;
   int _cacheMisses = 0;
+  
+  final BehaviorSubject<int> _limitSubject = BehaviorSubject.seeded(15);
+  bool _hasMore = true;
+  bool _isLoadingMore = false;
+
+  bool get hasMore => _hasMore;
+
+  void loadMore() {
+    if (_hasMore && !_isLoadingMore) {
+      _isLoadingMore = true;
+      _limitSubject.add(_limitSubject.value + 15);
+    }
+  }
 
   ShadeService() {
     // Start automatic cache cleanup
@@ -70,32 +84,41 @@ class ShadeService {
       return _activeStream!;
     }
 
-    // Create the base query
-    final query = _firestore
-        .collection('savedRegions')
-        .where('regionCategory', whereIn: shadeCategories)
-        .orderBy('updatedOn', descending: true)
-        .limit(maxCacheItems); // Limit the number of documents
+    // Create the stream with caching and dynamic limit
+    _activeStream = _limitSubject.switchMap((limit) {
+      final query = _firestore
+          .collection('savedRegions')
+          .where('regionCategory', whereIn: shadeCategories)
+          .orderBy('updatedOn', descending: true)
+          .limit(limit);
 
-    // Create the stream with caching
-    _activeStream = query.snapshots().map((snapshot) {
-      // Convert documents to ShadeData objects
-      final List<ShadeData> data =
-          snapshot.docs.map((doc) => _convertToShadeData(doc)).toList();
+      return query.snapshots().map((snapshot) {
+        _isLoadingMore = false;
 
-      // Update cache with size limit
-      if (data.length <= maxCacheItems) {
-        _cachedShadeData = data;
-        _lastCacheTime = DateTime.now();
-      } else {
-        // If data exceeds limit, store only the most recent items
-        _cachedShadeData = data.sublist(0, maxCacheItems);
-        _lastCacheTime = DateTime.now();
-        _log.warning(
-            'Data size exceeds cache limit. Caching only the most recent $maxCacheItems items.');
-      }
+        if (snapshot.docs.length < limit) {
+          _hasMore = false;
+        } else {
+          _hasMore = true;
+        }
 
-      return data;
+        // Convert documents to ShadeData objects
+        final List<ShadeData> data =
+            snapshot.docs.map((doc) => _convertToShadeData(doc)).toList();
+
+        // Update cache with size limit
+        if (data.length <= maxCacheItems) {
+          _cachedShadeData = data;
+          _lastCacheTime = DateTime.now();
+        } else {
+          // If data exceeds limit, store only the most recent items
+          _cachedShadeData = data.sublist(0, maxCacheItems);
+          _lastCacheTime = DateTime.now();
+          _log.warning(
+              'Data size exceeds cache limit. Caching only the most recent $maxCacheItems items.');
+        }
+
+        return data;
+      });
     });
 
     return _activeStream!;
@@ -154,6 +177,7 @@ class ShadeService {
   // Dispose of streams and cache
   void dispose() {
     _cleanupTimer?.cancel();
+    _limitSubject.close();
     clearCache();
   }
 

@@ -34,84 +34,97 @@ class BeneficiaryService {
   int _cacheHits = 0;
   int _cacheMisses = 0;
 
+  final BehaviorSubject<int> _limitSubject = BehaviorSubject.seeded(15);
+  StreamSubscription? _streamSubscription;
+  bool _hasMore = true;
+  bool _isLoadingMore = false;
+
+  bool get hasMore => _hasMore;
+
+  void loadMore() {
+    if (_hasMore && !_isLoadingMore) {
+      _isLoadingMore = true;
+      _limitSubject.add(_limitSubject.value + 15);
+    }
+  }
+
   BeneficiaryService() {
     _startCleanupTimer();
     _initializeDataStream();
   }
 
   void _initializeDataStream() {
-    final query = _firestore
-        .collection('farmerApplications')
-        .where('status', isEqualTo: 'active')
-        .orderBy('submittedOn', descending: true)
-        .limit(maxCacheItems);
+    _streamSubscription = _limitSubject.switchMap((limit) {
+      final query = _firestore
+          .collection('farmerApplications')
+          .where('status', isEqualTo: 'active')
+          .orderBy('submittedOn', descending: true)
+          .limit(limit);
 
-    // Listen to query snapshots and handle updates
-    query.snapshots().listen(
-      (snapshot) {
-        if (_dataSubject.isClosed) return; // Early return if stream is closed
+      return query.snapshots().map((snapshot) {
+        _isLoadingMore = false;
 
-        try {
-          final List<FarmerFormData> data = snapshot.docs
-              .map((doc) {
-                try {
-                  final Map<String, dynamic> docData = doc.data();
-                  // Convert submittedOn to DateTime, handling both Timestamp and String formats
-                  DateTime submittedOn;
-                  if (docData['submittedOn'] is Timestamp) {
-                    submittedOn =
-                        (docData['submittedOn'] as Timestamp).toDate();
-                  } else if (docData['submittedOn'] is String) {
-                    submittedOn = DateTime.parse(docData['submittedOn']);
-                  } else {
-                    submittedOn = DateTime.now();
-                  }
+        if (snapshot.docs.length < limit) {
+          _hasMore = false;
+        } else {
+          _hasMore = true;
+        }
 
-                  return FarmerFormData.fromJson({
-                    ...docData,
-                    'id': doc.id,
-                    'district': docData['district'] ?? '',
-                    'block': docData['block'] ?? '',
-                    'panchayat': docData['panchayat'] ?? '',
-                    'village': docData['village'] ?? '',
-                    'status': docData['status'] ?? 'active',
-                    'submittedOn': Timestamp.fromDate(submittedOn),
-                  });
-                } catch (e) {
-                  _log.warning('Error parsing document ${doc.id}: $e');
-                  return null;
+        return snapshot.docs
+            .map((doc) {
+              try {
+                final Map<String, dynamic> docData = doc.data();
+                DateTime submittedOn;
+                if (docData['submittedOn'] is Timestamp) {
+                  submittedOn = (docData['submittedOn'] as Timestamp).toDate();
+                } else if (docData['submittedOn'] is String) {
+                  submittedOn = DateTime.parse(docData['submittedOn']);
+                } else {
+                  submittedOn = DateTime.now();
                 }
-              })
-              .where((data) => data != null)
-              .cast<FarmerFormData>()
-              .toList();
 
-          // Update cache in a safe manner
-          _cachedData = List<FarmerFormData>.unmodifiable(data);
-          _lastCacheTime = DateTime.now();
+                return FarmerFormData.fromJson({
+                  ...docData,
+                  'id': doc.id,
+                  'district': docData['district'] ?? '',
+                  'block': docData['block'] ?? '',
+                  'panchayat': docData['panchayat'] ?? '',
+                  'village': docData['village'] ?? '',
+                  'status': docData['status'] ?? 'active',
+                  'submittedOn': Timestamp.fromDate(submittedOn),
+                });
+              } catch (e) {
+                _log.warning('Error parsing document ${doc.id}: $e');
+                return null;
+              }
+            })
+            .where((data) => data != null)
+            .cast<FarmerFormData>()
+            .toList();
+      });
+    }).listen(
+      (data) {
+        if (_dataSubject.isClosed) return;
 
-          // Only emit if there are changes and stream is still active
-          if (!_dataSubject.isClosed &&
-              (!_dataSubject.hasValue ||
-                  !listEquals(_dataSubject.value, data))) {
-            _dataSubject.add(List<FarmerFormData>.unmodifiable(data));
-          }
-        } catch (e) {
-          _log.severe('Error processing snapshot: $e');
-          // Don't emit error if we have cached data
-          if (_cachedData == null || _cachedData!.isEmpty) {
-            _dataSubject.addError(e);
-          }
+        // Update cache in a safe manner
+        _cachedData = List<FarmerFormData>.unmodifiable(data);
+        _lastCacheTime = DateTime.now();
+
+        // Only emit if there are changes and stream is still active
+        if (!_dataSubject.hasValue || !listEquals(_dataSubject.value, data)) {
+          _dataSubject.add(List<FarmerFormData>.unmodifiable(data));
         }
       },
       onError: (error) {
         _log.severe('Error in beneficiary data stream: $error');
         // Don't emit error if we have cached data
         if (_cachedData == null || _cachedData!.isEmpty) {
-          _dataSubject.addError(error);
+          if (!_dataSubject.isClosed) {
+            _dataSubject.addError(error);
+          }
         }
       },
-      cancelOnError: false, // Don't cancel stream on error
+      cancelOnError: false,
     );
   }
 
@@ -266,6 +279,8 @@ class BeneficiaryService {
 
   void dispose() {
     _cleanupTimer?.cancel();
+    _streamSubscription?.cancel();
+    _limitSubject.close();
     _dataSubject.close();
     clearCache();
   }
