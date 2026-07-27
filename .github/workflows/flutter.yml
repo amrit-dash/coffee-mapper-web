@@ -28,7 +28,7 @@ jobs:
       url: ${{ github.ref == 'refs/heads/main' && 'https://coffeemapper.web.app' || 'https://coffee-mapper-dashboard.web.app' }}
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
