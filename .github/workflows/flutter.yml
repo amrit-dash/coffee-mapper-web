@@ -75,6 +75,13 @@ jobs:
             exit 1
           fi
 
+          # Leak-safe diagnostics (counts only, never the secret value)
+          echo "dev bytes:  $(wc -c < lib/config/firebase_options_dev.dart)"
+          echo "prod bytes: $(wc -c < lib/config/firebase_options_prod.dart)"
+          echo "dev 'class' lines:          $(grep -c 'class ' lib/config/firebase_options_dev.dart || true)"
+          echo "dev 'FirebaseOptions' lines: $(grep -c 'FirebaseOptions' lib/config/firebase_options_dev.dart || true)"
+          echo "dev 'DefaultFirebaseOptions': $(grep -c 'DefaultFirebaseOptions' lib/config/firebase_options_dev.dart || true)"
+
           # Verify Firebase options
           if ! grep -q "DefaultFirebaseOptions" lib/config/firebase_options_dev.dart; then
             echo "Invalid firebase_options_dev.dart: Missing DefaultFirebaseOptions class"
